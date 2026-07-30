@@ -284,6 +284,8 @@
 </head>
 <body>
 
+<script type="application/json" id="appDB">/*__DB__*/{"users":[],"content":[],"profs":[],"next":[],"courses":{"t1":[],"t2":[],"t3":[],"t4":[]},"code":"GENERAL","token":"","meta":{"version":1,"lastUpdate":"2026-01-01T00:00:00.000Z"}}/*__DBEND__*/</script>
+
 <div class="floater f1"></div>
 <div class="floater f2"></div>
 <div class="floater f3"></div>
@@ -305,7 +307,7 @@
     <div class="login-foot">
       <span class="chip chip-time">🕐 <b id="loginTime">--:--:--</b></span>
       <span class="chip"><span>📅</span> <b id="loginDate">—</b></span>
-      <span class="chip net-on" id="netChip2" style="font-size:11px">☁ ابری: متصل</span>
+      <span class="chip" id="netChip2" style="font-size:11px">👥 —</span>
     </div>
   </div>
 
@@ -313,7 +315,7 @@
     <h2 class="display" style="font-size:21px; margin:0 0 16px; text-align:center">ورود دانشجویان</h2>
     <div style="margin-bottom:13px">
       <label>نام کاربری</label>
-      <input id="regName" placeholder="مثلاً: سید علی لاجوردی">
+      <input id="regName" placeholder="مثلاً: سیدمحمد رضوی">
     </div>
     <div style="margin-bottom:13px">
       <label>ترم تحصیلی</label>
@@ -360,7 +362,7 @@
         <div class="d" id="clockDate">—</div>
       </div>
     </div>
-    <span class="chip net-on" id="netChip" style="font-size:11px; padding:7px 12px">☁ ابری: متصل</span>
+    <span class="chip net-off" id="netChip" style="font-size:11px; padding:7px 12px">🔌 آفلاین</span>
     <div class="wallet">
       <span class="wchip chip neu-in" id="coinChip">🪙 <b id="coinVal">0</b></span>
       <span class="wchip chip neu-in" id="pointChip">⭐ <b id="pointVal">0</b></span>
@@ -409,6 +411,7 @@
     <span class="admin-badge">🔐 پنل مدیریت</span>
     <div style="flex:1"></div>
     <span class="chip">آخرین تغییر: <b id="adminLastUpdate" style="margin-inline-start:5px">—</b></span>
+    <span class="chip chip-new" id="dirtyBadge" hidden style="animation:pulse 1.5s infinite">📥 نیاز به انتشار فایل</span>
   </header>
 
   <nav class="admin-tabs neu" id="adminTabs">
@@ -418,7 +421,7 @@
     <button class="atab" data-atab="courses" onclick="switchAdminTab('courses')">📚 درس‌ها و ترم‌ها</button>
     <button class="atab" data-atab="profs" onclick="switchAdminTab('profs')">👨‍🏫 اساتید</button>
     <button class="atab" data-atab="next" onclick="switchAdminTab('next')">📣 اطلاعیه ترم آینده</button>
-    <button class="atab" data-atab="sync" onclick="switchAdminTab('sync')">☁ فضای ذخیره‌سازی</button>
+    <button class="atab" data-atab="sync" onclick="switchAdminTab('sync')">📥 انتشار و به‌روزرسانی</button>
   </nav>
 
   <section id="atab-code"></section>
@@ -451,6 +454,19 @@
   <div class="neu-in" id="dPremNote" style="padding:11px 14px; font-size:11.5px; color:#7a5a12; background:linear-gradient(135deg,#fff3d6,#ffe9b8); text-align:center" hidden>
     ⭐ حساب پریموم — سکه‌های دریافتی شما <b>۲ برابر</b> می‌شود!
   </div>
+  <div class="neu" style="padding:14px; margin-top:14px">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px">
+      <span style="font-size:17px">📡</span><b style="font-size:13px">اتصال به فضای آنلاین</b>
+      <span class="chip" id="tokStatus" style="margin-inline-start:auto; font-size:10.5px; padding:3px 10px">🔌 آفلاین</span>
+    </div>
+    <div style="display:flex; gap:7px">
+      <input id="tokInput" placeholder="توکن ادمین" style="direction:ltr; text-align:center; letter-spacing:2px; font-weight:800; padding:10px 12px; font-size:13px">
+      <button class="btn btn-teal btn-sm" style="white-space:nowrap" onclick="submitToken()">ارسال توکن</button>
+    </div>
+    <small id="tokHint" style="display:block; margin-top:8px; font-size:10.5px; color:var(--muted)">توکن را از ادمین گروه بگیرید و آنلاین شوید</small>
+  </div>
+  <div class="neu-in" style="padding:10px 14px; margin-top:10px; font-size:11.5px; text-align:center" id="dCounts">—</div>
+
   <div class="d-nav">
     <button class="btn btn-sm" onclick="switchTab('content'); toggleDrawer()">🎁 مطالب و رسانه</button>
     <button class="btn btn-sm" onclick="switchTab('courses'); toggleDrawer()">📚 درس‌های ترم‌ها</button>
@@ -490,7 +506,8 @@
 const K = {
   users:'iauqom_users', content:'iauqom_content', profs:'iauqom_profs',
   next:'iauqom_next', courses:'iauqom_courses', code:'iauqom_code',
-  meta:'iauqom_meta', seeded:'iauqom_seeded', session:'iauqom_session'
+  meta:'iauqom_meta', seeded:'iauqom_seeded', session:'iauqom_session',
+  token:'iauqom_atok'
 };
 const read = (k,f)=>{ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?f:v }catch(e){ return f } };
 const write = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
@@ -553,72 +570,104 @@ const getMeta = ()=>read(K.meta,{version:1,lastUpdate:nowIso()});
 const getUsers = ()=>read(K.users,[]);
 const saveUsers = u=>{ write(K.users,u); if(state.user){ state.user = u.find(x=>x.name===state.user.name)||state.user; } schedulePush(); };
 
-/* ================= فضای ذخیره‌سازی ابری (خودکار — بدون نیاز به توکن) ================= */
-/* این فضای مشترک از قبل ساخته شده؛ همه کاربران اپلیکیشن از همین فضا استفاده می‌کنند */
-const CLOUD_KEY='IAUQOMPSY7X2K';
-const CLOUD_API='https://www.jsonkeeper.com/b/'+CLOUD_KEY;
-const SHARED = ['users','content','profs','next','courses','code','meta'];
+/* ================= فضای ذخیره‌سازی مشترک (خود فایل index.html — بدون اینترنت و بدون توکن خارجی) ================= */
+/* داده‌ها بین نشانگرهای __DB__ داخل فایل ذخیره می‌شوند؛ ادمین فایل به‌روز را منتشر می‌کند */
+const SHARED = ['users','content','profs','next','courses','code','meta','token'];
 function collectDB(){ const o={}; SHARED.forEach(k=>o[k]=read(K[k],null)); return o; }
-async function cloudPull(){
-  try{
-    const res=await fetch(CLOUD_API,{cache:'no-store'});
-    if(res.ok){
-      const d=await res.json();
-      if(d && typeof d==='object' && d.meta) return {ok:true, data:d};
-      return {ok:false, status:404};
-    }
-    return {ok:false, status:res.status};
-  }catch(e){ return {ok:false, network:true}; }
-}
-let pushing=false;
-async function cloudPush(db){
-  if(pushing) return false;
-  pushing=true;
-  try{
-    const res=await fetch(CLOUD_API,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'json='+encodeURIComponent(JSON.stringify(db))});
-    return res.ok;
-  }catch(e){ return false; }
-  finally{ pushing=false; }
-}
-function adoptCloud(data){
-  SHARED.forEach(k=>{ if(data[k]!=null) write(K[k], data[k]); });
+function adoptDB(data){
+  SHARED.forEach(k=>{ if(data[k]!==undefined && data[k]!==null) write(K[k], data[k]); });
   if(state.user){ const f=getUsers().find(x=>x.name===state.user.name); if(f) state.user=f; }
+}
+function readEmbeddedDB(){
+  try{
+    const el=document.getElementById('appDB'); if(!el) return null;
+    const m=el.textContent.match(/\/\*__DB__\*\/([\s\S]*?)\/\*__DBEND__\*\//);
+    const db=JSON.parse(m?m[1]:el.textContent);
+    return (db && db.meta)? db : null;
+  }catch(e){ return null; }
+}
+function extractDBFromHtml(html){
+  try{
+    const m=html.match(/id="appDB"[^>]*>[\s\S]*?\/\*__DB__\*\/([\s\S]*?)\/\*__DBEND__\*\//);
+    if(m) return JSON.parse(m[1]);
+  }catch(e){}
+  return null;
+}
+function mergeDB(fileDB){
+  const local=collectDB();
+  const fileNewer=((fileDB.meta&&fileDB.meta.version)||0) >= ((local.meta&&local.meta.version)||0);
+  const out={};
+  ['content','profs','next','courses','code','meta','token'].forEach(k=>{
+    out[k]=fileNewer ? (fileDB[k]!=null?fileDB[k]:local[k]) : (local[k]!=null?local[k]:fileDB[k]);
+  });
+  const map=new Map();
+  (fileNewer?(fileDB.users||[]):(local.users||[])).forEach(u=>map.set(u.name,u));
+  (fileNewer?(local.users||[]):(fileDB.users||[])).forEach(u=>{
+    if(!map.has(u.name)) map.set(u.name,u);
+    else{
+      const m=map.get(u.name);
+      m.coins=Math.max(m.coins||0,u.coins||0);
+      m.points=Math.max(m.points||0,u.points||0);
+      m.watched=Object.assign({},u.watched||{},m.watched||{});
+      m.premium=!!(m.premium||u.premium);
+      m.onlineToken=m.onlineToken||u.onlineToken;
+    }
+  });
+  out.users=[...map.values()];
+  return out;
+}
+async function fetchSiteHtml(){
+  try{
+    const res=await fetch(location.href.split('#')[0],{cache:'no-store'});
+    if(res.ok) return await res.text();
+  }catch(e){}
+  return null;
+}
+async function checkForUpdates(silent){
+  if(!location.protocol.startsWith('http')){ if(!silent) toast('این قابلیت روی نسخه سایت (GitHub Pages) کار می‌کند','info'); return false; }
+  const html=await fetchSiteHtml();
+  const fileDB=html?extractDBFromHtml(html):null;
+  if(!fileDB){ if(!silent) toast('نسخه جدیدی روی سایت پیدا نشد','err'); return false; }
+  if(((fileDB.meta&&fileDB.meta.version)||0) > (getMeta().version||0)){
+    adoptDB(mergeDB(fileDB));
+    purgeVanai();
+    if(!document.getElementById('screen-app').hidden) renderApp();
+    if(!document.getElementById('screen-admin').hidden) renderAdmin();
+    updateNetChips();
+    toast('🔄 نسخه جدید برنامه دریافت شد','info');
+    return true;
+  }
+  if(!silent) toast('برنامه به‌روز است ✓');
+  return false;
 }
 let pushTo=null;
 function schedulePush(){
   clearTimeout(pushTo);
-  pushTo=setTimeout(async ()=>{
-    const ok=await cloudPush(collectDB());
-    setOnline(ok);
-  }, 1200);
+  pushTo=setTimeout(()=>{
+    state.dirty=true;
+    const el=document.getElementById('dirtyBadge');
+    if(el) el.hidden=false;
+  },400);
 }
-function setOnline(v){
-  state.online=!!v;
-  const html = state.online? '☁ ابری: متصل' : '📴 ذخیره محلی';
-  ['netChip','netChip2'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){ el.innerHTML=html; el.classList.toggle('net-off',!state.online); el.classList.toggle('net-on',state.online); }
-  });
+function isOnlineUser(){
+  const t=read(K.token,'');
+  return !!(state.user && t && state.user.onlineToken===t);
 }
-async function refreshFromCloud(notify){
-  const r=await cloudPull();
-  if(r.ok){
-    setOnline(true);
-    if(r.data.meta && r.data.meta.version > getMeta().version){
-      adoptCloud(r.data);
-      if(purgeVanai()) schedulePush();
-      if(notify) toast('🔄 داده‌ها از فضای ابری به‌روزرسانی شد','info');
-      if(!document.getElementById('screen-app').hidden) renderApp();
-      if(!document.getElementById('screen-admin').hidden) renderAdmin();
-      return true;
-    }
-  } else if(r.network) setOnline(false);
-  return false;
+function onlineCount(){
+  const t=read(K.token,'');
+  if(!t) return 0;
+  return getUsers().filter(u=>u.onlineToken===t).length;
 }
-function startSyncLoop(){
-  setInterval(()=>{ if(!document.hidden) refreshFromCloud(true); }, 20000);
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshFromCloud(true); });
+function updateNetChips(){
+  const on=isOnlineUser();
+  const c1=document.getElementById('netChip');
+  if(c1){ c1.innerHTML=on?'📡 آنلاین':'🔌 آفلاین'; c1.classList.toggle('net-off',!on); c1.classList.toggle('net-on',on); }
+  const c2=document.getElementById('netChip2');
+  if(c2) c2.innerHTML='👥 '+fa(getUsers().length)+' دانشجو';
 }
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden && state.user) checkForUpdates(true);
+});
 
 const state = { user:null, tab:'content', atab:'code', selTerm:'t1', timer:null, verTaps:0, tapTo:null };
 
@@ -710,6 +759,7 @@ function enterApp(){
 }
 function renderApp(){
   const u=state.user; if(!u) return;
+  updateNetChips();
   document.getElementById('userAva').textContent=u.avatar;
   document.getElementById('userAva').classList.toggle('premium-ring', !!u.premium);
   document.getElementById('userName').textContent=u.name;
@@ -917,6 +967,31 @@ function renderDrawer(){
   document.getElementById('dPoints').textContent=fa(u.points);
   document.getElementById('dWatched').textContent=fa(Object.keys(u.watched||{}).length);
   document.getElementById('dPremNote').hidden=!u.premium;
+  const on=isOnlineUser();
+  const ts=document.getElementById('tokStatus');
+  ts.innerHTML=on?'📡 آنلاین':'🔌 آفلاین';
+  ts.style.background=on?'linear-gradient(135deg,#7ee2a8,#2fae66)':'';
+  ts.style.color=on?'#0b3d22':'';
+  ts.style.boxShadow=on?'0 5px 12px rgba(47,174,102,.35)':'';
+  document.getElementById('tokHint').textContent = on
+    ? 'متصل هستید — تغییرات ادمین بعد از انتشار فایل جدید، با «بررسی به‌روزرسانی» یا رفرش صفحه می‌رسد'
+    : 'توکن را از ادمین گروه بگیرید و آنلاین شوید';
+  document.getElementById('dCounts').innerHTML='👥 کل دانشجویان: <b>'+fa(getUsers().length)+'</b> &nbsp;•&nbsp; 📡 آنلاین: <b>'+fa(onlineCount())+'</b>';
+  updateNetChips();
+}
+function submitToken(){
+  const v=(document.getElementById('tokInput').value||'').trim().toUpperCase();
+  const real=(read(K.token,'')||'').toUpperCase();
+  if(!real) return toast('ادمین هنوز توکنی طراحی نکرده است','err');
+  if(!v) return toast('توکن را وارد کنید','err');
+  if(v!==real) return toast('توکن ارسالی اشتباه است ❌','err');
+  const users=getUsers();
+  const u=users.find(x=>x.name===state.user.name);
+  u.onlineToken=read(K.token,'');
+  saveUsers(users); state.user=u;
+  document.getElementById('tokInput').value='';
+  toast('📡 آنلاین شدید! به فضای برنامه متصل هستید');
+  renderDrawer(); renderApp();
 }
 function toggleDrawer(forceClose){
   const d=document.getElementById('drawer'), o=document.getElementById('overlay');
@@ -965,6 +1040,7 @@ function renderAdmin(){
 
 /* --- کد دسترسی --- */
 function renderAdminCode(){
+  const tok=read(K.token,'');
   document.getElementById('atab-code').innerHTML=`
   <div class="form-card neu">
     <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">🔑 کد دسترسی آنلاین دانشجویان</h3>
@@ -979,6 +1055,16 @@ function renderAdminCode(){
       </div>
     </div>
     <small style="display:block; margin-top:12px; color:var(--muted); font-size:11.5px">⚠ با تغییر کد، نسخه برنامه بالا می‌رود و همه کاربران بنر به‌روزرسانی می‌بینند.</small>
+  </div>
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📡 طراحی توکن اتصال (مخصوص ادمین)</h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">این توکن را در اختیار دانشجویان بگذارید تا در بخش «ارسال توکن» برنامه وارد کنند و <b>آنلاین</b> شوند. بعد از طراحی توکن، حتماً فایل به‌روز را از تب «انتشار فایل» دانلود و در گیت‌هاب جایگزین کنید.</p>
+    <label>توکن فعلی</label>
+    <div class="code-display neu-in" style="color:${tok?'var(--teal-d)':'var(--muted)'}">${tok?esc(tok):'هنوز طراحی نشده'}</div>
+    <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+      <button class="btn btn-coral" style="flex:1" onclick="genToken()">🎲 طراحی توکن جدید</button>
+      <span class="chip" style="align-self:center">📡 دانشجویان آنلاین: <b style="margin-inline-start:4px">${fa(onlineCount())}</b></span>
+    </div>
   </div>`;
 }
 function genCode(){
@@ -990,6 +1076,14 @@ function setCode(){
   if(v.length<3) return toast('کد باید حداقل ۳ حرف باشد','err');
   write(K.code,v); bumpMeta();
   toast('کد دسترسی به '+v+' تغییر کرد 🔑');
+  renderAdmin();
+}
+function genToken(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let t='PSY-';
+  for(let i=0;i<5;i++) t+=chars[Math.floor(Math.random()*chars.length)];
+  write(K.token,t); bumpMeta();
+  toast('توکن جدید طراحی شد: '+t+' 📡 — حالا فایل را منتشر کنید');
   renderAdmin();
 }
 
@@ -1236,38 +1330,71 @@ function delNext(i){
   write(K.next,list); bumpMeta(); toast('حذف شد','info'); renderAdminNext();
 }
 
-/* --- فضای ذخیره‌سازی ابری --- */
+/* --- انتشار فایل و به‌روزرسانی --- */
 function renderAdminSync(){
+  const users=getUsers();
+  const tok=read(K.token,'');
+  const onlineN=tok?users.filter(u=>u.onlineToken===tok).length:0;
+  const premN=users.filter(u=>u.premium).length;
   document.getElementById('atab-sync').innerHTML=`
   <div class="form-card neu">
-    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">☁ فضای ذخیره‌سازی آنلاین</h3>
-    <p style="font-size:12.5px; color:var(--muted); margin:0 0 14px">فضای ابری به‌صورت خودکار ساخته شده و <b>هیچ توکن یا تنظیمی لازم نیست</b>. همه داده‌ها (کاربران، محتوا، اساتید، درس‌ها و کد دسترسی) در این فضای مشترک ذخیره می‌شود و دانشجویانی که با کد GENERAL وارد می‌شوند، همه یک نسخهٔ به‌روز را می‌بینند.</p>
-    <div class="list-row neu-in">
-      <div class="grow"><b style="font-size:13.5px">وضعیت اتصال</b>
-      <small style="display:block;color:var(--muted);font-size:11.5px;margin-top:3px">${state.online?'🟢 متصل — هر تغییر شما و ثبت‌نام هر دانشجو، همین حالا برای همه ذخیره می‌شود':'🔴 آفلاین — اینترنت را بررسی کنید؛ داده‌ها فعلاً فقط روی همین دستگاه ذخیره می‌شوند و بعد از اتصال، همگام خواهند شد'}</small></div>
-      <span class="chip ${state.online?'chip-watched':'chip-new'}" style="animation:none">${state.online?'آنلاین':'آفلاین'}</span>
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">👥 آمار دانشجویان ثبت‌شده در برنامه</h3>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px">
+      <div class="neu-in" style="text-align:center; padding:16px 8px">
+        <div style="font-family:'Lalezar'; font-size:30px; line-height:1; color:var(--teal-d)">${fa(users.length)}</div>
+        <div style="font-size:11px; color:var(--muted); font-weight:700; margin-top:5px">👥 ثبت‌شده</div>
+      </div>
+      <div class="neu-in" style="text-align:center; padding:16px 8px">
+        <div style="font-family:'Lalezar'; font-size:30px; line-height:1; color:#2f7fe0">${fa(onlineN)}</div>
+        <div style="font-size:11px; color:var(--muted); font-weight:700; margin-top:5px">📡 آنلاین (با توکن)</div>
+      </div>
+      <div class="neu-in" style="text-align:center; padding:16px 8px">
+        <div style="font-family:'Lalezar'; font-size:30px; line-height:1; color:#e09a12">${fa(premN)}</div>
+        <div style="font-size:11px; color:var(--muted); font-weight:700; margin-top:5px">⭐ پریموم</div>
+      </div>
     </div>
-    <div class="list-row neu-in">
-      <div class="grow"><b style="font-size:13.5px">نشانی فضای ذخیره‌سازی</b>
-      <small style="display:block;direction:ltr;text-align:left;color:var(--muted);font-size:11px;margin-top:3px;word-break:break-all">${CLOUD_API}</small></div>
+    <small style="display:block; margin-top:12px; color:var(--muted); font-size:11.5px">تعداد دانشجویان روی همین برنامه ثبت و ذخیره می‌شود و در صفحه ورود همه نمایش داده می‌شود.</small>
+  </div>
+
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📥 انتشار فایل به‌روز (index.html)</h3>
+    <p style="font-size:12.5px; color:var(--muted); margin:0 0 14px">همه داده‌ها (دانشجویان، محتوا، اساتید، درس‌ها، کد و توکن) <b>داخل خود فایل index.html</b> ذخیره می‌شود. هر تغییری بدهید، یک فایل جدید با داده‌های به‌روز دانلود می‌کنید و در گیت‌هاب جایگزین می‌کنید تا به دست همه برسد.</p>
+    ${state.dirty?'<div class="banner" style="margin:0 0 14px; padding:11px 15px"><span class="em">⚠️</span><div style="flex:1"><b style="font-size:13px">تغییرات ذخیره‌نشده در فایل دارید!</b><small>تا فایل جدید را منتشر نکنید، دانشجویان تغییرات را نمی‌بینند</small></div></div>':''}
+    <div style="display:flex; gap:9px; flex-wrap:wrap">
+      <button class="btn btn-coral" style="flex:1; min-width:200px" onclick="publishFile()">📥 دانلود فایل index.html به‌روز</button>
+      <button class="btn btn-sky" onclick="checkForUpdates(false)">🔄 بررسی نسخه سایت</button>
     </div>
-    <button class="btn btn-sky" style="margin-top:12px" onclick="manualSync()">🔄 همگام‌سازی دستی</button>
     <div class="neu-in" style="margin-top:16px; padding:15px 17px; font-size:12px; line-height:2.2">
-      <b>چگونه کار می‌کند؟</b><br>
-      • هر تغییر در پنل ادمین و هر ثبت‌نام دانشجویان، خودکار و فوری به فضای ابری فرستاده می‌شود<br>
-      • اپلیکیشن دانشجویان هر ۲۰ ثانیه و هنگام باز شدن صفحه، نسخهٔ جدید را دریافت می‌کند<br>
-      • اگر اینترنت قطع باشد، برنامه آفلاین کار می‌کند و با اتصال دوباره، داده‌ها همگام می‌شوند
+      <b>مراحل انتشار (۱ دقیقه):</b><br>
+      ۱. روی «دانلود فایل index.html به‌روز» بزنید — فایل با همه داده‌ها و تعداد دانشجویان آماده می‌شود<br>
+      ۲. در صفحه مخزن گیت‌هاب، فایل <span style="direction:ltr">index.html</span> را باز کنید 🖊 ویرایش → محتوای فایل جدید را جایگزین → Commit<br>
+      &nbsp;&nbsp;&nbsp;(یا فایل را داخل صفحه مخزن بکشید و رها کنید)<br>
+      ۳. دانشجویان با رفرش سایت یا «بررسی به‌روزرسانی»، نسخه جدید را می‌گیرند و بنر اطلاعیه می‌بینند
     </div>
   </div>`;
 }
-async function manualSync(){
-  toast('در حال همگام‌سازی…','info');
-  const ok=await cloudPush(collectDB());
-  setOnline(ok);
-  if(ok){ await refreshFromCloud(false); toast('☁ همگام‌سازی با فضای ابری انجام شد'); }
-  else toast('اتصال برقرار نشد — اینترنت را بررسی کنید','err');
+async function publishFile(){
+  const db=collectDB();
+  let html=await fetchSiteHtml();
+  if(!html) html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const payload=JSON.stringify(db);
+  let out;
+  if(/\/\*__DB__\*\/[\s\S]*?\/\*__DBEND__\*\//.test(html)){
+    out=html.replace(/\/\*__DB__\*\/[\s\S]*?\/\*__DBEND__\*\//,'/*__DB__*/'+payload+'/*__DBEND__*/');
+  }else{
+    const marker='<script type="application/json" id="appDB">/*__DB__*/'+payload+'/*__DBEND__*/<\/script>';
+    out=html.replace('<body>','<body>\n'+marker);
+  }
+  const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='index.html';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  state.dirty=false;
+  const el=document.getElementById('dirtyBadge'); if(el) el.hidden=true;
+  toast('📥 فایل به‌روز دانلود شد — آن را در گیت‌هاب جایگزین کنید');
   renderAdminSync();
-  if(!document.getElementById('screen-app').hidden) renderApp();
 }
 
 /* ================= همگام‌سازی زنده بین تب‌ها ================= */
@@ -1292,18 +1419,11 @@ document.querySelectorAll('.admin-gate').forEach(l=>l.addEventListener('click', 
   setTimeout(()=>document.getElementById('pwInput').focus(),200);
 }));
 (async function boot(){
-  const r=await cloudPull();
-  if(r.ok){
-    adoptCloud(r.data);
-    if(purgeVanai()) schedulePush();
-    setOnline(true);
-  }else if(r.status===404){
-    const ok=await cloudPush(collectDB());
-    setOnline(ok);
-    if(ok) toast('فضای ذخیره‌سازی ابری آماده شد ☁');
-    else setOnline(false);
-  }else setOnline(false);
-  startSyncLoop();
+  const fileDB=readEmbeddedDB();
+  if(fileDB) adoptDB(mergeDB(fileDB));
+  purgeVanai();
+  if(location.protocol.startsWith('http')) await checkForUpdates(true);
+  updateNetChips();
   const s=localStorage.getItem(K.session);
   if(s){
     const u=getUsers().find(x=>x.name===JSON.parse(s)||x.name===s.replace(/"/g,''));
