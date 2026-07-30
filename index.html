@@ -264,7 +264,7 @@
   .shake{animation:shake .45s}
   .ghost-lock{opacity:.13; font-size:12px; cursor:pointer; user-select:none; display:inline-block; transition:opacity .35s; padding:2px 6px; vertical-align:middle}
   .ghost-lock:hover{opacity:.35}
-  .net-on{color:#0a6f86}
+  .net-on{color:#0a6f86; box-shadow:inset 2px 2px 6px rgba(46,72,118,.12), inset -2px -2px 6px #fff, 0 0 12px rgba(15,181,166,.35)}
   .net-off{color:#b0413e}
   .term-pill{border:0;cursor:pointer;width:48px;height:48px;border-radius:15px;font-family:'Lalezar';font-size:19px;color:var(--muted);
     background:linear-gradient(145deg,#eef4fa,#dfe8f2); box-shadow:-4px -4px 9px #fff, 4px 5px 10px var(--sh-d)}
@@ -363,7 +363,7 @@
       </div>
     </div>
     <span class="chip net-off" id="netChip" style="font-size:11px; padding:7px 12px">🔌 آفلاین</span>
-    <button class="btn btn-sm" style="padding:8px 12px; font-size:12.5px" onclick="checkForUpdates(false)" title="دریافت آخرین تغییرات ادمین">🔄 رفرش</button>
+    <button class="btn btn-sm" style="padding:8px 12px; font-size:12.5px" onclick="refreshNow()" title="دریافت آخرین تغییرات مدیر">🔄 رفرش</button>
     <div class="wallet">
       <span class="wchip chip neu-in" id="coinChip">🪙 <b id="coinVal">0</b></span>
       <span class="wchip chip neu-in" id="pointChip">⭐ <b id="pointVal">0</b></span>
@@ -410,6 +410,7 @@
   <header class="admin-head neu">
     <button class="btn btn-sm" onclick="exitAdmin()">→ بازگشت</button>
     <span class="admin-badge">🔐 پنل مدیریت</span>
+    <span class="admin-badge" id="ownerBadge" hidden style="background:linear-gradient(135deg,#ffd873,#e09a12); color:#4a3305">👑 مدیر اصلی: سید علی لاجوردی</span>
     <div style="flex:1"></div>
     <span class="chip">آخرین تغییر: <b id="adminLastUpdate" style="margin-inline-start:5px">—</b></span>
     <button class="btn btn-sm btn-coral" onclick="publishFile()" title="دریافت فایل به‌روز برای انتشار تغییرات بین همه کاربران">📥 فایل به‌روز</button>
@@ -573,6 +574,63 @@ const saveUsers = u=>{ write(K.users,u); if(state.user){ state.user = u.find(x=>
 /* همه کاربران با رفرش صفحه یا دکمهٔ «رفرش» آخرین نسخه‌ای را می‌گیرند که ادمین منتشر کرده است */
 const SHARED = ['users','content','profs','next','courses','code','meta','token'];
 function collectDB(){ const o={}; SHARED.forEach(k=>o[k]=read(K[k],null)); return o; }
+/* ---- دیتابیس آنلاین خودکار (بدون توکن، بدون ساخت حساب — خود برنامه می‌سازد و مدیریت می‌کند) ---- */
+const STORE_URL='https://www.jsonkeeper.com/b/IAUQOMPSY1404DB';
+function isOwner(){
+  return !!(state.user && String(state.user.name).replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').trim().includes('لاجوردی'));
+}
+async function dbPull(){
+  try{
+    const res=await fetch(STORE_URL,{cache:'no-store'});
+    if(res.ok){
+      try{ const d=await res.json(); if(d && d.meta) return {ok:true, data:d}; }catch(e){}
+      return {ok:false, status:404};
+    }
+    return {ok:false, status:res.status};
+  }catch(e){ return {ok:false, network:true}; }
+}
+let dbPushing=false;
+async function dbPush(db){
+  if(dbPushing) return false;
+  dbPushing=true;
+  try{
+    const res=await fetch(STORE_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'json='+encodeURIComponent(JSON.stringify(db))});
+    return res.ok;
+  }catch(e){ return false; }
+  finally{ dbPushing=false; }
+}
+function setSyncStatus(v){
+  state.syncOnline=!!v;
+  updateNetChips();
+}
+async function syncFromStore(silent){
+  const r=await dbPull();
+  if(r.ok){
+    setSyncStatus(true);
+    if(((r.data.meta&&r.data.meta.version)||0) > (getMeta().version||0)){
+      adoptDB(mergeDB(r.data));
+      purgeVanai();
+      if(!document.getElementById('screen-app').hidden) renderApp();
+      if(!document.getElementById('screen-admin').hidden) renderAdmin();
+      updateNetChips();
+      toast('🔄 به‌روزرسانی جدید از مدیر دریافت شد','info');
+      return true;
+    }
+    if(!silent) toast('برنامه به‌روز است ✓');
+  }else{
+    if(r.network) setSyncStatus(false);
+    if(!silent) toast('اتصال به فضای آنلاین برقرار نشد — اینترنت را بررسی کنید','err');
+  }
+  return false;
+}
+function startLiveSync(){
+  setInterval(()=>{ if(!document.hidden) syncFromStore(true); }, 25000);
+}
+async function refreshNow(){
+  const a=await syncFromStore(false);
+  if(location.protocol.startsWith('http')) await checkForUpdates(true);
+  return a;
+}
 function adoptDB(data){
   SHARED.forEach(k=>{ if(data[k]!==undefined && data[k]!==null) write(K[k], data[k]); });
   if(state.user){ const f=getUsers().find(x=>x.name===state.user.name); if(f) state.user=f; }
@@ -643,7 +701,12 @@ async function checkForUpdates(silent){
 let pushTo=null;
 function schedulePush(){
   clearTimeout(pushTo);
-  pushTo=setTimeout(()=>{ state.dirty=true; },400);
+  pushTo=setTimeout(async ()=>{
+    state.dirty=true;
+    const ok=await dbPush(collectDB());
+    setSyncStatus(ok);
+    if(ok) state.dirty=false;
+  },1200);
 }
 async function publishFile(){
   const db=collectDB();
@@ -676,14 +739,19 @@ function onlineCount(){
   return getUsers().filter(u=>u.onlineToken===t).length;
 }
 function updateNetChips(){
-  const on=isOnlineUser();
   const c1=document.getElementById('netChip');
-  if(c1){ c1.innerHTML=on?'📡 آنلاین':'🔌 آفلاین'; c1.classList.toggle('net-on',on); c1.classList.toggle('net-off',!on); }
+  if(c1){
+    if(state.syncOnline){ c1.innerHTML='🟢 آنلاین'; c1.classList.add('net-on'); c1.classList.remove('net-off'); }
+    else { c1.innerHTML='🔌 محلی'; c1.classList.add('net-off'); c1.classList.remove('net-on'); }
+  }
   const c2=document.getElementById('netChip2');
   if(c2) c2.innerHTML='👥 '+fa(getUsers().length)+' دانشجو';
 }
 document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden && location.protocol.startsWith('http')) checkForUpdates(true);
+  if(!document.hidden){
+    syncFromStore(true);
+    if(location.protocol.startsWith('http')) checkForUpdates(true);
+  }
 });
 
 const state = { user:null, tab:'content', atab:'code', selTerm:'t1', timer:null, verTaps:0, tapTo:null };
@@ -759,6 +827,7 @@ function doLogin(){
   saveUsers(users);
   write(K.session,name);
   state.user=u;
+  if(isOwner()) toast('👑 خوش آمدید مدیر اصلی — سید علی لاجوردی','gold');
   enterApp();
 }
 function logout(){
@@ -976,7 +1045,7 @@ function renderDrawer(){
   const u=state.user;
   document.getElementById('dAva').textContent=u.avatar;
   document.getElementById('dAva').classList.toggle('premium-ring', !!u.premium);
-  document.getElementById('dName').textContent=u.name;
+  document.getElementById('dName').textContent=u.name+(isOwner()?' 👑':'');
   document.getElementById('dTerm').textContent='ترم '+fa(u.term);
   document.getElementById('dPrem').hidden=!u.premium;
   document.getElementById('dCode').textContent='🔑 '+u.code;
@@ -1052,6 +1121,7 @@ function switchAdminTab(t){
 }
 function renderAdmin(){
   document.getElementById('adminLastUpdate').textContent=faDT(new Date(getMeta().lastUpdate));
+  document.getElementById('ownerBadge').hidden=!isOwner();
   renderAdminCode(); renderAdminUsers(); renderAdminContent(); renderAdminCourses(); renderAdminProfs(); renderAdminNext();
 }
 
@@ -1074,8 +1144,8 @@ function renderAdminCode(){
     <small style="display:block; margin-top:12px; color:var(--muted); font-size:11.5px">⚠ با تغییر کد، نسخه برنامه بالا می‌رود و همه کاربران بنر به‌روزرسانی می‌بینند.</small>
   </div>
   <div class="form-card neu">
-    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📡 طراحی توکن اتصال (مخصوص ادمین)</h3>
-    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">این کد را در اختیار دانشجویان بگذارید تا در بخش «ارسال توکن» برنامه وارد کنند و <b>آنلاین</b> شوند. بعد از طراحی کد یا هر تغییر دیگر، دکمهٔ «📥 فایل به‌روز» بالای پنل را بزنید و فایل را در گیت‌هاب جایگزین کنید تا به همه برسد.</p>
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📡 طراحی کد اتصال دانشجویان <small style="font-family:'Vazirmatn'; font-size:10.5px; color:#e09a12; font-weight:800">👑 فقط مدیر اصلی</small></h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">کد را طراحی کنید و به دانشجویان بدهید؛ آن‌ها در بخش «ارسال توکن» برنامه (سایت یا هر اپ ساخته‌شده) وارد می‌کنند و <b>آنلاین</b> می‌شوند. کد و همهٔ تغییرات شما خودکار در فضای آنلاین ذخیره می‌شود و دانشجویان همان لحظه یا با دکمهٔ «🔄 رفرش» دریافت می‌کنند — نیازی به کار دیگری نیست.</p>
     <label>توکن فعلی</label>
     <div class="code-display neu-in" style="color:${tok?'var(--teal-d)':'var(--muted)'}">${tok?esc(tok):'هنوز طراحی نشده'}</div>
     <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
@@ -1096,6 +1166,7 @@ function setCode(){
   renderAdmin();
 }
 function genToken(){
+  if(!isOwner()) return toast('👑 فقط مدیر اصلی (سید علی لاجوردی) می‌تواند کد اتصال را طراحی کند','err');
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let t='PSY-';
   for(let i=0;i<5;i++) t+=chars[Math.floor(Math.random()*chars.length)];
@@ -1372,7 +1443,17 @@ document.querySelectorAll('.admin-gate').forEach(l=>l.addEventListener('click', 
   const fileDB=readEmbeddedDB();
   if(fileDB) adoptDB(mergeDB(fileDB));
   purgeVanai();
+  const r=await dbPull();
+  if(r.ok){
+    setSyncStatus(true);
+    adoptDB(mergeDB(r.data));
+  }else{
+    const ok=await dbPush(collectDB());
+    setSyncStatus(ok);
+    if(ok) toast('🟢 فضای آنلاین ساخته شد — همه کاربران متصل می‌شوند');
+  }
   if(location.protocol.startsWith('http')) await checkForUpdates(true);
+  startLiveSync();
   updateNetChips();
   const s=localStorage.getItem(K.session);
   if(s){
