@@ -363,6 +363,7 @@
       </div>
     </div>
     <span class="chip net-off" id="netChip" style="font-size:11px; padding:7px 12px">🔌 آفلاین</span>
+    <button class="btn btn-sm" style="padding:8px 12px; font-size:12.5px" onclick="checkForUpdates(false)" title="دریافت آخرین تغییرات ادمین">🔄 رفرش</button>
     <div class="wallet">
       <span class="wchip chip neu-in" id="coinChip">🪙 <b id="coinVal">0</b></span>
       <span class="wchip chip neu-in" id="pointChip">⭐ <b id="pointVal">0</b></span>
@@ -411,6 +412,7 @@
     <span class="admin-badge">🔐 پنل مدیریت</span>
     <div style="flex:1"></div>
     <span class="chip">آخرین تغییر: <b id="adminLastUpdate" style="margin-inline-start:5px">—</b></span>
+    <button class="btn btn-sm btn-coral" onclick="publishFile()" title="دریافت فایل به‌روز برای انتشار تغییرات بین همه کاربران">📥 فایل به‌روز</button>
   </header>
 
   <nav class="admin-tabs neu" id="adminTabs">
@@ -567,43 +569,10 @@ const getMeta = ()=>read(K.meta,{version:1,lastUpdate:nowIso()});
 const getUsers = ()=>read(K.users,[]);
 const saveUsers = u=>{ write(K.users,u); if(state.user){ state.user = u.find(x=>x.name===state.user.name)||state.user; } schedulePush(); };
 
-/* ================= دیتابیس مشترک و واقعی (مخزن گیت‌هاب: db.json) ================= */
-/* همه دستگاه‌ها — دسکتاپ، موبایل، هر مرورگر — این دیتابیس را می‌خوانند و در آن می‌نویسند */
-const GH_TOKEN='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'; //__GT__ ← در فایل منتشرشده، توکن اینجا قرار می‌گیرد
-const GH={
-  raw:'https://raw.githubusercontent.com/seyedaliboy2021-oss/universityapp/main/db.json',
-  api:'https://api.github.com/repos/seyedaliboy2021-oss/universityapp/contents/db.json'
-};
+/* ================= فضای مشترک برنامه (داده‌ها داخل خود فایل — بدون توکن و بدون سرویس خارجی) ================= */
+/* همه کاربران با رفرش صفحه یا دکمهٔ «رفرش» آخرین نسخه‌ای را می‌گیرند که ادمین منتشر کرده است */
 const SHARED = ['users','content','profs','next','courses','code','meta','token'];
 function collectDB(){ const o={}; SHARED.forEach(k=>o[k]=read(K[k],null)); return o; }
-const getGhToken=()=>localStorage.getItem('iauqom_token')||GH_TOKEN||state.sharedGhToken||'';
-async function cloudPull(){
-  try{
-    const res=await fetch(GH.raw+'?cb='+Date.now());
-    if(res.ok){ const d=await res.json(); return (d&&d.meta)?{ok:true,data:d}:{ok:false,status:404}; }
-    return {ok:false,status:res.status};
-  }catch(e){ return {ok:false,network:true}; }
-}
-async function cloudPush(db){
-  const t=getGhToken(); if(!t) return false;
-  db.ghToken=t;
-  const H={'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json'};
-  for(let attempt=0; attempt<2; attempt++){
-    try{
-      let sha=null;
-      const head=await fetch(GH.api,{headers:H});
-      if(head.ok) sha=(await head.json()).sha;
-      else if(head.status===401||head.status===403){ state.ghError='auth'; return false; }
-      const body={message:'sync: به‌روزرسانی دیتابیس اپلیکیشن',content:btoa(unescape(encodeURIComponent(JSON.stringify(db,null,1))))};
-      if(sha) body.sha=sha;
-      const res=await fetch(GH.api,{method:'PUT',headers:H,body:JSON.stringify(body)});
-      if(res.ok||res.status===201){ state.ghError=null; return true; }
-      if(res.status===401||res.status===403||res.status===422){ state.ghError='auth'; return false; }
-      if(res.status!==409) return false;
-    }catch(e){ return false; }
-  }
-  return false;
-}
 function adoptDB(data){
   SHARED.forEach(k=>{ if(data[k]!==undefined && data[k]!==null) write(K[k], data[k]); });
   if(state.user){ const f=getUsers().find(x=>x.name===state.user.name); if(f) state.user=f; }
@@ -640,43 +609,62 @@ function mergeDB(fileDB){
   return out;
 }
 
+async function fetchSiteHtml(){
+  try{
+    const res=await fetch(location.href.split('#')[0],{cache:'no-store'});
+    if(res.ok) return await res.text();
+  }catch(e){}
+  return null;
+}
+function extractDBFromHtml(html){
+  try{
+    const m=html.match(/id="appDB"[^>]*>[\s\S]*?\/\*__DB__\*\/([\s\S]*?)\/\*__DBEND__\*\//);
+    if(m) return JSON.parse(m[1]);
+  }catch(e){}
+  return null;
+}
+async function checkForUpdates(silent){
+  if(!location.protocol.startsWith('http')){ if(!silent) toast('برای دریافت به‌روزرسانی، برنامه را از سایت باز کنید','info'); return false; }
+  const html=await fetchSiteHtml();
+  const fileDB=html?extractDBFromHtml(html):null;
+  if(!fileDB){ if(!silent) toast('نسخه جدیدی پیدا نشد','err'); return false; }
+  if(((fileDB.meta&&fileDB.meta.version)||0) > (getMeta().version||0)){
+    adoptDB(mergeDB(fileDB));
+    purgeVanai();
+    if(!document.getElementById('screen-app').hidden) renderApp();
+    if(!document.getElementById('screen-admin').hidden) renderAdmin();
+    updateNetChips();
+    toast('🔄 نسخه جدید دریافت شد — تغییرات ادمین اعمال شد');
+    return true;
+  }
+  if(!silent) toast('برنامه به‌روز است ✓');
+  return false;
+}
 let pushTo=null;
 function schedulePush(){
   clearTimeout(pushTo);
-  pushTo=setTimeout(async ()=>{
-    if(getGhToken()){
-      const ok=await cloudPush(collectDB());
-      setDbStatus(ok);
-    }
-  },1200);
+  pushTo=setTimeout(()=>{ state.dirty=true; },400);
 }
-function setDbStatus(v){
-  state.dbOnline=!!v;
-  updateNetChips();
-}
-async function syncFromCloud(silent){
-  const r=await cloudPull();
-  if(r.ok){
-    setDbStatus(true);
-    if(r.data.ghToken) state.sharedGhToken=r.data.ghToken;
-    if(((r.data.meta&&r.data.meta.version)||0) > (getMeta().version||0)){
-      adoptDB(mergeDB(r.data));
-      purgeVanai();
-      if(!document.getElementById('screen-app').hidden) renderApp();
-      if(!document.getElementById('screen-admin').hidden) renderAdmin();
-      updateNetChips();
-      toast('🔄 اطلاعات از دیتابیس به‌روزرسانی شد','info');
-      return true;
-    }
-    if(!silent) toast('دیتابیس به‌روز است ✓');
+async function publishFile(){
+  const db=collectDB();
+  let html=await fetchSiteHtml();
+  if(!html) html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const payload=JSON.stringify(db);
+  let out;
+  if(/\/\*__DB__\*\/[\s\S]*?\/\*__DBEND__\*\//.test(html)){
+    out=html.replace(/\/\*__DB__\*\/[\s\S]*?\/\*__DBEND__\*\//,'/*__DB__*/'+payload+'/*__DBEND__*/');
   }else{
-    if(r.network) setDbStatus(false);
-    if(!silent) toast('اتصال به دیتابیس برقرار نشد','err');
+    const marker='<script type="application/json" id="appDB">/*__DB__*/'+payload+'/*__DBEND__*/<\/script>';
+    out=html.replace('<body>','<body>\n'+marker);
   }
-  return false;
-}
-function startSyncLoop(){
-  setInterval(()=>{ if(!document.hidden) syncFromCloud(true); }, 15000);
+  const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='index.html';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  state.dirty=false;
+  toast('📥 فایل به‌روز آماده شد — آن را در گیت‌هاب جایگزین کنید تا تغییرات به همه برسد');
 }
 function isOnlineUser(){
   const t=read(K.token,'');
@@ -688,19 +676,14 @@ function onlineCount(){
   return getUsers().filter(u=>u.onlineToken===t).length;
 }
 function updateNetChips(){
+  const on=isOnlineUser();
   const c1=document.getElementById('netChip');
-  if(c1){
-    let txt, on;
-    if(state.dbOnline){ txt='🟢 دیتابیس: متصل'; on=true; }
-    else if(getGhToken()){ txt=(state.ghError==='auth')?'🔴 توکن: دسترسی ندارد':'🔴 دیتابیس: قطع'; on=false; }
-    else { txt='⚙ دیتابیس: نیاز به اتصال'; on=false; }
-    c1.innerHTML=txt; c1.classList.toggle('net-on',on); c1.classList.toggle('net-off',!on);
-  }
+  if(c1){ c1.innerHTML=on?'📡 آنلاین':'🔌 آفلاین'; c1.classList.toggle('net-on',on); c1.classList.toggle('net-off',!on); }
   const c2=document.getElementById('netChip2');
   if(c2) c2.innerHTML='👥 '+fa(getUsers().length)+' دانشجو';
 }
 document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden) syncFromCloud(true);
+  if(!document.hidden && location.protocol.startsWith('http')) checkForUpdates(true);
 });
 
 const state = { user:null, tab:'content', atab:'code', selTerm:'t1', timer:null, verTaps:0, tapTo:null };
@@ -1008,8 +991,8 @@ function renderDrawer(){
   ts.style.color=on?'#0b3d22':'';
   ts.style.boxShadow=on?'0 5px 12px rgba(47,174,102,.35)':'';
   document.getElementById('tokHint').textContent = on
-    ? 'متصل هستید — تغییرات ادمین به‌صورت زنده از دیتابیس دریافت می‌شود'
-    : 'توکن را از ادمین گروه بگیرید و آنلاین شوید';
+    ? 'آنلاین هستید — با دکمهٔ «🔄 رفرش» بالای برنامه، آخرین تغییرات ادمین را دریافت کنید'
+    : 'کد ادمین را وارد کنید تا آنلاین شوید';
   document.getElementById('dCounts').innerHTML='👥 کل دانشجویان: <b>'+fa(getUsers().length)+'</b> &nbsp;•&nbsp; 📡 آنلاین: <b>'+fa(onlineCount())+'</b>';
   updateNetChips();
 }
@@ -1092,7 +1075,7 @@ function renderAdminCode(){
   </div>
   <div class="form-card neu">
     <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📡 طراحی توکن اتصال (مخصوص ادمین)</h3>
-    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">این توکن را در اختیار دانشجویان بگذارید تا در بخش «ارسال توکن» برنامه وارد کنند و <b>آنلاین</b> شوند. بعد از طراحی توکن، حتماً فایل به‌روز را از تب «انتشار فایل» دانلود و در گیت‌هاب جایگزین کنید.</p>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">این کد را در اختیار دانشجویان بگذارید تا در بخش «ارسال توکن» برنامه وارد کنند و <b>آنلاین</b> شوند. بعد از طراحی کد یا هر تغییر دیگر، دکمهٔ «📥 فایل به‌روز» بالای پنل را بزنید و فایل را در گیت‌هاب جایگزین کنید تا به همه برسد.</p>
     <label>توکن فعلی</label>
     <div class="code-display neu-in" style="color:${tok?'var(--teal-d)':'var(--muted)'}">${tok?esc(tok):'هنوز طراحی نشده'}</div>
     <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
@@ -1389,18 +1372,7 @@ document.querySelectorAll('.admin-gate').forEach(l=>l.addEventListener('click', 
   const fileDB=readEmbeddedDB();
   if(fileDB) adoptDB(mergeDB(fileDB));
   purgeVanai();
-  const r=await cloudPull();
-  if(r.ok){
-    if(r.data.ghToken) state.sharedGhToken=r.data.ghToken;
-    setDbStatus(true);
-    adoptDB(mergeDB(r.data));
-  }else if(r.status===404 && getGhToken()){
-    const ok=await cloudPush(collectDB());
-    setDbStatus(ok);
-    if(ok) toast('🟢 دیتابیس ساخته شد — همه کاربران متصل‌اند');
-    else toast('🔴 دیتابیس متصل نشد — توکن دسترسی نوشتن ندارد یا فایل سایت قدیمی است','err');
-  }else setDbStatus(false);
-  startSyncLoop();
+  if(location.protocol.startsWith('http')) await checkForUpdates(true);
   updateNetChips();
   const s=localStorage.getItem(K.session);
   if(s){
