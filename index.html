@@ -2,785 +2,1041 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>روان‌شناسی عمومی | دانشگاه آزاد قم</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
-:root{
-  --bg:#e6e9f2;
-  --bg-deep:#dde1ee;
-  --shadow-light:#ffffff;
-  --shadow-dark:#b9bfd6;
-  --ink:#33365a;
-  --ink-soft:#6b6f95;
-  --c1:#7c5cff;   /* دروس - بنفش */
-  --c1-soft:#efe9ff;
-  --c2:#00b894;   /* اساتید - سبز */
-  --c2-soft:#e3fbf4;
-  --c3:#ff9f43;   /* رسانه - نارنجی */
-  --c3-soft:#fff3e3;
-  --c4:#ee5a9e;   /* ترم آینده - صورتی */
-  --c4-soft:#ffe7f2;
-  --c5:#2e86de;   /* چت - آبی */
-  --c5-soft:#e5f2fe;
-  --admin:#e63946;
-  --gold:#f4a300;
-  --good:#00b894;
-  --mid:#f4a300;
-  --bad:#e63946;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
-.neu{background:var(--bg);border-radius:22px;box-shadow:9px 9px 18px var(--shadow-dark),-9px -9px 18px var(--shadow-light);}
-.neu-in{background:var(--bg);border-radius:16px;box-shadow:inset 5px 5px 10px var(--shadow-dark),inset -5px -5px 10px var(--shadow-light);}
-.neu-btn{background:var(--bg);border:none;border-radius:14px;box-shadow:6px 6px 12px var(--shadow-dark),-6px -6px 12px var(--shadow-light);cursor:pointer;transition:.15s;color:var(--ink);font-family:inherit}
-.neu-btn:active{box-shadow:inset 4px 4px 8px var(--shadow-dark),inset -4px -4px 8px var(--shadow-light);}
-.neu-btn:hover{filter:brightness(1.03)}
-input,textarea,select{font-family:'Vazirmatn',sans-serif;border:none;outline:none;background:var(--bg);border-radius:14px;box-shadow:inset 4px 4px 8px var(--shadow-dark),inset -4px -4px 8px var(--shadow-light);padding:12px 14px;color:var(--ink);width:100%;font-size:14px}
+  :root{
+    --p1:#6d5efc; --p2:#a64bff; --p3:#ff5d9e; --p4:#ff9d4d;
+    --g1:#22d3a6; --g2:#3ad7c8; --y1:#ffd23f;
+    --ink:#1c1432; --glass:rgba(255,255,255,.72);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:'Vazirmatn',sans-serif;color:var(--ink);overflow-x:hidden}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(900px 600px at 85% -5%, #ffd9ec 0%, transparent 55%),
+      radial-gradient(800px 600px at 5% 0%, #d6d0ff 0%, transparent 55%),
+      radial-gradient(900px 700px at 50% 110%, #c9f6ec 0%, transparent 55%),
+      linear-gradient(135deg,#7c6bff 0%,#9b5cff 35%,#c34be0 70%,#ff6fae 100%);
+    background-attachment:fixed;
+  }
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(124,92,255,.5);border-radius:10px}
+  ::-webkit-scrollbar-track{background:transparent}
 
-/* Topbar */
-#topbar{position:fixed;top:0;right:0;left:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:50;background:var(--bg)}
-#clockbox{display:flex;flex-direction:column;align-items:flex-start;padding:8px 16px;font-size:12px;color:var(--ink-soft)}
-#clockbox b{font-size:15px;color:var(--ink);font-weight:700}
-#brand{font-weight:800;font-size:15px;color:var(--c1);display:flex;flex-direction:column;align-items:center;line-height:1.5}
-#brand span{font-size:10px;font-weight:400;color:var(--ink-soft)}
-#burger{width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:20px}
+  /* ---------- Isometric background scene ---------- */
+  .iso-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .iso{position:absolute;transform-style:preserve-3d}
+  .iso-cube{animation:floaty 9s ease-in-out infinite}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-26px) rotate(8deg)}}
+  .gem{width:54px;height:54px;transform:rotate(45deg);border-radius:14px;
+    box-shadow:0 22px 40px rgba(80,40,140,.35);position:relative}
+  .gem::after{content:"";position:absolute;inset:0;border-radius:14px;
+    background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,0) 45%)}
+  .plat{border-radius:24px;background:rgba(255,255,255,.16);backdrop-filter:blur(3px);
+    box-shadow:0 30px 60px rgba(60,20,110,.25)}
 
-/* Login */
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-#loginCard{width:100%;max-width:400px;padding:36px 30px;text-align:center}
-#loginCard h1{font-size:20px;margin:0 0 4px;color:var(--c1)}
-#loginCard p{color:var(--ink-soft);font-size:13px;margin:0 0 24px}
-#loginCard .field{margin-bottom:16px;text-align:right}
-#loginCard label{font-size:12px;color:var(--ink-soft);display:block;margin-bottom:6px}
-.logo-circle{width:70px;height:70px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--bg);box-shadow:6px 6px 12px var(--shadow-dark),-6px -6px 12px var(--shadow-light);color:var(--c1)}
+  /* ---------- Glass surfaces ---------- */
+  .glass{background:var(--glass);backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.6);
+    box-shadow:0 22px 50px rgba(55,20,110,.22)}
+  .card-iso{transition:transform .25s ease, box-shadow .25s ease;will-change:transform}
+  .card-iso:hover{transform:translateY(-6px) rotateZ(-.4deg);box-shadow:0 30px 60px rgba(55,20,110,.32)}
 
-/* App shell */
-#app{display:none;padding:80px 16px 100px;max-width:900px;margin:0 auto}
-.hidden{display:none !important}
-.section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:18px;font-weight:700}
-.section-title .dot{width:10px;height:10px;border-radius:50%}
-.card{padding:18px;margin-bottom:14px}
-.hello{padding:16px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.hello .name{font-weight:700;color:var(--c1)}
-.term-pill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600}
+  /* ---------- Buttons ---------- */
+  .btn-3d{position:relative;border:none;cursor:pointer;color:#fff;font-weight:700;
+    border-radius:16px;padding:13px 22px;transition:transform .12s ease,box-shadow .12s ease;
+    box-shadow:0 7px 0 rgba(0,0,0,.18),0 14px 26px rgba(80,40,160,.35)}
+  .btn-3d:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.18),0 6px 12px rgba(80,40,160,.3)}
+  .b-grad1{background:linear-gradient(135deg,var(--p1),var(--p2))}
+  .b-grad2{background:linear-gradient(135deg,#ff7eb3,var(--p3))}
+  .b-grad3{background:linear-gradient(135deg,var(--g1),#13b6c4)}
+  .b-grad4{background:linear-gradient(135deg,var(--p4),var(--y1))}
 
-/* Bottom nav */
-#bottomnav{position:fixed;bottom:12px;right:12px;left:12px;display:flex;justify-content:space-around;padding:8px;z-index:40}
-.nav-btn{flex:1;margin:0 3px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--ink-soft);background:transparent;box-shadow:none}
-.nav-btn.active{color:var(--ink);box-shadow:4px 4px 8px var(--shadow-dark),-4px -4px 8px var(--shadow-light)}
-.nav-btn .ic{font-size:18px}
+  .chip{border-radius:999px;padding:5px 13px;font-weight:700;font-size:13px}
 
-/* course card */
-.course-item{padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.course-item .cname{font-weight:700;font-size:14px}
-.course-item .profs{font-size:12px;color:var(--ink-soft);margin-top:4px}
-.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;margin-top:6px;margin-left:4px;color:#fff}
-.tag.good{background:var(--good)}
-.tag.mid{background:var(--mid)}
-.tag.bad{background:var(--bad)}
+  .field{width:100%;border-radius:14px;border:2px solid rgba(124,92,255,.22);
+    background:rgba(255,255,255,.85);padding:12px 14px;font-family:inherit;font-size:15px;outline:none;transition:.2s}
+  .field:focus{border-color:var(--p1);box-shadow:0 0 0 4px rgba(109,94,252,.18)}
 
-/* professors list */
-.prof-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;margin-bottom:8px}
-.prof-row .pname{font-weight:600;font-size:13px}
-.rating-badge{font-size:11px;padding:4px 12px;border-radius:14px;color:#fff;font-weight:700}
+  .tab-btn,.atab-btn{transition:.22s;border:none;cursor:pointer}
+  .tab-btn.active,.atab-btn.active{transform:translateY(-3px);box-shadow:0 16px 30px rgba(50,20,110,.35);outline:3px solid rgba(255,255,255,.85)}
 
-/* media */
-.media-item{padding:14px;margin-bottom:12px}
-.media-item h4{margin:0 0 8px;font-size:14px}
-.media-item .meta{font-size:11px;color:var(--ink-soft);margin-bottom:8px}
-.media-item img{width:100%;border-radius:12px;display:block;margin:8px 0}
-.media-item video,.media-item audio{width:100%;border-radius:12px;margin:8px 0}
-.ad-box{padding:12px;text-align:center;font-size:12px}
-.progress-outer{height:10px;border-radius:6px;margin:10px 0;overflow:hidden}
-.progress-inner{height:100%;background:linear-gradient(90deg,var(--c3),var(--gold));width:0%;transition:width .2s}
+  /* drawer */
+  .drawer{transform:translateX(100%);transition:transform .35s cubic-bezier(.7,.1,.2,1)}
+  .drawer.open{transform:translateX(0)}
+  .overlay{opacity:0;pointer-events:none;transition:.3s}
+  .overlay.open{opacity:1;pointer-events:auto}
 
-/* chat */
-#chatMessages{height:340px;overflow-y:auto;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
-.msg{max-width:75%;padding:9px 13px;border-radius:14px;font-size:13px;box-shadow:3px 3px 6px var(--shadow-dark),-3px -3px 6px var(--shadow-light)}
-.msg.me{align-self:flex-start;background:var(--c5-soft)}
-.msg.other{align-self:flex-end;background:#fff}
-.msg .who{font-size:10px;color:var(--ink-soft);margin-bottom:3px;font-weight:700}
-#chatInputRow{display:flex;gap:8px}
-#chatInputRow input{flex:1}
-#chatGate{padding:26px 20px;text-align:center}
+  .modal{transform:scale(.9);opacity:0;pointer-events:none;transition:.3s}
+  .modal.open{transform:scale(1);opacity:1;pointer-events:auto}
 
-/* Sidebar / hamburger menu */
-#overlay{position:fixed;inset:0;background:rgba(30,30,50,.35);z-index:60;display:none}
-#sidebar{position:fixed;top:0;right:-320px;width:300px;height:100%;background:var(--bg);z-index:70;transition:.25s;padding:24px 18px;overflow-y:auto;box-shadow:-8px 0 20px rgba(0,0,0,.15)}
-#sidebar.open{right:0}
-#overlay.show{display:block}
-.side-item{padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;cursor:pointer}
-.side-item .ic{font-size:18px}
-.side-title{font-size:13px;color:var(--ink-soft);margin:18px 0 8px 4px}
+  .fade-in{animation:fade .45s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-/* modal */
-.modal-back{position:fixed;inset:0;background:rgba(20,20,40,.45);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-back.show{display:flex}
-.modal{width:100%;max-width:440px;padding:24px;max-height:88vh;overflow-y:auto}
-.modal h3{margin:0 0 14px;font-size:16px;color:var(--admin)}
-.modal .field{margin-bottom:12px}
-.modal label{font-size:12px;color:var(--ink-soft);display:block;margin-bottom:5px}
-.row2{display:flex;gap:8px}
-.row2>*{flex:1}
-.close-x{position:absolute;top:14px;left:14px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
-.rel{position:relative}
+  .pop{animation:pop .5s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
 
-/* admin lists */
-.admin-list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin-bottom:8px;font-size:13px}
-.mini-btn{padding:6px 10px;font-size:11px;border-radius:10px}
-.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.tab-btn{padding:8px 14px;font-size:12px}
-.tab-btn.active{background:var(--c1);color:#fff;box-shadow:none}
+  /* confetti */
+  .conf{position:fixed;width:11px;height:18px;top:-20px;z-index:90;border-radius:3px;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.9}}
 
-.btn-primary{padding:12px;font-weight:700;color:#fff;background:var(--c1);width:100%;box-shadow:none}
-.btn-admin{background:var(--admin);color:#fff}
-.small-muted{font-size:11px;color:var(--ink-soft)}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-thumb{background:var(--shadow-dark);border-radius:10px}
-@media(max-width:480px){
-  #brand{font-size:12px}
-  #clockbox{font-size:10px;padding:6px 8px}
-  #clockbox b{font-size:13px}
-}
+  .rating-pill{transition:.2s}
+  .timer-ring{transition:stroke-dashoffset 1s linear}
+
+  .scroll-hide::-webkit-scrollbar{display:none}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
-<div id="loginScreen">
-  <div class="neu" id="loginCard">
-    <div class="logo-circle">🧠</div>
-    <h1>روان‌شناسی عمومی</h1>
-    <p>دانشگاه آزاد اسلامی واحد قم</p>
-    <div class="field">
-      <label>نام و نام خانوادگی</label>
-      <input type="text" id="loginName" placeholder="مثلاً: زهرا محمدی">
+<!-- ===== Isometric decorations ===== -->
+<div class="iso-scene" aria-hidden="true">
+  <div class="iso iso-cube" style="top:9%;right:6%"><div class="gem" style="background:linear-gradient(135deg,#ff9d4d,#ff5d9e)"></div></div>
+  <div class="iso iso-cube" style="top:62%;left:4%;animation-delay:1.4s"><div class="gem" style="background:linear-gradient(135deg,#22d3a6,#3ad7c8);width:42px;height:42px"></div></div>
+  <div class="iso iso-cube" style="top:24%;left:8%;animation-delay:.7s"><div class="plat" style="width:96px;height:96px"></div></div>
+  <div class="iso iso-cube" style="top:75%;right:9%;animation-delay:2.1s"><div class="plat" style="width:64px;height:64px"></div></div>
+  <div class="iso iso-cube" style="top:42%;right:14%;animation-delay:.3s"><div class="gem" style="background:linear-gradient(135deg,#6d5efc,#a64bff);width:36px;height:36px"></div></div>
+</div>
+
+<!-- ================= WELCOME / ONBOARDING ================= -->
+<section id="welcome" class="relative z-10 min-h-screen flex items-center justify-center p-5">
+  <div class="glass rounded-[34px] max-w-lg w-full p-8 sm:p-10 fade-in text-center">
+    <div class="mx-auto w-28 h-28 rounded-[28px] flex items-center justify-center mb-5 relative" style="background:linear-gradient(135deg,#6d5efc,#a64bff 55%,#ff5d9e);box-shadow:0 20px 40px rgba(109,94,252,.45)">
+      <span class="text-5xl">🧠</span>
+      <span class="absolute -bottom-3 -left-3 text-3xl">✨</span>
     </div>
-    <div class="field">
-      <label>ترم تحصیلی</label>
-      <select id="loginTerm">
-        <option value="1">ترم ۱</option>
-        <option value="2">ترم ۲</option>
-        <option value="3">ترم ۳</option>
-        <option value="4">ترم ۴</option>
-      </select>
-    </div>
-    <button class="neu-btn btn-primary" onclick="doLogin()">ورود به برنامه</button>
-    <div class="small-muted" style="margin-top:14px">اطلاعات شما فقط روی همین دستگاه ذخیره می‌شود</div>
-  </div>
-</div>
+    <h1 class="text-2xl sm:text-3xl font-black text-white drop-shadow">روان‌شناسی عمومی</h1>
+    <p class="text-white/90 font-bold mt-1">دانشگاه آزاد اسلامی واحد قم</p>
+    <p class="text-sm text-white/80 mt-4 leading-7">سلام دانشجو جان! 👋 اسمت و ترمت رو وارد کن تا وارد دنیای رنگی روان‌شناسی بشی 🎨</p>
 
-<!-- ===== TOP BAR ===== -->
-<div id="topbar" class="hidden">
-  <div id="clockbox" class="neu-in">
-    <b id="clockTime">--:--:--</b>
-    <span id="clockDate">در حال دریافت تاریخ...</span>
-  </div>
-  <div id="brand">روان‌شناسی عمومی<span>دانشگاه آزاد قم</span></div>
-  <button class="neu-btn" id="burger" onclick="openSidebar()">☰</button>
-</div>
-
-<!-- ===== SIDEBAR ===== -->
-<div id="overlay" onclick="closeSidebar()"></div>
-<div id="sidebar">
-  <div style="font-weight:800;color:var(--c1);margin-bottom:6px">منوی برنامه</div>
-  <div class="small-muted" style="margin-bottom:16px" id="sideUserInfo"></div>
-
-  <div class="side-title">بخش‌های اصلی</div>
-  <div class="neu-btn side-item" onclick="goSection(1)"><span class="ic">📚</span> دروس و اساتید هر ترم</div>
-  <div class="neu-btn side-item" onclick="goSection(2)"><span class="ic">⭐</span> ارزیابی اساتید</div>
-  <div class="neu-btn side-item" onclick="goSection(3)"><span class="ic">🎬</span> مطالب و رسانه‌ها</div>
-  <div class="neu-btn side-item" onclick="goSection(4)"><span class="ic">🔮</span> اساتید ترم آینده</div>
-  <div class="neu-btn side-item" onclick="goSection(5)"><span class="ic">💬</span> چت دانشجویان</div>
-
-  <div class="side-title">مدیریت</div>
-  <div class="neu-btn side-item" onclick="openAdminLogin()" style="color:var(--admin)"><span class="ic">🔐</span> پنل مدیریت</div>
-  <div class="neu-btn side-item" onclick="doLogout()"><span class="ic">🚪</span> خروج از حساب</div>
-</div>
-
-<!-- ===== MAIN APP ===== -->
-<div id="app">
-
-  <div class="neu hello">
-    <div>خوش آمدید، <span class="name" id="helloName"></span></div>
-    <div class="term-pill neu-in" id="helloTerm"></div>
-  </div>
-
-  <!-- SECTION 1: courses -->
-  <section id="sec1" class="sec">
-    <div class="section-title"><span class="dot" style="background:var(--c1)"></span> دروس ترم <span id="sec1Term"></span> و اساتید</div>
-    <div id="courseList"></div>
-  </section>
-
-  <!-- SECTION 2: professor ratings -->
-  <section id="sec2" class="sec hidden">
-    <div class="section-title"><span class="dot" style="background:var(--c2)"></span> اساتید خوب، متوسط و ضعیف</div>
-    <div id="profRatingList"></div>
-  </section>
-
-  <!-- SECTION 3: media -->
-  <section id="sec3" class="sec hidden">
-    <div class="section-title"><span class="dot" style="background:var(--c3)"></span> مطالب و رسانه‌ها</div>
-    <div id="mediaList"></div>
-  </section>
-
-  <!-- SECTION 4: next term -->
-  <section id="sec4" class="sec hidden">
-    <div class="section-title"><span class="dot" style="background:var(--c4)"></span> اساتید ترم آینده</div>
-    <div id="nextTermList"></div>
-  </section>
-
-  <!-- SECTION 5: chat -->
-  <section id="sec5" class="sec hidden">
-    <div class="section-title"><span class="dot" style="background:var(--c5)"></span> چت دانشجویان (آنلاین)</div>
-    <div id="chatGateWrap">
-      <div class="neu" id="chatGate">
-        <div style="font-weight:700;margin-bottom:10px">برای ورود به چت، توکن را وارد کنید</div>
-        <input type="text" id="chatTokenInput" placeholder="توکن ورود به چت" style="margin-bottom:12px">
-        <button class="neu-btn btn-primary" onclick="joinChat()">ورود به گفتگو</button>
+    <div class="space-y-3 mt-6 text-right">
+      <div>
+        <label class="block text-white font-bold mb-1.5 text-sm">👤 نام و نام خانوادگی</label>
+        <input id="inName" class="field" placeholder="مثلاً: مریم احمدی">
       </div>
-    </div>
-    <div id="chatBoxWrap" class="hidden">
-      <div class="neu" id="chatMessages"></div>
-      <div id="chatInputRow">
-        <input type="text" id="chatInput" placeholder="پیام خود را بنویسید...">
-        <button class="neu-btn" style="padding:0 18px" onclick="sendChat()">ارسال</button>
-      </div>
-    </div>
-  </section>
-
-</div>
-
-<!-- ===== BOTTOM NAV ===== -->
-<div id="bottomnav" class="hidden">
-  <button class="neu-btn nav-btn active" data-s="1" onclick="goSection(1)"><span class="ic">📚</span>دروس</button>
-  <button class="neu-btn nav-btn" data-s="2" onclick="goSection(2)"><span class="ic">⭐</span>اساتید</button>
-  <button class="neu-btn nav-btn" data-s="3" onclick="goSection(3)"><span class="ic">🎬</span>رسانه</button>
-  <button class="neu-btn nav-btn" data-s="4" onclick="goSection(4)"><span class="ic">🔮</span>ترم آینده</button>
-  <button class="neu-btn nav-btn" data-s="5" onclick="goSection(5)"><span class="ic">💬</span>چت</button>
-</div>
-
-<!-- ===== ADMIN LOGIN MODAL ===== -->
-<div class="modal-back" id="adminLoginModal">
-  <div class="neu modal rel">
-    <button class="neu-btn close-x" onclick="closeModal('adminLoginModal')">✕</button>
-    <h3>ورود به پنل مدیریت</h3>
-    <div class="field">
-      <label>رمز عبور مدیریت</label>
-      <input type="password" id="adminPassInput" placeholder="رمز عبور">
-    </div>
-    <button class="neu-btn btn-primary btn-admin" onclick="tryAdminLogin()">تأیید و ورود</button>
-    <div class="small-muted" style="margin-top:10px">دسترسی فقط برای مدیر مجاز سیستم امکان‌پذیر است</div>
-  </div>
-</div>
-
-<!-- ===== ADMIN PANEL MODAL ===== -->
-<div class="modal-back" id="adminPanelModal">
-  <div class="neu modal rel" style="max-width:640px">
-    <button class="neu-btn close-x" onclick="closeModal('adminPanelModal')">✕</button>
-    <h3>پنل مدیریت — سید علی لاجوردی</h3>
-    <div class="tabs">
-      <button class="neu-btn tab-btn active" data-t="courses" onclick="adminTab('courses')">دروس و اساتید</button>
-      <button class="neu-btn tab-btn" data-t="media" onclick="adminTab('media')">مطالب و رسانه</button>
-      <button class="neu-btn tab-btn" data-t="next" onclick="adminTab('next')">ترم آینده</button>
-      <button class="neu-btn tab-btn" data-t="chat" onclick="adminTab('chat')">توکن چت</button>
-    </div>
-
-    <!-- courses tab -->
-    <div id="tab-courses" class="admin-tab">
-      <div class="row2" style="margin-bottom:10px">
-        <select id="admCourseTerm">
-          <option value="1">ترم ۱</option><option value="2">ترم ۲</option>
-          <option value="3">ترم ۳</option><option value="4">ترم ۴</option>
+      <div>
+        <label class="block text-white font-bold mb-1.5 text-sm">🎓 ترم تحصیلی</label>
+        <select id="inTerm" class="field">
+          <option value="">انتخاب ترم…</option>
+          <option value="1">ترم اول</option><option value="2">ترم دوم</option>
+          <option value="3">ترم سوم</option><option value="4">ترم چهارم</option>
+          <option value="5">ترم پنجم</option><option value="6">ترم ششم</option>
+          <option value="7">ترم هفتم</option><option value="8">ترم هشتم</option>
         </select>
-        <button class="neu-btn" onclick="renderAdminCourses()">نمایش</button>
       </div>
-      <div class="neu-in" style="padding:14px;margin-bottom:14px">
-        <div class="field"><label>نام درس جدید</label><input id="newCourseName" placeholder="مثلاً: روان‌شناسی رشد"></div>
-        <button class="neu-btn btn-primary" onclick="addCourse()">افزودن درس به این ترم</button>
+    </div>
+    <button onclick="saveStudent()" class="btn-3d b-grad1 w-full mt-6 text-lg">ورود به اپلیکیشن 🚀</button>
+    <p class="text-white/70 text-xs mt-4">اطلاعات شما فقط روی همین گوشی ذخیره می‌شود 🔒</p>
+  </div>
+</section>
+
+<!-- ================= MAIN APP ================= -->
+<section id="app" class="hidden relative z-10 min-h-screen pb-24">
+
+  <!-- Header -->
+  <header class="glass sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center gap-3 border-b border-white/50">
+    <button onclick="openDrawer()" class="btn-3d b-grad2 !p-3 !rounded-2xl" title="منو">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <div class="flex items-center gap-2.5 flex-1 min-w-0">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:linear-gradient(135deg,#6d5efc,#ff5d9e)">🧠</div>
+      <div class="min-w-0">
+        <h2 class="font-black text-sm sm:text-base leading-tight truncate">روان‌شناسی عمومی · قم</h2>
+        <p class="text-[11px] opacity-60 truncate" id="hdrUser">دانشجو</p>
       </div>
-      <div id="admCourseList"></div>
+    </div>
+    <div id="netChip" class="chip text-white shrink-0 hidden" style="background:#8b8ba7;cursor:default">⚪ آفلاین</div>
+    <div class="chip text-white shrink-0" style="background:linear-gradient(135deg,#ffd23f,#ff9d4d)">
+      ⭐ <span id="hdrPoints">0</span> امتیاز
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="px-3 sm:px-5 pt-4 grid grid-cols-4 gap-2 sm:gap-3 max-w-3xl mx-auto">
+    <button data-tab="1" onclick="switchTab(1)" class="tab-btn active glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
+      <span class="text-2xl">📚</span><span class="text-[11px] sm:text-xs font-bold">درس‌ها</span>
+    </button>
+    <button data-tab="2" onclick="switchTab(2)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
+      <span class="text-2xl">👨‍🏫</span><span class="text-[11px] sm:text-xs font-bold">اساتید</span>
+    </button>
+    <button data-tab="3" onclick="switchTab(3)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
+      <span class="text-2xl">📰</span><span class="text-[11px] sm:text-xs font-bold">مطالب و تبلیغات</span>
+    </button>
+    <button data-tab="4" onclick="switchTab(4)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
+      <span class="text-2xl">🔮</span><span class="text-[11px] sm:text-xs font-bold">ترم آینده</span>
+    </button>
+  </nav>
+
+  <!-- ===== TAB 1 : COURSES ===== -->
+  <div id="tab1" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto"></div>
+
+  <!-- ===== TAB 2 : PROFESSOR RATINGS ===== -->
+  <div id="tab2" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
+
+  <!-- ===== TAB 3 : CONTENT & ADS ===== -->
+  <div id="tab3" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
+
+  <!-- ===== TAB 4 : NEXT TERM ===== -->
+  <div id="tab4" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
+</section>
+
+<!-- ================= DRAWER ================= -->
+<div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="closeDrawer()"></div>
+<aside id="drawer" class="drawer fixed top-0 right-0 h-full w-72 max-w-[82%] z-50 p-5 flex flex-col"
+  style="background:linear-gradient(160deg,#fff,#efe7ff)">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#6d5efc,#ff5d9e)">🧠</div>
+    <div>
+      <h3 class="font-black leading-tight">منوی دانشجو</h3>
+      <p class="text-xs opacity-60" id="drawerUser">—</p>
+    </div>
+  </div>
+
+  <div class="glass rounded-2xl p-3 mb-4 text-center">
+    <p class="text-xs opacity-60">امتیاز شما</p>
+    <p class="text-3xl font-black" style="color:#6d5efc"><span id="drawerPoints">0</span> ⭐</p>
+  </div>
+
+  <div class="glass rounded-2xl p-3 mb-4">
+    <p class="text-xs font-black mb-2" id="netStatus">👥 دانشجویان آنلاین</p>
+    <div id="drawerOnline" class="space-y-1 max-h-32 overflow-y-auto">
+      <p class="text-[11px] opacity-60">در حال بررسی اتصال…</p>
+    </div>
+  </div>
+
+  <nav class="space-y-2 flex-1">
+    <button onclick="switchTab(1);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">📚 درس‌های هر ترم</button>
+    <button onclick="switchTab(2);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">👨‍🏫 اساتید خوب/متوسط/ضعیف</button>
+    <button onclick="switchTab(3);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">📰 مطالب و رسانه‌ها</button>
+    <button onclick="switchTab(4);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">🔮 اساتید ترم آینده</button>
+    <button onclick="openAdminLogin()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 text-white"
+      style="background:linear-gradient(135deg,#1c1432,#6d5efc)">🛡️ پنل مدیریت</button>
+  </nav>
+
+  <button onclick="logout()" class="btn-3d w-full mt-3" style="background:#ef4444">خروج 👋</button>
+  <p class="text-center text-[10px] opacity-50 mt-3">ساخته شده برای دانشجویان روان‌شناسی قم ❤️</p>
+</aside>
+
+<!-- ================= ADMIN LOGIN ================= -->
+<div id="adminLoginOverlay" class="overlay fixed inset-0 bg-black/55 z-[60] flex items-center justify-center p-5" onclick="if(event.target===this)closeAdminLogin()">
+  <div class="glass rounded-[30px] p-7 w-full max-w-sm text-center modal" id="adminLoginModal">
+    <div class="mx-auto w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-3" style="background:linear-gradient(135deg,#1c1432,#6d5efc)">🛡️</div>
+    <h3 class="text-xl font-black">ورود به پنل مدیریت</h3>
+    <p class="text-sm opacity-60 mt-1">فقط برای مدیر سیستم</p>
+    <input id="adminPass" type="password" class="field mt-5 text-center tracking-widest" placeholder="رمز عبور مدیر">
+    <button onclick="adminLogin()" class="btn-3d b-grad1 w-full mt-4">ورود 🔓</button>
+    <p id="adminErr" class="text-red-500 text-sm mt-2 font-bold hidden">رمز اشتباه است! 🚫</p>
+    <button onclick="closeAdminLogin()" class="text-sm opacity-60 mt-3">بستن</button>
+  </div>
+</div>
+
+<!-- ================= ADMIN PANEL ================= -->
+<div id="adminOverlay" class="overlay fixed inset-0 bg-black/60 z-[70] flex items-center justify-center p-2 sm:p-4">
+  <div class="glass rounded-[26px] w-full max-w-3xl max-h-[94vh] flex flex-col modal" id="adminModal">
+    <!-- admin header -->
+    <div class="flex items-center gap-3 p-4 border-b border-white/40" style="background:linear-gradient(135deg,#1c1432,#6d5efc)">
+      <div class="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center text-2xl">👑</div>
+      <div class="flex-1 text-white">
+        <h3 class="font-black leading-tight">پنل مدیریت</h3>
+        <p class="text-xs text-white/80">سید علی لاجوردی · مدیر روان‌شناسی قم</p>
+      </div>
+      <button onclick="closeAdmin()" class="bg-white/15 hover:bg-white/25 text-white rounded-xl w-10 h-10 text-xl">✕</button>
     </div>
 
-    <!-- media tab -->
-    <div id="tab-media" class="admin-tab hidden">
-      <div class="neu-in" style="padding:14px;margin-bottom:14px">
-        <div class="field"><label>عنوان مطلب</label><input id="mTitle" placeholder="عنوان"></div>
-        <div class="field"><label>نوع محتوا</label>
-          <select id="mType"><option value="text">متنی</option><option value="image">تصویری</option><option value="audio">صوتی</option><option value="video">ویدیویی</option></select>
+    <!-- admin sub tabs -->
+    <div class="grid grid-cols-5 gap-1.5 p-3">
+      <button data-atab="1" onclick="switchAdmin(1)" class="atab-btn btn-3d b-grad1 !p-1.5 !px-1 text-[11px] sm:text-xs">📚 درس‌ها</button>
+      <button data-atab="2" onclick="switchAdmin(2)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#9333ea">👨‍🏫 اساتید</button>
+      <button data-atab="3" onclick="switchAdmin(3)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#db2777">📰 مطالب</button>
+      <button data-atab="4" onclick="switchAdmin(4)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#0891b2">🔮 ترم بعد</button>
+      <button data-atab="5" onclick="switchAdmin(5)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#0f766e">🌐 آنلاین</button>
+    </div>
+
+    <div class="overflow-y-auto px-4 pb-4">
+      <!-- admin section 1 -->
+      <div id="admin1" class="atab-panel">
+        <h4 class="font-black text-lg mb-2">➕ افزودن / حذف درس و استاد هر ترم</h4>
+        <div class="glass rounded-2xl p-3 grid sm:grid-cols-3 gap-2">
+          <select id="cTerm" class="field">
+            <option value="1">ترم ۱</option><option value="2">ترم ۲</option><option value="3">ترم ۳</option><option value="4">ترم ۴</option>
+            <option value="5">ترم ۵</option><option value="6">ترم ۶</option><option value="7">ترم ۷</option><option value="8">ترم ۸</option>
+          </select>
+          <input id="cName" class="field" placeholder="نام درس">
+          <input id="cProf" class="field" placeholder="استاد درس">
         </div>
-        <div class="field"><label>متن / توضیح</label><textarea id="mText" rows="2" placeholder="در صورت متنی بودن، متن را وارد کنید"></textarea></div>
-        <div class="field"><label>لینک فایل (اختیاری)</label><input id="mUrl" placeholder="https://..."></div>
-        <div class="field"><label>یا آپلود فایل</label><input type="file" id="mFile"></div>
-        <div class="row2">
-          <div class="field"><label>امتیاز پس از دیدن تبلیغ</label><input type="number" id="mPoints" value="10"></div>
-          <div class="field"><label>مدت تماشای تبلیغ (ثانیه)</label><input type="number" id="mSeconds" value="15"></div>
+        <button onclick="addCourse()" class="btn-3d b-grad3 w-full mt-2">➕ افزودن درس</button>
+        <div id="adminCourseList" class="space-y-2 mt-3"></div>
+      </div>
+
+      <!-- admin section 2 -->
+      <div id="admin2" class="atab-panel hidden">
+        <h4 class="font-black text-lg mb-2">➕ افزودن / حذف استاد (خوب/متوسط/ضعیف)</h4>
+        <div class="glass rounded-2xl p-3 grid sm:grid-cols-3 gap-2">
+          <input id="pName" class="field" placeholder="نام استاد">
+          <input id="pInfo" class="field" placeholder="توضیح کوتاه (اختیاری)">
+          <select id="pCat" class="field">
+            <option value="good">🟢 خوب</option><option value="medium">🟡 متوسط</option><option value="weak">🔴 ضعیف</option>
+          </select>
         </div>
-        <button class="neu-btn btn-primary" onclick="addMedia()">افزودن مطلب</button>
+        <button onclick="addProf()" class="btn-3d b-grad3 w-full mt-2">➕ افزودن استاد</button>
+        <div id="adminProfList" class="space-y-3 mt-3"></div>
       </div>
-      <div id="admMediaList"></div>
-    </div>
 
-    <!-- next term tab -->
-    <div id="tab-next" class="admin-tab hidden">
-      <div class="neu-in" style="padding:14px;margin-bottom:14px">
-        <div class="field"><label>نام درس (ترم آینده)</label><input id="ntCourse" placeholder="نام درس"></div>
-        <div class="field"><label>نام استاد</label><input id="ntProf" placeholder="نام استاد"></div>
-        <button class="neu-btn btn-primary" onclick="addNextTerm()">افزودن به ترم آینده</button>
+      <!-- admin section 3 -->
+      <div id="admin3" class="atab-panel hidden">
+        <h4 class="font-black text-lg mb-2">➕ افزودن مطلب / رسانه / تبلیغ</h4>
+        <div class="glass rounded-2xl p-3 space-y-2">
+          <input id="mTitle" class="field" placeholder="عنوان مطلب یا تبلیغ">
+          <div class="grid sm:grid-cols-2 gap-2">
+            <select id="mType" class="field" onchange="toggleMediaType()">
+              <option value="text">📝 متن</option>
+              <option value="image">🖼️ عکس</option>
+              <option value="audio">🔊 صوت</option>
+              <option value="video">🎬 ویدیو</option>
+            </select>
+            <select id="mAd" class="field" onchange="toggleAd()">
+              <option value="0">📚 مطلب عادی</option>
+              <option value="1">📺 تبلیغ با امتیاز</option>
+            </select>
+          </div>
+          <div id="srcLink">
+            <input id="mLink" class="field" placeholder="لینک عکس/صوت/ویدیو (http…)">
+          </div>
+          <div id="srcUpload" class="hidden">
+            <input id="mFile" type="file" accept="image/*,audio/*,video/*" class="field !p-2.5">
+          </div>
+          <div class="flex gap-2 items-center">
+            <button type="button" onclick="document.getElementById('mFile').click()" id="btnUpload" class="btn-3d b-grad4 !py-2 !px-3 text-sm">📤 آپلود فایل</button>
+            <span class="text-xs opacity-60" id="fileNote">یا لینک بالا را وارد کنید</span>
+          </div>
+          <textarea id="mBody" class="field" rows="2" placeholder="متن مطلب (برای نوع متن)"></textarea>
+          <div id="adFields" class="hidden grid grid-cols-2 gap-2">
+            <input id="mPoints" type="number" min="1" class="field" placeholder="امتیاز (مثلا 50)">
+            <input id="mTime" type="number" min="1" class="field" placeholder="زمان مشاهده (ثانیه)">
+          </div>
+        </div>
+        <button onclick="addContent()" class="btn-3d b-grad3 w-full mt-2">➕ انتشار</button>
+        <div id="adminContentList" class="space-y-2 mt-3"></div>
       </div>
-      <div id="admNextList"></div>
-    </div>
 
-    <!-- chat token tab -->
-    <div id="tab-chat" class="admin-tab hidden">
-      <div class="neu-in" style="padding:16px;text-align:center;margin-bottom:14px">
-        <div class="small-muted" style="margin-bottom:8px">توکن فعلی چت دانشجویان:</div>
-        <div id="curTokenShow" style="font-weight:800;font-size:18px;color:var(--c5)">—</div>
+      <!-- admin section 4 -->
+      <div id="admin4" class="atab-panel hidden">
+        <h4 class="font-black text-lg mb-2">➕ اساتید هر درس برای ترم آینده</h4>
+        <div class="glass rounded-2xl p-3 space-y-2">
+          <input id="nCourse" class="field" placeholder="نام درس ترم آینده">
+          <input id="nProfs" class="field" placeholder="اساتید (با خط تیره - جدا کنید)">
+        </div>
+        <button onclick="addNext()" class="btn-3d b-grad3 w-full mt-2">➕ افزودن برنامه ترم آینده</button>
+        <div id="adminNextList" class="space-y-2 mt-3"></div>
       </div>
-      <button class="neu-btn btn-primary" onclick="generateToken()">ساخت توکن جدید</button>
+
+      <!-- admin section 5: ONLINE / STUDENTS -->
+      <div id="admin5" class="atab-panel hidden"><div id="admin5Body"></div></div>
     </div>
   </div>
 </div>
 
-<!-- ===== ADD/EDIT PROFESSOR MODAL (used from admin course list) ===== -->
-<div class="modal-back" id="profModal">
-  <div class="neu modal rel">
-    <button class="neu-btn close-x" onclick="closeModal('profModal')">✕</button>
-    <h3>افزودن استاد به درس</h3>
-    <input type="hidden" id="profCourseId">
-    <div class="field"><label>نام استاد</label><input id="profNameInput" placeholder="نام استاد"></div>
-    <div class="field"><label>سطح کیفیت تدریس</label>
-      <select id="profQualityInput">
-        <option value="good">خوب</option>
-        <option value="mid">متوسط</option>
-        <option value="bad">ضعیف</option>
-      </select>
+<!-- ================= AD WATCHER MODAL ================= -->
+<div id="adOverlay" class="overlay fixed inset-0 bg-black/85 z-[80] flex items-center justify-center p-4">
+  <div class="glass rounded-[28px] w-full max-w-md p-6 text-center modal" id="adModal">
+    <div class="flex justify-center mb-3">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="11"/>
+        <circle id="adRing" class="timer-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#adg)" stroke-width="11" stroke-linecap="round"
+          transform="rotate(-90 60 60)" stroke-dasharray="326.7" stroke-dashoffset="0"/>
+        <defs><linearGradient id="adg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6d5efc"/><stop offset="1" stop-color="#ff5d9e"/></linearGradient></defs>
+        <text id="adSec" x="60" y="68" text-anchor="middle" font-size="30" font-weight="900" fill="#1c1432">0</text>
+      </svg>
     </div>
-    <button class="neu-btn btn-primary" onclick="saveProf()">ذخیره استاد</button>
+    <p class="font-black text-lg" id="adTitle">تبلیغ</p>
+    <p class="text-sm opacity-70 mt-1">برای دریافت امتیاز، این تبلیغ را تا پایان تماشا کن 👀</p>
+    <div id="adMedia" class="mt-3 max-h-40 overflow-hidden rounded-2xl"></div>
+    <button id="adClaim" onclick="claimAd()" class="btn-3d b-grad3 w-full mt-4 hidden">دریافت امتیاز 🎁</button>
+    <button onclick="cancelAd()" class="text-sm opacity-60 mt-2">انصراف</button>
   </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] hidden">
+  <div class="glass rounded-2xl px-5 py-3 font-bold text-center pop"></div>
 </div>
 
 <script>
-/* ===================== DATA LAYER ===================== */
-const ADMIN_NAME = "سید علی لاجوردی";
-const ADMIN_PASS = "ALIVANAPSY";
-const DATA_KEY = "psy_app_data_v1";
-const STUDENT_KEY = "psy_student_v1";
-const SCORES_KEY = "psy_scores_v1";
-const VIEWED_KEY = "psy_viewedads_v1";
-const CHATLOG_KEY = "psy_chatlog_v1";
+/* ============================================================
+   DATA LAYER  (localStorage)
+============================================================ */
+const KEY = 'psy_qom_app_v1';
+const ADMIN_PASS = 'ALIVANAPSY';
 
-function loadData(){
-  let d = localStorage.getItem(DATA_KEY);
-  if(d) return JSON.parse(d);
-  const seed = {
-    courses:{
-      "1":[{id:cid(),name:"مبانی روان‌شناسی عمومی",professors:[{name:"دکتر احمدی",quality:"good"}]}],
-      "2":[{id:cid(),name:"روان‌شناسی رشد",professors:[{name:"دکتر کریمی",quality:"mid"}]}],
-      "3":[{id:cid(),name:"آسیب‌شناسی روانی",professors:[{name:"دکتر رضایی",quality:"good"}]}],
-      "4":[{id:cid(),name:"روان‌سنجی",professors:[{name:"دکتر موسوی",quality:"bad"}]}]
-    },
-    media:[],
-    nextTerm:[],
-    chatToken:"PSYQOM2026"
-  };
-  saveData(seed);
-  return seed;
-}
-function saveData(d){ localStorage.setItem(DATA_KEY, JSON.stringify(d)); }
-function cid(){ return 'id'+Math.random().toString(36).slice(2,10); }
+/* ============================================================
+   🌐 اتصال آنلاین (Firebase Realtime Database — پروژه: uniazad)
+   راهنما: پنل مدیریت ← تب «🌐»
+============================================================ */
+const FB_CONFIG = {
+  apiKey: "AIzaSyCbSp_ML5UjtFNFjBkHRTOj68DO3b1KRxY",
+  authDomain: "uniazad.firebaseapp.com",
+  databaseURL: "https://uniazad-default-rtdb.firebaseio.com",
+  projectId: "uniazad",
+  storageBucket: "uniazad.firebasestorage.app",
+  messagingSenderId: "937508332641",
+  appId: "1:937508332641:web:6e89ed7f01a940a5f5b620"
+};
 
-let DATA = loadData();
-let student = JSON.parse(localStorage.getItem(STUDENT_KEY) || "null");
-let isAdmin = false;
+let NET={ready:false,box:null}, PRES={}, USERS={}, adminOpen=false, currentAdminTab=1, firstCloudSync=true, lastShared=0;
+let savedCfg=null; try{savedCfg=JSON.parse(localStorage.getItem('psy_fb_cfg')||'null')}catch(e){}
+const CFG=(FB_CONFIG.apiKey&&FB_CONFIG.databaseURL)?FB_CONFIG:(savedCfg&&savedCfg.apiKey?savedCfg:null);
 
-/* ===================== LOGIN ===================== */
-function doLogin(){
-  const name = document.getElementById('loginName').value.trim();
-  const term = document.getElementById('loginTerm').value;
-  if(!name){ alert('لطفاً نام خود را وارد کنید'); return; }
-  student = {name, term};
-  localStorage.setItem(STUDENT_KEY, JSON.stringify(student));
-  enterApp();
-}
-function doLogout(){
-  isAdmin = false;
-  localStorage.removeItem(STUDENT_KEY);
-  student = null;
-  closeSidebar();
-  document.getElementById('app').style.display='none';
-  document.getElementById('topbar').classList.add('hidden');
-  document.getElementById('bottomnav').classList.add('hidden');
-  document.getElementById('loginScreen').style.display='flex';
-}
-function enterApp(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='block';
-  document.getElementById('topbar').classList.remove('hidden');
-  document.getElementById('bottomnav').classList.remove('hidden');
-  document.getElementById('helloName').textContent = student.name;
-  document.getElementById('helloTerm').textContent = 'ترم '+student.term;
-  document.getElementById('sec1Term').textContent = student.term;
-  document.getElementById('sideUserInfo').textContent = student.name + ' — ترم ' + student.term;
-  goSection(1);
-  renderCourseList();
-  renderProfRatings();
-  renderMedia();
-  renderNextTerm();
-  checkChatAccess();
-}
-if(student){ enterApp(); }
-
-/* ===================== CLOCK (Iran time) ===================== */
-function tickClock(){
-  const now = new Date();
-  const timeStr = new Intl.DateTimeFormat('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Tehran'}).format(now);
-  const dateStr = new Intl.DateTimeFormat('fa-IR',{year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Tehran',calendar:'persian'}).format(now);
-  document.getElementById('clockTime').textContent = timeStr;
-  document.getElementById('clockDate').textContent = dateStr;
-}
-tickClock();
-setInterval(tickClock,1000);
-
-/* ===================== SIDEBAR ===================== */
-function openSidebar(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-
-/* ===================== SECTION NAV ===================== */
-function goSection(n){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.add('hidden'));
-  document.getElementById('sec'+n).classList.remove('hidden');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const btn = document.querySelector('.nav-btn[data-s="'+n+'"]');
-  if(btn) btn.classList.add('active');
-  closeSidebar();
-}
-
-/* ===================== SECTION 1: COURSES ===================== */
-function renderCourseList(){
-  const list = DATA.courses[student.term] || [];
-  const el = document.getElementById('courseList');
-  if(list.length===0){ el.innerHTML='<div class="neu card small-muted">هنوز درسی برای این ترم ثبت نشده است.</div>'; return; }
-  el.innerHTML = list.map(c=>{
-    const profsHtml = (c.professors||[]).map(p=>`<span class="tag ${p.quality}">${p.name} (${qLabel(p.quality)})</span>`).join('');
-    return `<div class="neu course-item">
-      <div>
-        <div class="cname">${escapeHtml(c.name)}</div>
-        <div class="profs">${profsHtml || 'استادی ثبت نشده'}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function qLabel(q){ return q==='good'?'خوب':q==='mid'?'متوسط':'ضعیف'; }
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-/* ===================== SECTION 2: PROFESSOR RATINGS ===================== */
-function renderProfRatings(){
-  let all=[];
-  Object.keys(DATA.courses).forEach(t=>{
-    (DATA.courses[t]||[]).forEach(c=>{
-      (c.professors||[]).forEach(p=> all.push({...p, course:c.name}));
+function sid(){let id=localStorage.getItem('psy_sid');if(!id){id='s'+uid();localStorage.setItem('psy_sid',id)}return id}
+function sharedCount(){let t=0;for(const k in DB.terms)t+=(DB.terms[k]||[]).length;for(const k in DB.professors)t+=(DB.professors[k]||[]).length;t+=(DB.content||[]).length+(DB.nextTerm||[]).length;return t}
+function shareSnapshot(){return{terms:DB.terms,professors:DB.professors,content:DB.content,nextTerm:DB.nextTerm}}
+function cloudPush(){if(NET.ready&&NET.box){NET.box.child('db').set(shareSnapshot())}}
+function netInit(){
+  if(!CFG||typeof firebase==='undefined'){netBadge();return}
+  try{
+    firebase.initializeApp(CFG);
+    const root=firebase.database().ref('psyqom');
+    NET.ready=true; NET.box=root;
+    root.child('db').on('value',snap=>{
+      const v=snap.val();
+      if(!v){root.child('db').set(shareSnapshot());return}
+      applyRemote(v);
     });
-  });
-  const groups = {good:[],mid:[],bad:[]};
-  all.forEach(p=> groups[p.quality] && groups[p.quality].push(p));
-  const el = document.getElementById('profRatingList');
-  const section = (title,color,arr)=>{
-    if(arr.length===0) return '';
-    return `<div class="neu card"><div style="font-weight:700;color:${color};margin-bottom:10px">${title}</div>`+
-      arr.map(p=>`<div class="prof-row neu-in"><div><div class="pname">${escapeHtml(p.name)}</div><div class="small-muted">${escapeHtml(p.course)}</div></div><div class="rating-badge" style="background:${color}">${qLabel(p.quality)}</div></div>`).join('')
-      +`</div>`;
+    root.child('presence').on('value',s=>{PRES=s.val()||{};updatePresenceUI()});
+    root.child('users').on('value',s=>{USERS=s.val()||{};updatePresenceUI()});
+    setInterval(updatePresenceUI,20000);
+  }catch(e){console.warn('net',e);NET.ready=false}
+  netBadge();
+}
+function applyRemote(v){
+  const prev=lastShared;
+  DB.terms=v.terms||{};
+  DB.professors=v.professors||{good:[],medium:[],weak:[]};
+  DB.content=v.content||[];
+  DB.nextTerm=v.nextTerm||[];
+  save(); lastShared=sharedCount();
+  rerender(); netBadge();
+  if(!firstCloudSync&&lastShared>prev){toast('📢 محتوای جدید اضافه شد! ببین 📚','🔔');}
+  firstCloudSync=false;
+}
+function rerender(){
+  const app=document.getElementById('app');
+  if(!app||app.classList.contains('hidden'))return;
+  const y=window.scrollY;
+  if(activeTab==1)renderCourses();
+  else if(activeTab==2)renderProfessors();
+  else if(activeTab==3)renderContent();
+  else if(activeTab==4)renderNext();
+  refreshUser();
+  if(adminOpen)switchAdmin(currentAdminTab);
+  window.scrollTo(0,y);
+}
+function startPresence(){
+  if(!NET.ready||!DB.student)return;
+  const id=sid(), root=NET.box;
+  const pr=root.child('presence/'+id);
+  const beat=()=>{
+    if(!DB.student)return;
+    pr.set({name:DB.student.name,term:String(DB.student.term),pts:DB.points||0,ts:Date.now()});
+    root.child('users/'+id).update({name:DB.student.name,term:String(DB.student.term),lastSeen:Date.now()});
   };
-  el.innerHTML = section('اساتید خوب','var(--good)',groups.good)+
-                 section('اساتید متوسط','var(--mid)',groups.mid)+
-                 section('اساتید ضعیف','var(--bad)',groups.bad);
-  if(all.length===0) el.innerHTML='<div class="neu card small-muted">هنوز استادی ثبت نشده است.</div>';
+  beat(); setInterval(beat,12000);
+  try{pr.onDisconnect().remove()}catch(e){}
 }
-
-/* ===================== SECTION 3: MEDIA ===================== */
-function getScores(){ return JSON.parse(localStorage.getItem(SCORES_KEY)||"{}"); }
-function setScores(s){ localStorage.setItem(SCORES_KEY, JSON.stringify(s)); }
-function getViewed(){ return JSON.parse(localStorage.getItem(VIEWED_KEY)||"{}"); }
-function setViewed(v){ localStorage.setItem(VIEWED_KEY, JSON.stringify(v)); }
-
-function renderMedia(){
-  const el = document.getElementById('mediaList');
-  if(DATA.media.length===0){ el.innerHTML='<div class="neu card small-muted">هنوز مطلبی اضافه نشده است.</div>'; return; }
-  const viewed = getViewed()[student.name] || [];
-  const scores = getScores();
-  const myScore = scores[student.name] || 0;
-  el.innerHTML = `<div class="neu card" style="text-align:center;font-weight:700">امتیاز شما: <span style="color:var(--c3)">${myScore}</span></div>` +
-    DATA.media.map(m=>{
-      const done = viewed.includes(m.id);
-      let body='';
-      if(m.type==='text') body = `<div>${escapeHtml(m.text||'')}</div>`;
-      else if(m.type==='image') body = `<img src="${m.url}">`;
-      else if(m.type==='audio') body = `<audio controls src="${m.url}"></audio>`;
-      else if(m.type==='video') body = `<video controls src="${m.url}"></video>`;
-      const adBox = done
-        ? `<div class="ad-box neu-in small-muted">امتیاز این مطلب قبلاً دریافت شده ✅</div>`
-        : `<div class="ad-box neu-in">
-             <div style="margin-bottom:6px">برای دریافت ${m.points} امتیاز، تبلیغ را تا ${m.seconds} ثانیه تماشا کنید</div>
-             <div class="progress-outer neu-in"><div class="progress-inner" id="prog-${m.id}"></div></div>
-             <button class="neu-btn" style="margin-top:6px" onclick="watchAd('${m.id}', ${m.seconds}, ${m.points})" id="btn-${m.id}">شروع تماشای تبلیغ</button>
-           </div>`;
-      return `<div class="neu media-item">
-        <h4>${escapeHtml(m.title)}</h4>
-        <div class="meta">نوع: ${typeLabel(m.type)}</div>
-        ${body}
-        ${adBox}
+function onlineList(){
+  const now=Date.now();
+  return Object.entries(PRES||{}).filter(([k,v])=>v&&v.name&&(now-(v.ts||0)<45000));
+}
+function updatePresenceUI(){
+  const online=onlineList();
+  const hc=document.getElementById('hdrOnline'); if(hc)hc.textContent=online.length.toLocaleString('fa-ir');
+  const st=document.getElementById('netStatus'); if(st)st.textContent='👥 دانشجویان آنلاین ('+online.length.toLocaleString('fa-ir')+')';
+  const dl=document.getElementById('drawerOnline');
+  if(dl){
+    if(!NET.ready){dl.innerHTML='<p class="text-[11px] opacity-60">⚪ حالت آفلاین — فقط روی همین دستگاه</p>'}
+    else if(!online.length){dl.innerHTML='<p class="text-[11px] opacity-60">هنوز کسی آنلاین نیست</p>'}
+    else{dl.innerHTML=online.map(([id,v])=>`<div class="flex items-center gap-2 bg-white/70 rounded-lg px-2 py-1"><span class="w-2 h-2 rounded-full shrink-0" style="background:#22c55e"></span><span class="text-xs font-bold truncate">${esc(v.name)}</span><span class="text-[10px] opacity-50 shrink-0">${v.term?termName(v.term):''}</span></div>`).join('')}
+  }
+  if(NET.ready)netBadge();
+  if(adminOpen&&currentAdminTab==5)renderAdminOnline();
+}
+function netBadge(){
+  const chip=document.getElementById('netChip'); if(!chip)return;
+  chip.classList.remove('hidden');
+  if(NET.ready){chip.style.background='#16a34a';chip.innerHTML='🟢 <span id="hdrOnline">'+onlineList().length.toLocaleString('fa-ir')+'</span> آنلاین';}
+  else{chip.style.background='#8b8ba7';chip.innerHTML='⚪ آفلاین';}
+}
+function saveCfg(){
+  const k=(document.getElementById('fbKey').value||'').trim();
+  const u=(document.getElementById('fbUrl').value||'').trim();
+  if(!k||!u){toast('هر دو مقدار را وارد کنید','⚠️');return}
+  localStorage.setItem('psy_fb_cfg',JSON.stringify({apiKey:k,databaseURL:u}));
+  toast('ذخیره شد؛ در حال اتصال…','🔗'); setTimeout(()=>location.reload(),700);
+}
+function renderAdminOnline(){
+  const el=document.getElementById('admin5Body'); if(!el)return;
+  if(!NET.ready){
+    el.innerHTML=`
+      <div class="glass rounded-2xl p-4">
+        <h4 class="font-black mb-1">🌐 اتصال به دیتابیس آنلاین رایگان (Firebase)</h4>
+        <p class="text-sm leading-6 opacity-75">در حالت فعلی تغییرات فقط روی همین گوشی دیده می‌شود. با یک دیتابیس رایگان، همهٔ دانشجویان <b>بدون نیاز به آپدیت یا بازخوانی برنامه</b> تغییرات را لحظه‌ای می‌بینند. آفلاین و آنلاین بودن دانشجویان هم نمایش داده می‌شود.</p>
+        <ol class="list-decimal pr-5 text-sm space-y-2 my-3 leading-6 opacity-90">
+          <li>به <b dir="ltr">console.firebase.google.com</b> بروید → <b>Add project</b> → یک نام دلخواه بدهید → تا آخر Next.</li>
+          <li>از منوی سمت چپ: <b>Build ← Realtime Database ← Create Database</b> و حالت <b>test mode</b> را بزنید.</li>
+          <li>در تب <b>Rules</b> این مقدار را جایگزین و <b>Publish</b> کنید:
+            <div class="text-left bg-black/75 text-green-200 rounded-xl p-2 my-1 text-[11px] font-mono" dir="ltr">{"rules":{".read": true, ".write": true}}</div></li>
+          <li>⚙️ <b>Project settings ← Your apps ← آیکن وب (</>)</b> ← نام دلخواه ← ثبت.</li>
+          <li>دو مقدار <b>apiKey</b> و <b>databaseURL</b> را کپی کنید.</li>
+        </ol>
+        <p class="text-sm font-black">✔ روش ۱ — پیشنهادی برای انتشار در App Mint:</p>
+        <p class="text-sm leading-6 opacity-80 mb-3">در فایل <b>index.html</b> ابتدای اسکریپت، بخش <b>FB_CONFIG</b> را پر کنید و فایل را در App Mint آپلود کنید. همهٔ دانشجویان خودکار وصل می‌شوند و کاری لازم نیست بکنند.</p>
+        <p class="text-sm font-black mt-2">🧪 روش ۲ — تست سریع (فقط روی همین دستگاه):</p>
+        <input id="fbKey" class="field mt-1.5" dir="ltr" placeholder="apiKey  (AIzaSy...)">
+        <input id="fbUrl" class="field mt-1.5" dir="ltr" placeholder="databaseURL  (https://x-default-rtdb.firebaseio.com)">
+        <button onclick="saveCfg()" class="btn-3d b-grad3 w-full mt-2">ذخیره و اتصال 🔗</button>
       </div>`;
-    }).join('');
-}
-function typeLabel(t){ return {text:'متنی',image:'تصویری',audio:'صوتی',video:'ویدیویی'}[t]||t; }
-
-function watchAd(id, seconds, points){
-  const btn = document.getElementById('btn-'+id);
-  const prog = document.getElementById('prog-'+id);
-  btn.disabled = true; btn.textContent='در حال نمایش تبلیغ...';
-  let elapsed = 0;
-  const timer = setInterval(()=>{
-    elapsed++;
-    prog.style.width = Math.min(100,(elapsed/seconds*100))+'%';
-    if(elapsed>=seconds){
-      clearInterval(timer);
-      const scores = getScores();
-      scores[student.name] = (scores[student.name]||0) + points;
-      setScores(scores);
-      const viewed = getViewed();
-      viewed[student.name] = viewed[student.name]||[];
-      viewed[student.name].push(id);
-      setViewed(viewed);
-      renderMedia();
-    }
-  },1000);
-}
-
-/* ===================== SECTION 4: NEXT TERM ===================== */
-function renderNextTerm(){
-  const el = document.getElementById('nextTermList');
-  if(DATA.nextTerm.length===0){ el.innerHTML='<div class="neu card small-muted">هنوز اساتید ترم آینده مشخص نشده‌اند.</div>'; return; }
-  el.innerHTML = DATA.nextTerm.map(n=>`
-    <div class="neu course-item">
-      <div>
-        <div class="cname">${escapeHtml(n.course)}</div>
-        <div class="profs">استاد: ${escapeHtml(n.prof)}</div>
-      </div>
-    </div>`).join('');
-}
-
-/* ===================== SECTION 5: CHAT ===================== */
-function checkChatAccess(){
-  const key = 'psy_chat_access_'+student.name;
-  const has = localStorage.getItem(key);
-  if(has === DATA.chatToken){
-    document.getElementById('chatGateWrap').classList.add('hidden');
-    document.getElementById('chatBoxWrap').classList.remove('hidden');
-    renderChat();
-  } else {
-    document.getElementById('chatGateWrap').classList.remove('hidden');
-    document.getElementById('chatBoxWrap').classList.add('hidden');
-  }
-}
-function joinChat(){
-  const t = document.getElementById('chatTokenInput').value.trim();
-  if(t === DATA.chatToken && t!==''){
-    localStorage.setItem('psy_chat_access_'+student.name, t);
-    checkChatAccess();
-  } else {
-    alert('توکن نادرست است. با ادمین برنامه هماهنگ کنید.');
-  }
-}
-function getChatLog(){ return JSON.parse(localStorage.getItem(CHATLOG_KEY)||"[]"); }
-function setChatLog(l){ localStorage.setItem(CHATLOG_KEY, JSON.stringify(l)); }
-function renderChat(){
-  const log = getChatLog();
-  const el = document.getElementById('chatMessages');
-  el.innerHTML = log.map(m=>`<div class="msg ${m.user===student.name?'me':'other'}"><div class="who">${escapeHtml(m.user)}</div>${escapeHtml(m.text)}</div>`).join('');
-  el.scrollTop = el.scrollHeight;
-}
-function sendChat(){
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if(!text) return;
-  const log = getChatLog();
-  log.push({user:student.name, text, time:Date.now()});
-  setChatLog(log);
-  input.value='';
-  renderChat();
-}
-window.addEventListener('storage', e=>{
-  if(e.key===CHATLOG_KEY) renderChat();
-});
-
-/* ===================== ADMIN LOGIN ===================== */
-function openAdminLogin(){
-  if(!student){ alert('ابتدا وارد برنامه شوید'); return; }
-  if(student.name !== ADMIN_NAME){
-    alert('شما اجازه دسترسی به پنل مدیریت را ندارید.');
     return;
   }
-  document.getElementById('adminLoginModal').classList.add('show');
-  closeSidebar();
-}
-function tryAdminLogin(){
-  const pass = document.getElementById('adminPassInput').value;
-  if(pass === ADMIN_PASS){
-    isAdmin = true;
-    closeModal('adminLoginModal');
-    openAdminPanel();
-  } else {
-    alert('رمز عبور اشتباه است.');
-  }
-}
-function openAdminPanel(){
-  document.getElementById('adminPanelModal').classList.add('show');
-  adminTab('courses');
-  renderAdminCourses();
-  renderAdminMedia();
-  renderAdminNext();
-  document.getElementById('curTokenShow').textContent = DATA.chatToken;
-}
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-
-function adminTab(t){
-  document.querySelectorAll('.admin-tab').forEach(d=>d.classList.add('hidden'));
-  document.getElementById('tab-'+t).classList.remove('hidden');
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelector('.tab-btn[data-t="'+t+'"]').classList.add('active');
-}
-
-/* --- admin: courses --- */
-function addCourse(){
-  const term = document.getElementById('admCourseTerm').value;
-  const name = document.getElementById('newCourseName').value.trim();
-  if(!name) return;
-  DATA.courses[term] = DATA.courses[term] || [];
-  DATA.courses[term].push({id:cid(), name, professors:[]});
-  document.getElementById('newCourseName').value='';
-  saveData(DATA);
-  renderAdminCourses();
-}
-function renderAdminCourses(){
-  const term = document.getElementById('admCourseTerm').value;
-  const list = DATA.courses[term] || [];
-  const el = document.getElementById('admCourseList');
-  el.innerHTML = list.map(c=>{
-    const profs = (c.professors||[]).map(p=>`<span class="tag ${p.quality}">${escapeHtml(p.name)} <a href="#" onclick="removeProf('${term}','${c.id}','${p.name}');return false;" style="color:#fff">✕</a></span>`).join('');
-    return `<div class="admin-list-item neu-in" style="flex-direction:column;align-items:stretch">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>${escapeHtml(c.name)}</b>
-        <div>
-          <button class="neu-btn mini-btn" onclick="openProfModal('${term}','${c.id}')">افزودن استاد</button>
-          <button class="neu-btn mini-btn" onclick="removeCourse('${term}','${c.id}')">حذف درس</button>
+  const online=onlineList();
+  const onlineIds=new Set(online.map(([k])=>k));
+  const users=Object.entries(USERS||{});
+  const ulist=users.map(([id,v])=>{
+    const on=onlineIds.has(id);
+    return `<div class="bg-white/85 rounded-xl p-2.5 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${on?'#22c55e':'#cbd5e1'}"></span>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(v.name)}</p><p class="text-[10px] opacity-60">${v.term?termName(v.term):'ترم نامشخص'}</p></div>
+      <span class="text-[10px] font-black shrink-0" style="color:${on?'#16a34a':'#94a3b8'}">${on?'آنلاین':'آفلاین'}</span>
+    </div>`;
+  }).join('');
+  el.innerHTML=`
+    <div class="glass rounded-2xl p-4">
+      <p class="font-black">🌐 وضعیت اتصال: <span style="color:#16a34a">متصل ✅</span></p>
+      <p class="text-sm leading-6 opacity-75 mt-1">تغییرات شما بلافاصله برای <b>همهٔ دانشجویان</b> نمایش داده می‌شود — بدون نیاز به بازخوانی یا آپدیت برنامه.</p>
+    </div>
+    <div class="glass rounded-2xl p-4 mt-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+        <p class="font-black">👥 دانشجویان</p>
+        <div class="flex gap-1.5">
+          <span class="chip text-white" style="background:#16a34a">آنلاین: ${online.length.toLocaleString('fa-ir')}</span>
+          <span class="chip text-white" style="background:#6d5efc">ثبت‌شده: ${users.length.toLocaleString('fa-ir')}</span>
         </div>
       </div>
-      <div style="margin-top:6px">${profs}</div>
+      <div class="space-y-1.5 max-h-64 overflow-y-auto">${ulist||'<p class="text-sm opacity-50 text-center py-3">هنوز دانشجویی ثبت نشده</p>'}</div>
     </div>`;
-  }).join('') || '<div class="small-muted">درسی در این ترم نیست.</div>';
-}
-function removeCourse(term,id){
-  DATA.courses[term] = DATA.courses[term].filter(c=>c.id!==id);
-  saveData(DATA); renderAdminCourses();
-}
-function openProfModal(term,courseId){
-  document.getElementById('profCourseId').value = term+'|'+courseId;
-  document.getElementById('profNameInput').value='';
-  document.getElementById('profModal').classList.add('show');
-}
-function saveProf(){
-  const [term,courseId] = document.getElementById('profCourseId').value.split('|');
-  const name = document.getElementById('profNameInput').value.trim();
-  const quality = document.getElementById('profQualityInput').value;
-  if(!name) return;
-  const course = DATA.courses[term].find(c=>c.id===courseId);
-  course.professors = course.professors || [];
-  course.professors.push({name, quality});
-  saveData(DATA);
-  closeModal('profModal');
-  renderAdminCourses();
-}
-function removeProf(term,courseId,name){
-  const course = DATA.courses[term].find(c=>c.id===courseId);
-  course.professors = course.professors.filter(p=>p.name!==name);
-  saveData(DATA);
-  renderAdminCourses();
 }
 
-/* --- admin: media --- */
-function addMedia(){
-  const title = document.getElementById('mTitle').value.trim();
-  const type = document.getElementById('mType').value;
-  const text = document.getElementById('mText').value.trim();
-  const url = document.getElementById('mUrl').value.trim();
-  const points = parseInt(document.getElementById('mPoints').value)||10;
-  const seconds = parseInt(document.getElementById('mSeconds').value)||15;
-  const file = document.getElementById('mFile').files[0];
-  if(!title){ alert('عنوان را وارد کنید'); return; }
-  const finalize = (finalUrl)=>{
-    DATA.media.push({id:cid(), title, type, text, url:finalUrl||'', points, seconds});
-    saveData(DATA);
-    document.getElementById('mTitle').value='';
-    document.getElementById('mText').value='';
-    document.getElementById('mUrl').value='';
-    document.getElementById('mFile').value='';
-    renderAdminMedia();
-    renderMedia();
+function seed(){
+  return {
+    student:null,
+    points:0,
+    watchedAds:[],
+    terms:{
+      1:[
+        {id:uid(),name:'روان‌شناسی عمومی',prof:'دکتر رضایی'},
+        {id:uid(),name:'زبان انگلیسی عمومی',prof:'دکتر موسوی'},
+        {id:uid(),name:'اندیشه اسلامی ۱',prof:'دکتر صادقی'},
+        {id:uid(),name:'مبانی کامپیوتر',prof:'مهندس قاسمی'},
+      ],
+      2:[
+        {id:uid(),name:'روان‌شناسی رشد (کودکی و نوجوانی)',prof:'دکتر محمدی'},
+        {id:uid(),name:'آمار و کاربرد آن',prof:'دکتر اکبری'},
+        {id:uid(),name:'فیزیولوژی اعصاب',prof:'دکتر حسینی'},
+      ],
+      3:[
+        {id:uid(),name:'روان‌شناسی اجتماعی',prof:'دکتر کریمی'},
+        {id:uid(),name:'یادگیری و یاددهی',prof:'دکتر محمدی'},
+        {id:uid(),name:'روش تحقیق در روان‌شناسی',prof:'دکتر اکبری'},
+      ],
+      4:[],5:[],6:[],7:[],8:[]
+    },
+    professors:{
+      good:[
+        {id:uid(),name:'دکتر محمدی',info:'توضیح‌رسانی عالی، اخلاق خوب'},
+        {id:uid(),name:'دکتر رضایی',info:'سوالات منصفانه و مفید'},
+        {id:uid(),name:'دکتر حسینی',info:'محتوای علمی قوی'},
+      ],
+      medium:[
+        {id:uid(),name:'دکتر کریمی',info:'متوسط'},
+        {id:uid(),name:'دکتر موسوی',info:'متوسط'},
+      ],
+      weak:[
+        {id:uid(),name:'دکتر صادقی',info:'پیشنهاد: مراقب باشید'},
+      ]
+    },
+    content:[
+      {id:uid(),type:'text',title:'نکته مهم: مدیریت استرس امتحانات',body:'برای کاهش اضطراب، مطالعه را به بخش‌های کوچک تقسیم کنید و بین هر بخش ۵ دقیقه استراحت کنید. خواب کافی فراموش نشود!',ad:0,points:0,time:0},
+      {id:uid(),type:'image',title:'نقاشی روانی نیمکره‌های مغز',link:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=700',ad:0,points:0,time:0},
+      {id:uid(),type:'ad',title:'تبلیغ دوره تقویت حافظه 🎁',link:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=700',ad:1,points:50,time:8,desc:'با دیدن کامل این تبلیغ ۵۰ امتیاز بگیر!'},
+    ],
+    nextTerm:[
+      {id:uid(),course:'روان‌شناسی تربیتی',profs:'دکتر محمدی'},
+      {id:uid(),course:'روان‌شناسی صنعتی و سازمانی',profs:'دکتر کریمی - دکتر رضایی'},
+      {id:uid(),course:'روان‌شناسی شخصیت',profs:'دکتر حسینی'},
+    ]
   };
-  if(file){
-    const reader = new FileReader();
-    reader.onload = ()=> finalize(reader.result);
-    reader.readAsDataURL(file);
-  } else {
-    finalize(url);
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+let DB={};
+function load(){ try{DB=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){DB=seed()} 
+  // shallow merge to add missing keys
+  const base=seed(); DB={...base,...DB, terms:{...base.terms,...(DB.terms||{})}, professors:{...base.professors,...(DB.professors||{})}};
+}
+function save(){ localStorage.setItem(KEY,JSON.stringify(DB)) }
+
+/* ============================================================
+   TOAST
+============================================================ */
+let toastT;
+function toast(msg,icon='✅'){
+  const t=document.getElementById('toast');
+  t.querySelector('div').textContent=icon+' '+msg;
+  t.classList.remove('hidden'); t.querySelector('div').classList.remove('pop'); void t.offsetWidth;
+  t.querySelector('div').classList.add('pop');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.add('hidden'),2200);
+}
+function confetti(){
+  const colors=['#6d5efc','#ff5d9e','#ff9d4d','#22d3a6','#ffd23f','#a64bff'];
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div'); c.className='conf';
+    c.style.left=Math.random()*100+'vw'; c.style.background=colors[i%colors.length];
+    c.style.animationDuration=(1.6+Math.random()*1.5)+'s'; c.style.animationDelay=Math.random()*.4+'s';
+    document.body.appendChild(c); setTimeout(()=>c.remove(),3500);
   }
 }
-function renderAdminMedia(){
-  const el = document.getElementById('admMediaList');
-  el.innerHTML = DATA.media.map(m=>`
-    <div class="admin-list-item neu-in">
-      <div><b>${escapeHtml(m.title)}</b> <span class="small-muted">(${typeLabel(m.type)} — ${m.points} امتیاز / ${m.seconds}ث)</span></div>
-      <button class="neu-btn mini-btn" onclick="removeMedia('${m.id}')">حذف</button>
-    </div>`).join('') || '<div class="small-muted">مطلبی ثبت نشده.</div>';
+
+/* ============================================================
+   ONBOARDING
+============================================================ */
+function saveStudent(){
+  const name=document.getElementById('inName').value.trim();
+  const term=document.getElementById('inTerm').value;
+  if(!name){toast('لطفاً نام خود را وارد کن','⚠️');return}
+  if(!term){toast('لطفاً ترم را انتخاب کن','⚠️');return}
+  DB.student={name,term}; save();
+  document.getElementById('welcome').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  refreshUser(); switchTab(1); startPresence();
+  confetti(); toast('خوش آمدی '+name+'! 🎉');
 }
-function removeMedia(id){
-  DATA.media = DATA.media.filter(m=>m.id!==id);
-  saveData(DATA); renderAdminMedia(); renderMedia();
+function logout(){
+  if(!confirm('مطمئنی می‌خوای خارج بشی؟ اطلاعات تو پاک می‌شه.'))return;
+  localStorage.removeItem(KEY); location.reload();
+}
+function refreshUser(){
+  if(!DB.student)return;
+  const t=DB.student.term?termName(DB.student.term):'';
+  document.getElementById('hdrUser').textContent=DB.student.name+' · '+t;
+  document.getElementById('drawerUser').textContent=DB.student.name+' ('+t+')';
+  document.getElementById('hdrPoints').textContent=DB.points;
+  document.getElementById('drawerPoints').textContent=DB.points;
+}
+function termName(n){return ['','ترم اول','ترم دوم','ترم سوم','ترم چهارم','ترم پنجم','ترم ششم','ترم هفتم','ترم هشتم'][+n]||('ترم '+n)}
+
+/* ============================================================
+   TABS
+============================================================ */
+let activeTab=1;
+function switchTab(n){
+  activeTab=n;
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.toggle('active',b.dataset.tab==n)});
+  for(let i=1;i<=4;i++)document.getElementById('tab'+i).classList.toggle('hidden',i!=n);
+  if(n==1)renderCourses();
+  if(n==2)renderProfessors();
+  if(n==3)renderContent();
+  if(n==4)renderNext();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* --- admin: next term --- */
-function addNextTerm(){
-  const course = document.getElementById('ntCourse').value.trim();
-  const prof = document.getElementById('ntProf').value.trim();
-  if(!course||!prof) return;
-  DATA.nextTerm.push({id:cid(), course, prof});
-  document.getElementById('ntCourse').value='';
-  document.getElementById('ntProf').value='';
-  saveData(DATA);
-  renderAdminNext(); renderNextTerm();
+/* ============================================================
+   TAB 1 — COURSES
+============================================================ */
+let selTerm='1';
+function renderCourses(){
+  const wrap=document.getElementById('tab1');
+  const termBtns=[1,2,3,4,5,6,7,8].map(t=>{
+    const on=String(t)===String(selTerm);
+    return `<button onclick="selTerm='${t}';renderCourses()" class="btn-3d ${on?'b-grad1':'!p-2.5'} ${on?'':'opacity-80'}" style="${on?'':'background:#fff;color:#6d5efc;box-shadow:0 5px 0 rgba(0,0,0,.12)'}">ترم ${t.toLocaleString('fa-ir')}</button>`;
+  }).join('');
+  const list=(DB.terms[selTerm]||[]).map(c=>`
+    <div class="card-iso glass rounded-2xl p-4 flex items-center gap-3 fade-in">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0" style="background:linear-gradient(135deg,#6d5efc,#a64bff)">📘</div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold leading-tight truncate">${esc(c.name)}</h3>
+        <p class="text-sm opacity-70 mt-0.5">👨‍🏫 ${esc(c.prof)}</p>
+      </div>
+    </div>`).join('');
+  wrap.innerHTML=`
+    <h2 class="text-xl font-black mb-1 text-white drop-shadow">📚 درس‌های هر ترم</h2>
+    <p class="text-white/85 text-sm mb-3">ترم خودت رو انتخاب کن تا درس‌ها و اساتیدش رو ببینی</p>
+    <div class="flex flex-wrap gap-2 mb-4">${termBtns}</div>
+    <div class="space-y-2.5">${list||'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز درسی برای این ترم ثبت نشده 😴</p>'}</div>`;
+}
+
+/* ============================================================
+   TAB 2 — PROFESSORS
+============================================================ */
+function renderProfessors(){
+  const cats=[
+    {k:'good',t:'اساتید خوب 🟢',emoji:'⭐',grad:'linear-gradient(135deg,#22d3a6,#13b6c4)'},
+    {k:'medium',t:'اساتید متوسط 🟡',emoji:'⚖️',grad:'linear-gradient(135deg,#ffd23f,#ff9d4d)'},
+    {k:'weak',t:'اساتید ضعیف 🔴',emoji:'⚠️',grad:'linear-gradient(135deg,#ff5d9e,#ff3b3b)'},
+  ];
+  const cols=cats.map(c=>{
+    const list=(DB.professors[c.k]||[]).map(p=>`
+      <div class="bg-white/85 rounded-2xl p-3 flex items-center gap-2 fade-in">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black shrink-0" style="background:${c.grad}">${p.name.replace(/^دکتر\s*/,'').trim().charAt(0)||'؟'}</div>
+        <div class="min-w-0">
+          <p class="font-bold text-sm leading-tight truncate">${esc(p.name)}</p>
+          ${p.info?`<p class="text-[11px] opacity-60 truncate">${esc(p.info)}</p>`:''}
+        </div>
+      </div>`).join('');
+    return `<div class="glass rounded-3xl p-3">
+      <div class="rounded-2xl p-2.5 mb-2.5 text-white font-black text-center text-sm" style="background:${c.grad}">${c.t}</div>
+      <div class="space-y-2 min-h-[80px]">${list||'<p class="text-center text-xs opacity-50 py-3">خالی</p>'}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('tab2').innerHTML=`
+    <h2 class="text-xl font-black mb-1 text-white drop-shadow">👨‍🏫 اساتید</h2>
+    <p class="text-white/85 text-sm mb-3">بر اساس تجربه دانشجویان: خوب · متوسط · ضعیف</p>
+    <div class="grid sm:grid-cols-3 gap-3">${cols}</div>`;
+}
+
+/* ============================================================
+   TAB 3 — CONTENT & ADS
+============================================================ */
+function renderContent(){
+  const items=DB.content.map(m=>{
+    let media='';
+    if(m.type==='image') media=m.link?`<img src="${esc(m.link)}" class="w-full h-40 object-cover rounded-2xl mt-2" onerror="this.style.display='none'">`:'';
+    if(m.type==='video') media=m.link?`<video src="${esc(m.link)}" controls class="w-full rounded-2xl mt-2" style="max-height:200px"></video>`:'';
+    if(m.type==='audio') media=m.link?`<audio src="${esc(m.link)}" controls class="w-full mt-2"></audio>`:'';
+    if(m.type==='text'&&m.body) media=`<p class="text-sm opacity-80 mt-2 leading-7">${esc(m.body)}</p>`;
+    const watched=DB.watchedAds.includes(m.id);
+    const typeEmoji={text:'📝',image:'🖼️',audio:'🔊',video:'🎬',ad:'📺'}[m.type]||'📄';
+    const badge = m.ad==1
+      ? (watched
+          ? `<span class="chip text-white" style="background:#22c55e">✓ دیده شد +${(+m.points).toLocaleString('fa-ir')}</span>`
+          : `<span class="chip text-white" style="background:linear-gradient(135deg,#ff9d4d,#ff5d9e)">🎁 ${(+m.points).toLocaleString('fa-ir')} امتیاز · ${(+m.time).toLocaleString('fa-ir')} ثانیه</span>`)
+      : `<span class="chip" style="background:#ede9ff;color:#6d5efc">${typeEmoji} مطلب</span>`;
+    const action = m.ad==1
+      ? (watched
+          ? `<button disabled class="chip text-white opacity-60" style="background:#9ca3af">غیرفعال شد ✓</button>`
+          : `<button onclick="watchAd('${m.id}')" class="btn-3d b-grad4 !py-2 !px-4 text-sm">دریافت امتیاز 🎁</button>`)
+      : '';
+    return `<div class="card-iso glass rounded-3xl p-4 fade-in">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="font-black leading-tight flex-1">${typeEmoji} ${esc(m.title)}</h3>
+        ${badge}
+      </div>
+      ${m.desc&&m.ad==1?`<p class="text-sm opacity-70 mt-1">${esc(m.desc)}</p>`:''}
+      ${media}
+      ${action?`<div class="mt-3">${action}</div>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('tab3').innerHTML=`
+    <h2 class="text-xl font-black mb-1 text-white drop-shadow">📰 مطالب و رسانه‌ها</h2>
+    <p class="text-white/85 text-sm mb-3">مطالب مفید و با دیدن تبلیغات امتیاز بگیر 🎁</p>
+    <div class="space-y-3">${items||'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز مطلبی منتشر نشده</p>'}</div>
+    <div class="glass rounded-2xl p-3 mt-4 text-center text-sm opacity-70">امتیاز کل شما: <b style="color:#6d5efc">${DB.points.toLocaleString('fa-ir')}</b> ⭐</div>`;
+}
+
+/* ============================================================
+   AD WATCHING + POINTS
+============================================================ */
+let adTimer=null, adTotal=0, adLeft=0, currentAd=null;
+function watchAd(id){
+  const m=DB.content.find(x=>x.id===id); if(!m)return;
+  if(DB.watchedAds.includes(id)){toast('این تبلیغ قبلاً دیده شده','🙂');return}
+  currentAd=m; adTotal=+m.time||5; adLeft=adTotal;
+  document.getElementById('adTitle').textContent=m.title;
+  document.getElementById('adMedia').innerHTML=
+    m.type==='image'&&m.link?`<img src="${esc(m.link)}" class="w-full h-40 object-cover" onerror="this.style.display='none'">`:
+    m.desc?`<p class="text-sm p-2">${esc(m.desc)}</p>`:'';
+  document.getElementById('adClaim').classList.add('hidden');
+  document.getElementById('adRing').style.strokeDashoffset=0;
+  document.getElementById('adOverlay').classList.add('open');
+  document.getElementById('adModal').classList.add('open');
+  updateAdRing();
+  adTimer=setInterval(()=>{
+    adLeft--;
+    updateAdRing();
+    if(adLeft<=0){ clearInterval(adTimer); finishAd(); }
+  },1000);
+}
+function updateAdRing(){
+  const C=326.7;
+  const off=C*(1-adLeft/adTotal);
+  document.getElementById('adRing').style.strokeDashoffset=off;
+  document.getElementById('adSec').textContent=adLeft.toLocaleString('fa-ir');
+}
+function finishAd(){
+  document.getElementById('adSec').textContent='✓';
+  document.getElementById('adClaim').classList.remove('hidden');
+}
+function claimAd(){
+  if(!currentAd)return;
+  DB.watchedAds.push(currentAd.id);
+  DB.points += +currentAd.points||0;
+  save(); refreshUser();
+  cancelAd(); confetti();
+  toast('تبریک! '+(+currentAd.points).toLocaleString('fa-ir')+' امتیاز گرفتی 🎉','🎁');
+  renderContent();
+}
+function cancelAd(){
+  clearInterval(adTimer);
+  document.getElementById('adOverlay').classList.remove('open');
+  document.getElementById('adModal').classList.remove('open');
+  currentAd=null;
+}
+
+/* ============================================================
+   TAB 4 — NEXT TERM
+============================================================ */
+function renderNext(){
+  const list=DB.nextTerm.map(n=>`
+    <div class="card-iso glass rounded-2xl p-4 flex items-center gap-3 fade-in">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0" style="background:linear-gradient(135deg,#0891b2,#22d3a6)">🔮</div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold leading-tight truncate">${esc(n.course)}</h3>
+        <p class="text-sm opacity-70 mt-0.5">👨‍🏫 ${esc(n.profs)}</p>
+      </div>
+    </div>`).join('');
+  document.getElementById('tab4').innerHTML=`
+    <h2 class="text-xl font-black mb-1 text-white drop-shadow">🔮 ترم آینده</h2>
+    <p class="text-white/85 text-sm mb-3">اساتید احتمالی هر درس برای ترم بعد 🚀</p>
+    <div class="space-y-2.5">${list||'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز برنامه‌ای اعلام نشده</p>'}</div>`;
+}
+
+/* ============================================================
+   DRAWER
+============================================================ */
+function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('overlay').classList.add('open');}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+
+/* ============================================================
+   ADMIN LOGIN
+============================================================ */
+function openAdminLogin(){
+  closeDrawer();
+  document.getElementById('adminLoginOverlay').classList.add('open');
+  document.getElementById('adminLoginModal').classList.add('open');
+  document.getElementById('adminPass').value='';
+  document.getElementById('adminErr').classList.add('hidden');
+  setTimeout(()=>document.getElementById('adminPass').focus(),200);
+}
+function closeAdminLogin(){
+  document.getElementById('adminLoginOverlay').classList.remove('open');
+  document.getElementById('adminLoginModal').classList.remove('open');
+}
+function adminLogin(){
+  const v=document.getElementById('adminPass').value.trim();
+  if(v===ADMIN_PASS){
+    closeAdminLogin();
+    openAdmin();
+    toast('خوش آمدید سید علی لاجوردی 👑','🛡️');
+  }else{
+    document.getElementById('adminErr').classList.remove('hidden');
+    document.getElementById('adminPass').value='';
+  }
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('adminLoginOverlay').classList.contains('open'))adminLogin(); });
+
+/* ============================================================
+   ADMIN PANEL
+============================================================ */
+function openAdmin(){
+  adminOpen=true;
+  document.getElementById('adminOverlay').classList.add('open');
+  document.getElementById('adminModal').classList.add('open');
+  switchAdmin(1);
+}
+function closeAdmin(){
+  adminOpen=false;
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.getElementById('adminModal').classList.remove('open');
+}
+function switchAdmin(n){
+  currentAdminTab=n;
+  document.querySelectorAll('.atab-btn').forEach(b=>b.classList.toggle('active',b.dataset.atab==n));
+  for(let i=1;i<=5;i++)document.getElementById('admin'+i).classList.toggle('hidden',i!=n);
+  if(n==1)renderAdminCourses();
+  if(n==2)renderAdminProf();
+  if(n==3)renderAdminContent();
+  if(n==4)renderAdminNext();
+  if(n==5)renderAdminOnline();
+}
+
+/* ---- Admin: courses ---- */
+function addCourse(){
+  const term=document.getElementById('cTerm').value;
+  const name=document.getElementById('cName').value.trim();
+  const prof=document.getElementById('cProf').value.trim();
+  if(!name){toast('نام درس را وارد کن','⚠️');return}
+  if(!prof){toast('نام استاد را وارد کن','⚠️');return}
+  DB.terms[term]=DB.terms[term]||[];
+  DB.terms[term].push({id:uid(),name,prof});
+  save(); cloudPush();
+  document.getElementById('cName').value='';document.getElementById('cProf').value='';
+  renderAdminCourses(); toast('درس اضافه شد');
+}
+function delCourse(term,id){
+  if(!confirm('حذف این درس؟'))return;
+  DB.terms[term]=(DB.terms[term]||[]).filter(c=>c.id!==id);save();cloudPush();renderAdminCourses();toast('حذف شد','🗑️');
+}
+function renderAdminCourses(){
+  const term=document.getElementById('cTerm').value||'1';
+  const list=(DB.terms[term]||[]).map(c=>`
+    <div class="bg-white/80 rounded-xl p-3 flex items-center gap-2">
+      <span class="text-xl">📘</span>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(c.name)}</p><p class="text-xs opacity-60">👨‍🏫 ${esc(c.prof)}</p></div>
+      <button onclick="delCourse('${term}','${c.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    </div>`).join('');
+  document.getElementById('adminCourseList').innerHTML=list||'<p class="text-center text-sm opacity-50 py-3">درسی برای این ترم نیست</p>';
+}
+document.getElementById('cTerm')&&document.addEventListener('change',e=>{ if(e.target.id==='cTerm')renderAdminCourses(); });
+
+/* ---- Admin: professors ---- */
+function addProf(){
+  const name=document.getElementById('pName').value.trim();
+  const info=document.getElementById('pInfo').value.trim();
+  const cat=document.getElementById('pCat').value;
+  if(!name){toast('نام استاد را وارد کن','⚠️');return}
+  DB.professors[cat]=DB.professors[cat]||[];
+  DB.professors[cat].push({id:uid(),name,info});
+  save();cloudPush();document.getElementById('pName').value='';document.getElementById('pInfo').value='';
+  renderAdminProf();toast('استاد اضافه شد');
+}
+function delProf(cat,id){
+  if(!confirm('حذف این استاد از این دسته؟'))return;
+  DB.professors[cat]=(DB.professors[cat]||[]).filter(p=>p.id!==id);save();cloudPush();renderAdminProf();toast('حذف شد','🗑️');
+}
+function renderAdminProf(){
+  const cats=[['good','🟢 خوب'],['medium','🟡 متوسط'],['weak','🔴 ضعیف']];
+  document.getElementById('adminProfList').innerHTML=cats.map(([k,t])=>{
+    const list=(DB.professors[k]||[]).map(p=>`
+      <div class="bg-white/80 rounded-xl p-2.5 flex items-center gap-2">
+        <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(p.name)}</p>${p.info?`<p class="text-xs opacity-60 truncate">${esc(p.info)}</p>`:''}</div>
+        <button onclick="delProf('${k}','${p.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+      </div>`).join('');
+    return `<div><p class="font-bold text-sm mb-1.5">${t}</p><div class="space-y-1.5">${list||'<p class="text-xs opacity-50">خالی</p>'}</div></div>`;
+  }).join('');
+}
+
+/* ---- Admin: content ---- */
+let pendingFile=null;
+function toggleMediaType(){
+  const t=document.getElementById('mType').value;
+  const showSrc = t!=='text';
+  document.getElementById('srcLink').classList.toggle('hidden',!showSrc);
+  document.getElementById('srcUpload').classList.toggle('hidden',!showSrc);
+}
+function toggleAd(){
+  const ad=document.getElementById('mAd').value==='1';
+  document.getElementById('adFields').classList.toggle('hidden',!ad);
+}
+document.addEventListener('change',e=>{
+  if(e.target.id==='mFile'){
+    const f=e.target.files[0]; if(!f)return;
+    pendingFile={name:f.name,type:f.type};
+    document.getElementById('fileNote').textContent='انتخاب شد: '+f.name;
+  }
+});
+function addContent(){
+  const title=document.getElementById('mTitle').value.trim();
+  if(!title){toast('عنوان را وارد کن','⚠️');return}
+  const type=document.getElementById('mType').value;
+  const isAd=document.getElementById('mAd').value==='1';
+  const item={id:uid(),title,type,ad:isAd?1:0,points:0,time:0};
+  item.body=document.getElementById('mBody').value.trim();
+  if(isAd){
+    item.type='ad';
+    item.points=+document.getElementById('mPoints').value||10;
+    item.time=+document.getElementById('mTime').value||5;
+    item.desc=item.body||('با دیدن کامل این تبلیغ '+(+item.points).toLocaleString('fa-ir')+' امتیاز بگیر!');
+    item.body='';
+  }
+  const f=document.getElementById('mFile').files[0];
+  const link=document.getElementById('mLink').value.trim();
+  if(type!=='text'){
+    if(f){
+      if(f.size>4*1024*1024){toast('فایل بزرگ است (بیشتر از ۴ مگ) 😅','⚠️');return}
+      const r=new FileReader();
+      r.onload=()=>{ item.link=r.result; pushContent(item); };
+      r.readAsDataURL(f); return;
+    }else if(link){ item.link=link; }
+    else if(!isAd){ toast('لینک یا فایل رسانه را اضافه کن','⚠️'); return; }
+  }
+  pushContent(item);
+}
+function pushContent(item){
+  DB.content.unshift(item); save(); cloudPush();
+  document.getElementById('mTitle').value='';document.getElementById('mLink').value='';
+  document.getElementById('mBody').value='';document.getElementById('mFile').value='';
+  document.getElementById('fileNote').textContent='یا لینک بالا را وارد کنید';
+  renderAdminContent();toast('منتشر شد 🎉');
+}
+function delContent(id){
+  if(!confirm('حذف این مطلب؟'))return;
+  DB.content=DB.content.filter(c=>c.id!==id);save();cloudPush();renderAdminContent();toast('حذف شد','🗑️');
+}
+function renderAdminContent(){
+  document.getElementById('adminContentList').innerHTML=DB.content.map(m=>{
+    const te={text:'📝',image:'🖼️',audio:'🔊',video:'🎬',ad:'📺'}[m.type]||'📄';
+    return `<div class="bg-white/80 rounded-xl p-3 flex items-center gap-2">
+      <span class="text-xl">${te}</span>
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-sm truncate">${esc(m.title)}</p>
+        <p class="text-xs opacity-60">${m.ad==1?'📺 تبلیغ · '+(+m.points).toLocaleString('fa-ir')+' امتیاز · '+(+m.time).toLocaleString('fa-ir')+' ث':'مطلب عادی'}</p>
+      </div>
+      <button onclick="delContent('${m.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    </div>`;
+  }).join('')||'<p class="text-center text-sm opacity-50 py-3">مطلبی نیست</p>';
+}
+
+/* ---- Admin: next term ---- */
+function addNext(){
+  const course=document.getElementById('nCourse').value.trim();
+  const profs=document.getElementById('nProfs').value.trim();
+  if(!course){toast('نام درس را وارد کن','⚠️');return}
+  if(!profs){toast('اساتید را وارد کن','⚠️');return}
+  DB.nextTerm.push({id:uid(),course,profs});
+  save();cloudPush();document.getElementById('nCourse').value='';document.getElementById('nProfs').value='';
+  renderAdminNext();toast('افزوده شد 🔮');
+}
+function delNext(id){
+  if(!confirm('حذف؟'))return;
+  DB.nextTerm=DB.nextTerm.filter(n=>n.id!==id);save();cloudPush();renderAdminNext();toast('حذف شد','🗑️');
 }
 function renderAdminNext(){
-  const el = document.getElementById('admNextList');
-  el.innerHTML = DATA.nextTerm.map(n=>`
-    <div class="admin-list-item neu-in">
-      <div><b>${escapeHtml(n.course)}</b> — ${escapeHtml(n.prof)}</div>
-      <button class="neu-btn mini-btn" onclick="removeNextTerm('${n.id}')">حذف</button>
-    </div>`).join('') || '<div class="small-muted">هنوز موردی اضافه نشده.</div>';
-}
-function removeNextTerm(id){
-  DATA.nextTerm = DATA.nextTerm.filter(n=>n.id!==id);
-  saveData(DATA); renderAdminNext(); renderNextTerm();
+  document.getElementById('adminNextList').innerHTML=DB.nextTerm.map(n=>`
+    <div class="bg-white/80 rounded-xl p-3 flex items-center gap-2">
+      <span class="text-xl">🔮</span>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(n.course)}</p><p class="text-xs opacity-60">${esc(n.profs)}</p></div>
+      <button onclick="delNext('${n.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    </div>`).join('')||'<p class="text-center text-sm opacity-50 py-3">خالی</p>';
 }
 
-/* --- admin: chat token --- */
-function generateToken(){
-  const t = 'PSY-'+Math.random().toString(36).slice(2,8).toUpperCase();
-  DATA.chatToken = t;
-  saveData(DATA);
-  document.getElementById('curTokenShow').textContent = t;
-  alert('توکن جدید ساخته شد: '+t+'\nاین توکن را در اختیار دانشجویان قرار دهید.');
+/* ============================================================
+   UTIL
+============================================================ */
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ============================================================
+   INIT
+============================================================ */
+load();
+lastShared=sharedCount();
+netInit();
+if(DB.student){
+  document.getElementById('welcome').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  refreshUser(); switchTab(1); startPresence();
+}else{
+  document.getElementById('welcome').classList.remove('hidden');
 }
 </script>
 </body>
