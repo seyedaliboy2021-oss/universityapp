@@ -1,1613 +1,1178 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ارشد روانشناسی قم - عمومی</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/lib/radix.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/lib/radisk.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/lib/store.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #e6ebf3;
-      --bg-2: #e9eef7;
-      --shadow-dark: #c4cad6;
-      --shadow-dark-2: #b9bfcb;
-      --shadow-light: #ffffff;
-      --text: #273549;
-      --muted: #73819b;
-      --line: rgba(255,255,255,0.8);
-      --accent: #2fd2a8;
-      --accent-2: #5aa7ff;
-      --danger: #ff7a8a;
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-pill: 999px;
-    }
-    * { box-sizing: border-box; }
-    html { font-family: Vazirmatn, Tahoma, sans-serif; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-    ::selection { background: rgba(47,210,168,0.22); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>روانشناسی عمومی | دانشگاه آزاد قم</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e8eef6; --surface:#eef4fa; --surface2:#e2eaf3;
+    --ink:#253352; --muted:#7d8ca8; --line:#d9e3ef;
+    --teal:#0fb5a6; --teal-d:#0a8f84;
+    --coral:#ff6b6b; --coral-d:#e04f4f;
+    --sun:#ffb52e; --sun-d:#e09a12;
+    --sky:#3f9bff; --pink:#ff7ab0;
+    --sh-d:rgba(46,72,118,.16); --sh-l:#ffffff;
+    --r:22px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Vazirmatn',sans-serif; color:var(--ink); background:var(--bg);
+    background-image:
+      radial-gradient(1100px 520px at 88% -8%, rgba(15,181,166,.11), transparent 62%),
+      radial-gradient(950px 520px at -8% 108%, rgba(255,107,107,.10), transparent 60%),
+      radial-gradient(rgba(125,140,168,.15) 1px, transparent 1.4px);
+    background-size:auto,auto,24px 24px;
+    background-attachment:fixed;
+    min-height:100vh;
+  }
+  [hidden]{display:none !important}
+  .display{font-family:'Lalezar',cursive; letter-spacing:.5px}
 
-    /* Neumorphism primitives */
-    .neu-panel {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      box-shadow: 14px 14px 28px var(--shadow-dark), -14px -14px 28px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.75);
-    }
-    .neu-soft {
-      background: var(--bg);
-      border-radius: var(--radius-lg);
-      box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.6);
-    }
-    .neu-inset {
-      background: var(--bg);
-      border-radius: var(--radius-lg);
-      box-shadow: inset 7px 7px 14px var(--shadow-dark), inset -7px -7px 14px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.4);
-    }
-    .neu-field {
-      width: 100%;
-      background: var(--bg);
-      border-radius: 18px;
-      box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-      border: 1px solid transparent;
-      color: var(--text);
-      padding: 0.9rem 1.1rem;
-      outline: none;
-      transition: box-shadow 180ms ease, transform 180ms ease;
-    }
-    .neu-field:focus {
-      box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light), 0 0 0 3px rgba(47,210,168,0.22);
-    }
-    .neu-field option { background: var(--bg); color: var(--text); }
+  /* ---------- neumorphic primitives ---------- */
+  .neu{
+    background:linear-gradient(145deg,#f3f8fd,#e2eaf3);
+    border-radius:var(--r);
+    box-shadow:-7px -7px 16px var(--sh-l), 8px 9px 20px var(--sh-d);
+  }
+  .neu-in{
+    background:linear-gradient(145deg,#dfe8f2,#edf3fa);
+    border-radius:16px;
+    box-shadow:inset 4px 4px 9px rgba(46,72,118,.13), inset -4px -4px 9px #fff;
+  }
+  input,select,textarea{
+    font-family:'Vazirmatn'; color:var(--ink);
+    background:linear-gradient(145deg,#dfe8f2,#eef4fb);
+    border:0; border-radius:15px; padding:13px 16px; width:100%; font-size:14.5px;
+    box-shadow:inset 4px 4px 9px rgba(46,72,118,.13), inset -4px -4px 9px #fff;
+    outline:none; transition:box-shadow .25s;
+  }
+  input:focus,select:focus,textarea:focus{
+    box-shadow:inset 4px 4px 9px rgba(46,72,118,.15), inset -4px -4px 9px #fff, 0 0 0 3px rgba(15,181,166,.28);
+  }
+  input[type=file]{padding:10px 12px; font-size:12.5px}
+  label{font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:7px}
+  .btn{
+    font-family:'Vazirmatn'; font-weight:800; border:0; cursor:pointer; border-radius:15px;
+    padding:13px 22px; font-size:14.5px; color:var(--ink);
+    background:linear-gradient(145deg,#f3f8fd,#e0e9f2);
+    box-shadow:-5px -5px 12px var(--sh-l), 6px 7px 14px var(--sh-d);
+    transition:transform .18s, box-shadow .18s, filter .18s;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:-7px -7px 15px var(--sh-l), 8px 10px 18px var(--sh-d)}
+  .btn:active{transform:translateY(1px); box-shadow:inset 3px 3px 7px rgba(46,72,118,.18), inset -3px -3px 7px #fff}
+  .btn-teal{background:linear-gradient(135deg,#12c9b8,#0a8f84); color:#fff; box-shadow:-5px -5px 12px rgba(255,255,255,.75), 6px 7px 16px rgba(10,143,132,.38)}
+  .btn-teal:hover{box-shadow:-6px -6px 14px rgba(255,255,255,.8), 8px 10px 20px rgba(10,143,132,.45)}
+  .btn-coral{background:linear-gradient(135deg,#ff8080,#e04f4f); color:#fff; box-shadow:-5px -5px 12px rgba(255,255,255,.75), 6px 7px 16px rgba(224,79,79,.38)}
+  .btn-sun{background:linear-gradient(135deg,#ffc95e,#e09a12); color:#4a3305; box-shadow:-5px -5px 12px rgba(255,255,255,.75), 6px 7px 16px rgba(224,154,18,.4)}
+  .btn-sky{background:linear-gradient(135deg,#66b0ff,#2f7fe0); color:#fff; box-shadow:-5px -5px 12px rgba(255,255,255,.75), 6px 7px 16px rgba(47,127,224,.4)}
+  .btn-sm{padding:8px 14px; font-size:12.5px; border-radius:12px}
+  .btn-danger{background:linear-gradient(145deg,#ffe4e4,#ffd2d2); color:#c73a3a; box-shadow:-4px -4px 10px #fff, 5px 6px 12px rgba(199,58,58,.18)}
+  .btn-press{box-shadow:inset 3px 3px 8px rgba(46,72,118,.2), inset -3px -3px 8px #fff !important; transform:none !important}
 
-    .neu-btn {
-      background: var(--bg);
-      border-radius: var(--radius-pill);
-      box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.7);
-      color: var(--text);
-      padding: 0.72rem 1.1rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 160ms ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-    }
-    .neu-btn:hover { transform: translateY(-1px); box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); }
-    .neu-btn:active, .neu-btn.pressed {
-      box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
-      transform: translateY(0);
-    }
-    .neu-primary {
-      background: linear-gradient(145deg, #58e9bc, #2fd2a8);
-      box-shadow: 8px 8px 16px var(--shadow-dark-2), -8px -8px 16px var(--shadow-light);
-      color: #08261e;
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: var(--radius-pill);
-      padding: 0.92rem 1.2rem;
-      font-weight: 900;
-      cursor: pointer;
-      transition: all 180ms ease;
-    }
-    .neu-primary:hover { transform: translateY(-2px); box-shadow: 10px 10px 20px var(--shadow-dark-2), -10px -10px 20px var(--shadow-light); }
-    .neu-primary:active { box-shadow: inset 6px 6px 12px rgba(0,0,0,0.12), inset -6px -6px 12px rgba(255,255,255,0.7); transform: translateY(0); }
+  .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:999px; font-size:12.5px; font-weight:700;
+    background:linear-gradient(145deg,#eef4fa,#e0e9f2); box-shadow:inset 2px 2px 6px rgba(46,72,118,.12), inset -2px -2px 6px #fff;}
+  .chip-coin{color:#8a5c00}
+  .chip-time{color:#0a6f86}
+  .chip-term{background:linear-gradient(135deg,#12c9b8,#0a8f84); color:#fff; box-shadow:0 5px 12px rgba(10,143,132,.35)}
+  .chip-premium{background:linear-gradient(135deg,#ffd873,#e09a12); color:#4a3305; box-shadow:0 5px 12px rgba(224,154,18,.4)}
+  .chip-watched{background:linear-gradient(135deg,#7ee2a8,#2fae66); color:#0b3d22; box-shadow:0 5px 12px rgba(47,174,102,.35)}
+  .chip-new{background:linear-gradient(135deg,#ff9dbf,#e05585); color:#fff; box-shadow:0 5px 12px rgba(224,85,133,.4); animation:pulse 1.6s infinite}
 
-    .neu-danger {
-      color: #7a1020;
-      box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light), inset 0 0 0 1px rgba(255,122,138,0.18);
-    }
+  .icon-bubble{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:23px;flex-shrink:0;
+    box-shadow:-4px -4px 10px var(--sh-l), 5px 6px 12px var(--sh-d)}
+  .ib-teal{background:linear-gradient(135deg,#d7f7f2,#b5ece4); }
+  .ib-coral{background:linear-gradient(135deg,#ffe0e0,#ffc7c7)}
+  .ib-sun{background:linear-gradient(135deg,#ffedc4,#ffdc92)}
+  .ib-sky{background:linear-gradient(135deg,#d9eaff,#b7d7ff)}
 
-    .logo-mark {
-      background: var(--bg);
-      border-radius: 26px;
-      box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.8);
-    }
-    .avatar {
-      display: grid; place-items: center;
-      background: var(--bg);
-      box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-      border: 1px solid rgba(255,255,255,0.7);
-      color: var(--text);
-      font-weight: 900;
-    }
-    .online-dot { width: .7rem; height: .7rem; border-radius: 999px; background: #21d29a; box-shadow: 0 0 0 4px rgba(33,210,154,0.18), 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
-    .offline-dot { background: #aab4c5; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
+  /* ---------- ambient floaters ---------- */
+  .floater{position:fixed; border-radius:50%; z-index:0; pointer-events:none;
+    background:linear-gradient(145deg,#f1f6fc,#e0e9f3);
+    box-shadow:-10px -10px 24px var(--sh-l), 12px 14px 28px var(--sh-d);}
+  .floater::after{content:''; position:absolute; inset:16%; border-radius:50%;
+    box-shadow:inset 5px 5px 12px rgba(46,72,118,.12), inset -5px -5px 12px #fff}
+  .f1{width:120px;height:120px; top:12%; left:4%; animation:float 9s ease-in-out infinite}
+  .f2{width:70px;height:70px; bottom:14%; right:5%; animation:float 7s 1.2s ease-in-out infinite}
+  .f3{width:46px;height:46px; top:38%; right:9%; animation:float 11s .6s ease-in-out infinite}
+  .f1::before{content:'🧠'; position:absolute; inset:0; display:grid; place-items:center; font-size:34px; z-index:2}
+  .f2::before{content:'📚'; position:absolute; inset:0; display:grid; place-items:center; font-size:22px; z-index:2}
+  .f3::before{content:'🪙'; position:absolute; inset:0; display:grid; place-items:center; font-size:15px; z-index:2}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(4deg)}}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes pop{from{transform:scale(.85); opacity:0}to{transform:scale(1); opacity:1}}
+  @keyframes slideup{from{transform:translateY(14px); opacity:0}to{transform:translateY(0); opacity:1}}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes coinfly{to{transform:translate(var(--tx),var(--ty)) scale(.3) rotate(260deg); opacity:0}}
 
-    .neu-progress-track {
-      height: 12px; border-radius: 999px;
-      background: var(--bg);
-      box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
-      overflow: hidden;
-    }
-    .neu-progress-bar {
-      height: 100%; border-radius: 999px;
-      background: linear-gradient(90deg, #2fd2a8, #5aa7ff);
-      box-shadow: 2px 0 8px rgba(47,210,168,0.4);
-      transition: width 1s linear;
-    }
+  /* ---------- layout ---------- */
+  .wrap{max-width:1020px; margin:0 auto; padding:18px 16px 70px; position:relative; z-index:1}
+  .topbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 18px; margin-bottom:18px; animation:slideup .5s}
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand-logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:23px;
+    background:linear-gradient(135deg,#12c9b8,#0a8f84); box-shadow:0 6px 14px rgba(10,143,132,.4)}
+  .brand h1{font-family:'Lalezar'; font-size:23px; margin:0; line-height:1.1}
+  .brand small{color:var(--muted); font-size:11px; font-weight:600}
+  .clockbox{display:flex; align-items:center; gap:10px; padding:8px 15px}
+  .clockbox .dot{width:9px;height:9px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 4px rgba(255,107,107,.22); animation:blink 1.4s infinite}
+  .clockbox .t{font-family:'Lalezar'; font-size:19px; line-height:1}
+  .clockbox .d{font-size:10.5px; color:var(--muted); font-weight:600}
+  .userchip{display:flex; align-items:center; gap:9px; padding:7px 14px 7px 8px; cursor:pointer}
+  .avatar{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-size:20px;flex-shrink:0;
+    background:linear-gradient(145deg,#f3f8fd,#dde7f1); box-shadow:inset 3px 3px 7px rgba(46,72,118,.14), inset -3px -3px 7px #fff}
+  .avatar.premium-ring{box-shadow:inset 3px 3px 7px rgba(46,72,118,.14), inset -3px -3px 7px #fff, 0 0 0 2.5px #ffb52e, 0 5px 12px rgba(224,154,18,.4)}
+  .wallet{display:flex; gap:8px}
+  .wchip{display:flex; align-items:center; gap:6px; padding:8px 14px; font-weight:800; font-size:13.5px; transition:transform .3s}
+  .wchip.bump{animation:pop .45s}
 
-    .quality-good { background: linear-gradient(145deg, #c8f5e4, #a7ecd2); color: #0c3a28; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
-    .quality-neutral { background: linear-gradient(145deg, #fff2c4, #ffe49a); color: #5a4100; }
-    .quality-bad { background: linear-gradient(145deg, #ffc2c9, #ff95a1); color: #5e0a16; }
-    .status-confirmed { background: linear-gradient(145deg, #b8f3e0, #8ce8c9); color: #083524; }
-    .status-pending { background: linear-gradient(145deg, #ffeab3, #ffd780); color: #5b3b00; }
-    .status-suggested { background: var(--bg); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); color: var(--muted); }
+  .banner{display:flex; align-items:center; gap:12px; padding:14px 18px; margin-bottom:18px; border-radius:18px;
+    background:linear-gradient(135deg,#fff3d6,#ffe3ad); box-shadow:0 8px 20px rgba(224,154,18,.28); animation:slideup .5s}
+  .banner .em{font-size:24px}
+  .banner b{display:block; font-size:14px}
+  .banner small{color:#7a5a12; font-size:11.5px}
 
-    .drawer-open { transform: translateX(0); }
-    .drawer-closed { transform: translateX(110%); }
-    .course-active {
-      box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light) !important;
-      border-color: rgba(47,210,168,0.45) !important;
-      background: linear-gradient(145deg, #e6f6f0, #e8ecf3) !important;
-    }
+  .tabs{display:flex; gap:9px; overflow-x:auto; padding:6px; margin-bottom:20px; scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{white-space:nowrap; border:0; cursor:pointer; font-family:'Vazirmatn'; font-weight:700; font-size:13px; color:var(--muted);
+    padding:10px 18px; border-radius:999px; background:transparent; transition:all .25s}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:#fff; background:linear-gradient(135deg,#12c9b8,#0a8f84); box-shadow:0 6px 14px rgba(10,143,132,.35)}
 
-    @keyframes riseIn { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes softFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    .animate-rise { animation: riseIn 480ms cubic-bezier(.2,.8,.2,1) both; }
-    .float-soft { animation: softFloat 5s ease-in-out infinite; }
+  .sec-title{font-family:'Lalezar'; font-size:22px; margin:26px 4px 14px; display:flex; align-items:center; gap:9px}
+  .sec-title .bar{width:7px; height:26px; border-radius:5px; background:linear-gradient(180deg,#ff8080,#e04f4f); box-shadow:0 4px 8px rgba(224,79,79,.35)}
 
-    .scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background: #c3c9d5; border-radius: 999px; }
-    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px}
+  .card{padding:18px; transition:transform .25s, box-shadow .25s; position:relative; overflow:hidden}
+  .card:hover{transform:translateY(-4px); box-shadow:-9px -9px 20px var(--sh-l), 11px 13px 26px var(--sh-d)}
+  .card-head{display:flex; gap:12px; align-items:flex-start; margin-bottom:12px}
+  .card-head h3{margin:0; font-size:15.5px; font-weight:800; line-height:1.5}
+  .card-head p{margin:4px 0 0; font-size:12.5px; color:var(--muted); line-height:1.7}
+  .card-chips{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+  .type-tag{position:absolute; top:14px; left:14px; font-size:10.5px; font-weight:800; padding:4px 10px; border-radius:999px; color:#fff}
+  .tt-text{background:#0fb5a6} .tt-video{background:#e04f4f} .tt-image{background:#3f9bff} .tt-audio{background:#ffb52e; color:#4a3305}
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
-  </style>
+  .term-card{padding:16px 18px; margin-bottom:13px}
+  .term-head{display:flex; align-items:center; gap:12px; margin-bottom:11px}
+  .term-bubble{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-family:'Lalezar';font-size:21px;color:#fff;flex-shrink:0}
+  .lesson-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; margin-top:8px; border-radius:13px}
+  .lesson-row b{font-size:13.5px}
+  .lesson-row small{color:var(--muted); font-size:11.5px; display:block; margin-top:2px}
+
+  .announce{padding:20px; border-radius:20px; margin-bottom:14px; color:#fff; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#ff8080,#e04f4f); box-shadow:0 10px 24px rgba(224,79,79,.35)}
+  .announce.alt{background:linear-gradient(135deg,#66b0ff,#2f7fe0); box-shadow:0 10px 24px rgba(47,127,224,.35)}
+  .announce .meg{font-size:30px; position:absolute; left:16px; top:50%; transform:translateY(-50%) rotate(-12deg); opacity:.9}
+  .announce h3{font-family:'Lalezar'; margin:0 0 5px; font-size:18px}
+  .announce small{opacity:.9; font-size:12px}
+  .announce .pill{display:inline-block; background:rgba(255,255,255,.22); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:700; margin-top:9px}
+
+  .prof-card{padding:18px; display:flex; align-items:center; gap:14px}
+  .prof-ava{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:'Lalezar';font-size:22px;flex-shrink:0; box-shadow:0 7px 14px rgba(46,72,118,.25)}
+  .online-dot{width:9px;height:9px;border-radius:50%;background:#2fae66;box-shadow:0 0 0 4px rgba(47,174,102,.2); display:inline-block; margin-inline-start:5px}
+
+  .empty{padding:34px; text-align:center; color:var(--muted); font-size:13.5px}
+  .empty .em{font-size:38px; display:block; margin-bottom:10px}
+
+  /* ---------- drawer ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(37,51,82,.4); backdrop-filter:blur(3px); z-index:40; opacity:0; pointer-events:none; transition:opacity .3s}
+  .overlay.show{opacity:1; pointer-events:auto}
+  .drawer{position:fixed; top:0; bottom:0; right:0; width:min(330px,88vw); z-index:50; padding:22px 18px; overflow-y:auto;
+    background:linear-gradient(160deg,#f2f7fd,#e4ecf5); box-shadow:-12px 0 34px rgba(46,72,118,.22);
+    border-radius:26px 0 0 26px; transform:translateX(105%); transition:transform .38s cubic-bezier(.2,.9,.3,1)}
+  .drawer.show{transform:translateX(0)}
+  .d-close{position:absolute; top:14px; left:14px; width:38px;height:38px;border-radius:12px;border:0;cursor:pointer;font-size:16px;
+    background:linear-gradient(145deg,#f3f8fd,#e0e9f2); box-shadow:-3px -3px 8px #fff, 4px 4px 9px var(--sh-d)}
+  .d-profile{text-align:center; padding:26px 10px 16px}
+  .d-avatar{width:84px;height:84px;border-radius:26px;font-size:42px; margin:0 auto 12px}
+  .d-name{font-family:'Lalezar'; font-size:24px; margin:2px 0 8px}
+  .d-stats{display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px; margin:16px 0}
+  .d-stat{padding:12px 6px; text-align:center}
+  .d-stat .n{font-family:'Lalezar'; font-size:20px; line-height:1}
+  .d-stat .l{font-size:10.5px; color:var(--muted); font-weight:700; margin-top:3px}
+  .d-nav{display:flex; flex-direction:column; gap:9px; margin-top:14px}
+  .d-nav button{text-align:right; display:flex; align-items:center; gap:10px; width:100%}
+  .d-version{text-align:center; margin-top:22px; font-size:11.5px; color:#8fa0bd; cursor:pointer; user-select:none; transition:color .2s; font-weight:700; letter-spacing:.3px}
+  .d-version:hover{color:var(--teal-d)}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:16px;
+    background:rgba(37,51,82,.5); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .28s}
+  .modal.show{opacity:1; pointer-events:auto}
+  .modal-card{width:min(580px,96vw); max-height:92vh; overflow-y:auto; padding:22px; animation:pop .32s; position:relative}
+  .m-close{position:absolute; top:14px; left:14px; z-index:5}
+  .media-box{border-radius:16px; overflow:hidden; margin:14px 0; background:#1d2740; min-height:120px}
+  .media-box img,.media-box video{width:100%; display:block; max-height:340px; object-fit:contain; background:#1d2740}
+  .media-box iframe{width:100%; height:300px; border:0; display:block}
+  .media-box audio{width:100%; margin:34px 0}
+  .media-box .txt{padding:20px; background:linear-gradient(145deg,#f3f8fd,#e7eef6); color:var(--ink); font-size:14px; line-height:2.1; max-height:320px; overflow-y:auto}
+  .timer-area{display:flex; flex-direction:column; align-items:center; gap:8px; padding:14px 0 6px}
+  .ring-wrap{position:relative; width:118px; height:118px}
+  .ring-wrap svg{transform:rotate(-90deg)}
+  .ring-bg{fill:none; stroke:#dde7f2; stroke-width:10}
+  .ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset .9s linear}
+  .ring-num{position:absolute; inset:0; display:grid; place-items:center; font-family:'Lalezar'; font-size:30px}
+  .earned-box{text-align:center; padding:12px 0 4px; animation:pop .4s}
+  .earned-box .big{font-family:'Lalezar'; font-size:30px; color:#c07f00}
+
+  .coinbit{position:fixed; z-index:80; font-size:22px; pointer-events:none; animation:coinfly .95s ease-out forwards}
+
+  /* ---------- toast ---------- */
+  #toasts{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:90; display:flex; flex-direction:column; gap:9px; align-items:center; width:max-content; max-width:92vw}
+  .toast{padding:12px 20px; border-radius:15px; font-size:13px; font-weight:700; color:#fff; animation:slideup .35s; box-shadow:0 10px 24px rgba(37,51,82,.3)}
+  .t-ok{background:linear-gradient(135deg,#34c47c,#1f9a5c)}
+  .t-err{background:linear-gradient(135deg,#ff8080,#d84343)}
+  .t-info{background:linear-gradient(135deg,#66b0ff,#2f7fe0)}
+  .t-gold{background:linear-gradient(135deg,#ffc95e,#e09a12); color:#4a3305}
+
+  /* ---------- login ---------- */
+  .login-hero{display:flex; flex-direction:column; align-items:center; text-align:center; padding:34px 0 8px}
+  .login-logo{width:96px;height:96px;border-radius:30px;display:grid;place-items:center;font-size:46px; margin-bottom:16px;
+    background:linear-gradient(145deg,#f3f8fd,#e0e9f2); box-shadow:-8px -8px 18px var(--sh-l), 9px 10px 22px var(--sh-d), 0 0 0 6px rgba(15,181,166,.12);
+    animation:float 6s ease-in-out infinite}
+  .login-hero h1{font-family:'Lalezar'; font-size:clamp(32px,6vw,44px); margin:0; line-height:1.15}
+  .login-hero h1 span{color:var(--teal-d)}
+  .login-hero p{color:var(--muted); font-weight:600; font-size:14px; margin:8px 0 0}
+  .login-card{max-width:470px; margin:26px auto 0; padding:26px; animation:slideup .55s}
+  .ava-pick{display:flex; gap:8px; flex-wrap:wrap}
+  .ava-pick button{width:46px;height:46px;border-radius:14px;border:0;font-size:22px;cursor:pointer;
+    background:linear-gradient(145deg,#eef4fa,#dfe8f2); box-shadow:-3px -3px 8px #fff, 4px 4px 9px var(--sh-d); transition:transform .15s}
+  .ava-pick button:hover{transform:translateY(-2px)}
+  .ava-pick button.sel{box-shadow:inset 3px 3px 7px rgba(46,72,118,.2), inset -3px -3px 7px #fff, 0 0 0 2.5px var(--teal)}
+  .login-foot{display:flex; justify-content:center; gap:10px; margin-top:20px; flex-wrap:wrap}
+
+  /* ---------- admin ---------- */
+  .admin-head{display:flex; align-items:center; gap:14px; padding:16px 18px; margin-bottom:16px; flex-wrap:wrap}
+  .admin-badge{background:linear-gradient(135deg,#3a4a6e,#253352); color:#fff; padding:7px 16px; border-radius:999px; font-size:12px; font-weight:800; box-shadow:0 6px 14px rgba(37,51,82,.35)}
+  .admin-tabs{display:flex; gap:8px; overflow-x:auto; padding:5px; margin-bottom:20px; scrollbar-width:none}
+  .admin-tabs::-webkit-scrollbar{display:none}
+  .atab{white-space:nowrap; border:0; cursor:pointer; font-family:'Vazirmatn'; font-weight:700; font-size:12.5px; color:var(--muted);
+    padding:9px 16px; border-radius:13px; background:transparent; transition:all .22s}
+  .atab.active{color:#fff; background:linear-gradient(135deg,#3a4a6e,#253352); box-shadow:0 6px 12px rgba(37,51,82,.3)}
+  .form-card{padding:20px; margin-bottom:18px}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:13px}
+  @media(max-width:560px){.form-row{grid-template-columns:1fr}}
+  .list-row{display:flex; align-items:center; gap:11px; padding:13px 15px; margin-bottom:10px; flex-wrap:wrap}
+  .list-row .grow{flex:1; min-width:150px}
+  .code-display{font-family:'Lalezar'; font-size:30px; letter-spacing:4px; text-align:center; padding:16px; direction:ltr; color:var(--teal-d)}
+  .mini-input{width:90px; padding:8px 10px; font-size:13px; border-radius:11px}
+  .shake{animation:shake .45s}
+  .ghost-lock{opacity:.13; font-size:12px; cursor:pointer; user-select:none; display:inline-block; transition:opacity .35s; padding:2px 6px; vertical-align:middle}
+  .ghost-lock:hover{opacity:.35}
+  .term-pill{border:0;cursor:pointer;width:48px;height:48px;border-radius:15px;font-family:'Lalezar';font-size:19px;color:var(--muted);
+    background:linear-gradient(145deg,#eef4fa,#dfe8f2); box-shadow:-4px -4px 9px #fff, 4px 5px 10px var(--sh-d)}
+  .term-pill.active{color:#fff; background:linear-gradient(135deg,#12c9b8,#0a8f84); box-shadow:0 6px 13px rgba(10,143,132,.4)}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .55s, transform .55s}
+  .reveal.in{opacity:1; transform:none}
+
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:#c4d1e2; border-radius:9px}
+  @media(max-width:640px){
+    .topbar{gap:9px}
+    .clockbox .d{display:none}
+    .floater{display:none}
+  }
+</style>
 </head>
 <body>
-  <section id="loginScreen" class="relative grid min-h-screen place-items-center px-5 py-10">
-    <div class="animate-rise grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-      <div class="space-y-7">
-        <div class="flex items-center gap-5">
-          <div class="logo-mark grid h-24 w-24 shrink-0 place-items-center">
-            <svg viewBox="0 0 96 96" width="62" height="62" aria-hidden="true">
-              <circle cx="48" cy="48" r="34" fill="none" stroke="#9aa6bb" stroke-width="2.6"></circle>
-              <path d="M48 19c10 9 17 18 17 28 0 11-7 20-17 26-10-6-17-15-17-26 0-10 7-19 17-28Z" fill="none" stroke="#2fd2a8" stroke-width="3.8" stroke-linejoin="round"></path>
-              <path d="M36 52c7 1 17 1 24 0M41 41h14" stroke="#556987" stroke-width="3.2" stroke-linecap="round"></path>
-              <text x="48" y="84" text-anchor="middle" fill="#556987" font-size="11" font-weight="900" font-family="Vazirmatn">قم</text>
-            </svg>
-          </div>
-          <div>
-            <p class="text-sm font-black tracking-wide text-slate-500">دانشگاه آزاد اسلامی قم</p>
-            <h1 class="mt-2 text-4xl font-black leading-none tracking-tight text-slate-800 md:text-[3.4rem]">ارشد<br>روانشناسی قم</h1>
-            <div class="mt-3 flex gap-2">
-              <span class="neu-soft px-3 py-1.5 text-[11px] font-black text-slate-600">فقط عمومی</span>
-              <span class="neu-soft px-3 py-1.5 text-[11px] font-black text-slate-600">ترم ۱ تا ۴</span>
-            </div>
-          </div>
-        </div>
-        <div class="neu-panel p-7">
-          <h2 class="text-xl font-black text-slate-800">یادگیری با تمرکز و ردیابی واقعی مطالعه</h2>
-          <p class="mt-3 text-[14px] leading-8 text-slate-500">
-            هر جزوه متنی، عکس و ویدیو حالا زمان مطالعه حداقلی دارد. باید محتوا را واقعا ببینی (تایمر فعال فقط وقتی محتوا در دید است) تا تکمیل شود و امتیاز بگیری. ادمین می‌تواند زمان لازم و امتیاز هر محتوا را تعیین کند.
-          </p>
-          <div class="mt-5 grid grid-cols-3 gap-3">
-            <div class="neu-inset grid place-items-center p-4 text-center">
-              <p class="text-2xl">👀</p>
-              <p class="mt-2 text-[11px] font-black text-slate-600">رهگیری دید</p>
-            </div>
-            <div class="neu-inset grid place-items-center p-4 text-center">
-              <p class="text-2xl">⏱️</p>
-              <p class="mt-2 text-[11px] font-black text-slate-600">زمان حداقل</p>
-            </div>
-            <div class="neu-inset grid place-items-center p-4 text-center">
-              <p class="text-2xl">⭐</p>
-              <p class="mt-2 text-[11px] font-black text-slate-600">امتیاز خودکار</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <form id="loginForm" class="neu-panel animate-rise p-7 md:p-8" style="animation-delay: 110ms">
-        <div class="mb-7 flex items-center justify-between">
-          <div>
-            <h2 class="text-2xl font-black text-slate-800">ورود دانشجو</h2>
-            <p class="mt-2 text-sm leading-7 text-slate-500">نام و ترم خود را وارد کنید.</p>
-          </div>
-          <div class="neu-soft grid h-14 w-14 place-items-center text-xl">🎓</div>
-        </div>
-        <div class="space-y-4">
-          <label class="block">
-            <span class="mb-2 block text-xs font-black text-slate-600">نام و نام خانوادگی</span>
-            <input id="studentName" class="neu-field" type="text" placeholder="مثلا سارا احمدی" required>
-          </label>
-          <label class="block">
-            <span class="mb-2 block text-xs font-black text-slate-600">ترم</span>
-            <select id="studentSemester" class="neu-field" required>
-              <option value="1">ترم ۱</option>
-              <option value="2">ترم ۲</option>
-              <option value="3">ترم ۳</option>
-              <option value="4">ترم ۴</option>
-            </select>
-          </label>
-          <button class="neu-primary w-full" type="submit">ورود به برنامه</button>
-          <p class="text-[11px] leading-6 text-slate-500">بعد از ورود، اگر کد همگام‌سازی کلاس را دارید در بخش بعدی وارد کنید تا تمام بخش‌ها و دکمه‌هایی که ادمین ساخته را ببینید.</p>
-        </div>
-      </form>
+<div class="floater f1"></div>
+<div class="floater f2"></div>
+<div class="floater f3"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffc95e"/><stop offset="100%" stop-color="#e09a12"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ============ صفحه ورود ============ -->
+<section id="screen-login" class="wrap">
+  <div class="login-hero">
+    <div class="login-logo">🧠</div>
+    <h1>روانشناسی <span>عمومی</span></h1>
+    <p>دانشگاه آزاد اسلامی — واحد قم</p>
+    <div class="login-foot">
+      <span class="chip chip-time">🕐 <b id="loginTime">--:--:--</b></span>
+      <span class="chip"><span>📅</span> <b id="loginDate">—</b></span>
     </div>
-  </section>
+  </div>
 
-  <main id="dashboard" class="relative hidden min-h-screen px-4 py-5 md:px-6">
-    <header class="neu-panel sticky top-4 z-30 mx-auto mb-7 flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4">
-      <div class="flex min-w-0 items-center gap-4">
-        <div class="logo-mark grid h-14 w-14 shrink-0 place-items-center"><span class="text-xl font-black text-slate-700">قم</span></div>
-        <div class="min-w-0">
-          <p class="text-[11px] font-black tracking-widest text-slate-500">AZAD QOM</p>
-          <h2 class="truncate text-lg font-black text-slate-800 md:text-xl">ارشد روانشناسی - عمومی</h2>
-        </div>
-      </div>
-      <div class="order-3 flex w-full items-center justify-between gap-3 rounded-[18px] bg-[#e6ebf3] px-4 py-3 shadow-[inset_6px_6px_12px_#c4cad6,inset_-6px_-6px_12px_#ffffff] md:order-2 md:w-auto md:min-w-[260px]">
-        <div class="text-center">
-          <p id="iranDate" class="text-[11px] font-black text-slate-600"></p>
-          <p id="iranTime" class="mt-1 font-mono text-[15px] font-black text-slate-800"></p>
-        </div>
-        <div class="hidden h-8 w-px bg-slate-300/50 md:block"></div>
-        <div class="hidden text-left md:block">
-          <p class="text-[10px] font-black text-slate-500">TIME TRACKING</p>
-          <p class="mt-1 text-xs font-bold text-slate-700">مطالعه ردیابی می‌شود</p>
-        </div>
-      </div>
-      <div class="order-2 flex flex-col items-end gap-2 md:order-3">
-        <div class="flex items-center gap-2">
-          <button id="logoutBtn" class="neu-btn hidden text-xs sm:inline-flex" type="button">خروج</button>
-          <button id="adminOpenBtn" class="neu-btn grid h-12 w-12 place-items-center p-0" type="button" aria-label="مدیریت">
-            <span class="grid gap-1.5"><span class="block h-1 w-5 rounded-full bg-slate-700"></span><span class="block h-1 w-5 rounded-full bg-slate-700"></span><span class="block h-1 w-5 rounded-full bg-slate-700"></span></span>
-          </button>
-        </div>
-        <div id="cloudStatus" class="neu-inset px-3 py-2 text-[10px] font-black text-slate-500 flex items-center gap-2"><span class="offline-dot"></span> در حال اتصال ابری...</div>
-      </div>
-    </header>
-
-    <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[360px_minmax(0,1fr)_330px]">
-      <aside class="space-y-6">
-        <section id="profilePanel" class="neu-panel p-6"></section>
-        <section id="sectionsPanel" class="neu-panel p-6"></section>
-      </aside>
-
-      <section class="flex min-h-[74vh] flex-col gap-6">
-        <div id="syncPanel" class="neu-panel p-5 md:p-6"></div>
-        <div id="activeCoursePanel" class="neu-panel p-5 md:p-6"></div>
-        <div id="termOfferingsPanel" class="neu-panel p-5 md:p-6"></div>
-        <div class="neu-panel flex min-h-[460px] flex-1 flex-col p-5 md:p-6">
-          <div id="chatHeader" class="mb-4"></div>
-          <div id="chatMessages" class="scrollbar-thin neu-inset min-h-0 flex-1 space-y-3 overflow-y-auto p-4"></div>
-          <form id="chatForm" class="mt-5 flex gap-3">
-            <input id="chatInput" class="neu-field flex-1" type="text" maxlength="500" placeholder="پیام خود را بنویسید...">
-            <button class="neu-primary shrink-0 px-6" type="submit">ارسال</button>
-          </form>
-        </div>
-      </section>
-
-      <aside class="space-y-6">
-        <section id="peoplePanel" class="neu-panel p-6"></section>
-        <section id="teachersPanel" class="neu-panel p-6"></section>
-      </aside>
+  <div class="neu login-card">
+    <h2 class="display" style="font-size:21px; margin:0 0 16px; text-align:center">ورود دانشجویان</h2>
+    <div style="margin-bottom:13px">
+      <label>نام کاربری</label>
+      <input id="regName" placeholder="مثلاً: علی ونایی">
     </div>
-  </main>
+    <div style="margin-bottom:13px">
+      <label>ترم تحصیلی</label>
+      <select id="regTerm">
+        <option value="">انتخاب ترم…</option>
+        <option value="1">ترم ۱</option><option value="2">ترم ۲</option>
+        <option value="3">ترم ۳</option><option value="4">ترم ۴</option>
+        <option value="5">ترم ۵</option><option value="6">ترم ۶</option>
+        <option value="7">ترم ۷</option><option value="8">ترم ۸</option>
+      </select>
+    </div>
+    <div style="margin-bottom:13px">
+      <label>کد دسترسی آنلاین <small style="color:#0a8f84">(پیش‌فرض: GENERAL)</small></label>
+      <input id="regCode" placeholder="GENERAL" style="direction:ltr; text-align:center; letter-spacing:2px; font-weight:800">
+    </div>
+    <div style="margin-bottom:18px">
+      <label>آواتار خود را انتخاب کنید</label>
+      <div class="ava-pick" id="avaPick"></div>
+    </div>
+    <button class="btn btn-teal" style="width:100%; font-size:15.5px" onclick="doLogin()">🚪 ورود به برنامه</button>
+    <p style="text-align:center; font-size:11.5px; color:var(--muted); margin:14px 0 10px">
+      با ورود، نام کاربری و ترم شما در دستگاه ذخیره می‌شود
+    </p>
+    <div style="text-align:center"><span class="ghost-lock admin-gate">🔒</span></div>
+  </div>
+</section>
 
-  <div id="drawerBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/10 backdrop-blur-sm"></div>
-  <aside id="adminDrawer" class="drawer-closed fixed bottom-0 right-0 top-0 z-50 w-full max-w-[560px] overflow-y-auto border-l border-white/60 bg-[#e6ebf3] p-6 shadow-[-16px_0_32px_rgba(0,0,0,0.08)] transition-transform duration-300 md:p-8">
-    <div class="mb-7 flex items-center justify-between gap-3">
+<!-- ============ صفحه اصلی اپ ============ -->
+<section id="screen-app" class="wrap" hidden>
+  <header class="topbar neu">
+    <button class="btn btn-sm" style="padding:10px 12px; font-size:17px" onclick="toggleDrawer()" title="منو">☰</button>
+    <div class="brand">
+      <div class="brand-logo">🧠</div>
       <div>
-        <p class="text-xs font-black tracking-widest text-slate-500">پنل</p>
-        <h2 class="mt-1 text-2xl font-black text-slate-800">پنل مدیریت</h2>
+        <h1>روانشناسی عمومی</h1>
+        <small>دانشگاه آزاد — قم</small>
       </div>
-      <button id="adminCloseBtn" class="neu-btn px-4 py-2 text-xs" type="button">بستن</button>
     </div>
-    <div id="adminContent"></div>
-  </aside>
-
-  <script>
-    const STORAGE_KEY = "qom_psy_master_app_v3_neo";
-    const CURRENT_USER_KEY = "qom_psy_current_user_v1";
-    const ADMIN_SESSION_KEY = "qom_psy_admin_session_v1";
-    const ACTIVE_ROOM_KEY = "qom_psy_active_room_v3";
-    const ADMIN_PASSWORD = "ALIVANAPSY";
-    const faDigits = "۰۱۲۳۴۵۶۷۸۹";
-    const qualityLabels = { good: "خوب", neutral: "متوسط", bad: "بد" };
-    const qualityClasses = { good: "quality-good", neutral: "quality-neutral", bad: "quality-bad" };
-    const offeringStatusLabels = { confirmed: "قطعی", pending: "در حال هماهنگی", suggested: "پیشنهادی" };
-    const offeringStatusClasses = { confirmed: "status-confirmed", pending: "status-pending", suggested: "status-suggested" };
-
-    function uid(prefix) { return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`; }
-
-    let data = loadData();
-    let currentUser = null;
-    let activeRoomId = localStorage.getItem(ACTIVE_ROOM_KEY) && data.rooms.some(r => r.id === localStorage.getItem(ACTIVE_ROOM_KEY)) ? localStorage.getItem(ACTIVE_ROOM_KEY) : "room-general";
-    let activeCourseId = null;
-    let activeAdminTab = "courses";
-    let adminAuthed = sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes";
-    let exportText = "";
-    let pendingMaterial = { dataUrl: "", fileName: "" };
-
-    // View tracking
-    let visibleMaterials = new Set();
-    let viewingInterval = null;
-    let materialObserver = null;
-
-    const channel = "BroadcastChannel" in window ? new BroadcastChannel("qom_psy_master_sync_v3") : null;
-
-    // ====== GUN.JS CLOUD SYNC PER ROOM CODE - DATABASE PERSISTENT PER CLASS ======
-    const GUN_PEERS = [
-      'https://gun-manhattan.herokuapp.com/gun',
-      'https://gun-us.herokuapp.com/gun'
-    ];
-    let gun = null;
-    let gunRoot = null;
-    let gunStateNode = null;
-    let isSyncingFromCloud = false;
-    let cloudConnected = false;
-    let lastCloudUpdate = 0;
-    let cloudSyncEnabled = true;
-    let currentRoomCode = (localStorage.getItem('qom_current_room_code') || 'GENERAL').toUpperCase();
-    let gunRoomUnsub = null;
-
-    function getRoomCode() {
-      return (currentRoomCode || localStorage.getItem('qom_current_room_code') || 'GENERAL').toUpperCase();
-    }
-
-    function getShareLinkForCode(code) {
-      const c = (code || getRoomCode()).toUpperCase();
-      const base = location.origin + location.pathname;
-      return `${base}?join=${encodeURIComponent(c)}`;
-    }
-
-    function initGun() {
-      if (!cloudSyncEnabled) return;
-      initGunForRoom(getRoomCode());
-    }
-
-    function initGunForRoom(code) {
-      const roomCode = (code || getRoomCode()).toUpperCase();
-      currentRoomCode = roomCode;
-      localStorage.setItem('qom_current_room_code', roomCode);
-      lastCloudUpdate = 0;
-      try {
-        if (typeof Gun === 'undefined') {
-          console.warn('Gun not loaded');
-          cloudConnected = false;
-          updateCloudStatusUI();
-          return;
-        }
-        if (!gun) {
-          gun = Gun({ peers: GUN_PEERS, localStorage: false, radisk: false });
-        }
-        // هر اتاق یک فضای ابری جداگانه دارد: qom-class-CODE
-        gunRoot = gun.get('qom-class-' + roomCode.toLowerCase());
-        gunStateNode = gunRoot.get('sharedStateV2');
-
-        if (gunRoomUnsub && typeof gunRoomUnsub.off === 'function') {
-          try { gunRoomUnsub.off(); } catch {}
-        }
-
-        // گوش دادن به دیتابیس همین اتاق
-        gunRoomUnsub = gunStateNode.on((cloudWrapper) => {
-          if (!cloudWrapper || !cloudWrapper.json || isSyncingFromCloud) return;
-          if (cloudWrapper.roomCode && cloudWrapper.roomCode.toUpperCase() !== roomCode) return;
-          if (cloudWrapper.updatedAt && cloudWrapper.updatedAt <= lastCloudUpdate) return;
-          try {
-            if (cloudWrapper.json.length > 900000) {
-              console.warn('Cloud data too large');
-              return;
-            }
-            const parsed = JSON.parse(cloudWrapper.json);
-            if (!parsed || typeof parsed !== 'object') return;
-            if (parsed._senderId && currentUser && parsed._senderId === currentUser.id && Date.now() - (cloudWrapper.updatedAt || 0) < 2500) return;
-            lastCloudUpdate = cloudWrapper.updatedAt || Date.now();
-            isSyncingFromCloud = true;
-            // مرج هوشمند: کاربران و پیام‌ها را ادغام کن تا هیچکس حذف نشود
-            const incoming = normalizeData({ ...makeDefaultData(), ...parsed });
-            // ادغام کاربران: هر دو لیست را نگه دار
-            const mergedUsers = [...data.users];
-            incoming.users.forEach(u => { if (!mergedUsers.some(x => x.id === u.id)) mergedUsers.push(u); else { const idx = mergedUsers.findIndex(x => x.id === u.id); if (idx >= 0 && (u.lastSeen || 0) > (mergedUsers[idx].lastSeen || 0)) mergedUsers[idx] = u; } });
-            // ادغام پیام‌ها برای هر اتاق
-            const mergedRooms = [...data.rooms];
-            incoming.rooms.forEach(ir => {
-              const localIdx = mergedRooms.findIndex(r => r.id === ir.id);
-              if (localIdx === -1) mergedRooms.push(ir);
-              else {
-                // مرج پیام‌ها
-                const localMsgs = mergedRooms[localIdx].messages || [];
-                const incMsgs = ir.messages || [];
-                const allMsgs = [...localMsgs];
-                incMsgs.forEach(m => { if (!allMsgs.some(x => x.id === m.id)) allMsgs.push(m); });
-                allMsgs.sort((a,b) => (a.at||0)-(b.at||0));
-                mergedRooms[localIdx] = { ...mergedRooms[localIdx], ...ir, messages: allMsgs.slice(-300) };
-              }
-            });
-
-            const merged = { ...incoming, users: mergedUsers, rooms: mergedRooms, materialProgress: { ...data.materialProgress, ...incoming.materialProgress } };
-            // حفظ بخش‌های مهم محلی مثل courses/materials/teachers که جدیدتر است را ترجیح بده به ابری که تازه‌تر است
-            if ((data.materials?.length || 0) >= (incoming.materials?.length || 0) && lastCloudUpdate - (cloudWrapper.updatedAt||0) < 5000) {
-              // اگر محلی تازه‌تر است، آن را نگه دار
-              merged.courses = data.courses.length ? data.courses : incoming.courses;
-              merged.materials = data.materials.length ? data.materials : incoming.materials;
-              merged.teachers = data.teachers.length ? data.teachers : incoming.teachers;
-              merged.offerings = data.offerings.length ? data.offerings : incoming.offerings;
-            }
-
-            const curId = localStorage.getItem(CURRENT_USER_KEY);
-            data = normalizeData(merged);
-            if (curId) {
-              const stillExists = data.users.find(u => u.id === curId);
-              if (stillExists) currentUser = stillExists;
-            }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            // اتاق فعال را حفظ کن
-            activeRoomId = localStorage.getItem(ACTIVE_ROOM_KEY) || activeRoomId;
-            renderAll();
-            cloudConnected = true;
-            updateCloudStatusUI();
-          } catch (e) {
-            console.warn('cloud parse', e);
-          } finally {
-            setTimeout(() => { isSyncingFromCloud = false; }, 700);
-          }
-        });
-
-        gun.on('hi', () => { cloudConnected = true; updateCloudStatusUI(); });
-        gun.on('bye', () => { cloudConnected = false; updateCloudStatusUI(); });
-
-        setTimeout(() => {
-          gunStateNode.once((d) => {
-            if (d && d.json) {
-              cloudConnected = true;
-              updateCloudStatusUI();
-            } else {
-              // اتاق ابری خالی است، دیتابیس محلی را به عنوان سید بفرست تا محفوظ بماند
-              if (data.users.length >= 0) pushToCloud();
-            }
-          });
-        }, 2200);
-
-        setTimeout(() => {
-          if (lastCloudUpdate === 0) pushToCloud();
-        }, 4500);
-
-      } catch (err) {
-        console.warn('Gun room init failed', err);
-        cloudConnected = false;
-        updateCloudStatusUI();
-      }
-    }
-
-    function sanitizeDataForCloud(src) {
-      const copy = JSON.parse(JSON.stringify(src));
-      if (copy.materials) {
-        copy.materials = copy.materials.map(m => {
-          if (m.dataUrl && m.dataUrl.length > 40000 && m.dataUrl.startsWith('data:')) {
-            return { ...m, dataUrl: m.dataUrl.startsWith('http') ? m.dataUrl : '', fileName: (m.fileName || '') + ' (حجیم - فقط محلی)' };
-          }
-          return m;
-        });
-      }
-      copy._senderId = currentUser ? currentUser.id : 'anon';
-      copy._roomCode = getRoomCode();
-      return copy;
-    }
-
-    function pushToCloud() {
-      if (!cloudSyncEnabled || !gunStateNode || isSyncingFromCloud) return;
-      if (typeof Gun === 'undefined') return;
-      try {
-        const sanitized = sanitizeDataForCloud(data);
-        const json = JSON.stringify(sanitized);
-        if (json.length > 950000) {
-          console.warn('Too large for cloud');
-          return;
-        }
-        lastCloudUpdate = Date.now();
-        gunStateNode.put({ json, updatedAt: lastCloudUpdate, roomCode: getRoomCode() });
-        // همچنین متای اتاق را ذخیره کن تا ادمین لیست اتاق‌ها را ببیند
-        const meta = { code: getRoomCode(), name: data.rooms.find(r => r.code.toUpperCase() === getRoomCode())?.name || getRoomCode(), updatedAt: lastCloudUpdate, usersCount: data.users.length, link: getShareLinkForCode(getRoomCode()) };
-        if (gunRoot) gunRoot.get('meta').put(meta);
-        cloudConnected = true;
-        updateCloudStatusUI();
-      } catch (e) {
-        console.warn('push cloud', e);
-      }
-    }
-
-    function updateCloudStatusUI() {
-      const el = document.getElementById('cloudStatus');
-      if (!el) return;
-      const code = getRoomCode();
-      const link = getShareLinkForCode(code);
-      if (cloudConnected) {
-        el.innerHTML = `<span class="online-dot"></span> اتاق <b dir="ltr" class="font-mono">${escapeHTML(code)}</b> آنلاین - دیتابیس محفوظ - <span class="underline cursor-pointer" onclick="copyShareLink('${code}')">کپی لینک دعوت</span>`;
-        el.className = 'neu-inset px-3 py-2.5 text-[10px] font-black text-emerald-700 flex flex-wrap items-center gap-2';
-        el.title = link;
-      } else {
-        el.innerHTML = `<span class="offline-dot"></span> اتاق ${escapeHTML(code)} آفلاین - تلاش مجدد...`;
-        el.className = 'neu-inset px-3 py-2.5 text-[10px] font-black text-slate-500 flex items-center gap-2';
-      }
-    }
-
-    function debounceCloudPush() {
-      if (window._cloudPushTimer) clearTimeout(window._cloudPushTimer);
-      window._cloudPushTimer = setTimeout(pushToCloud, 700);
-    }
-
-    function copyShareLink(code) {
-      const c = code || getRoomCode();
-      const link = getShareLinkForCode(c);
-      navigator.clipboard?.writeText(link).then(() => {
-        const el = document.getElementById('cloudStatus');
-        if (el) {
-          const prev = el.innerHTML;
-          el.innerHTML = `✅ لینک کپی شد: ${escapeHTML(link)}`;
-          setTimeout(updateCloudStatusUI, 2500);
-        }
-      }).catch(() => {
-        prompt('لینک اتاق (کپی کنید):', link);
-      });
-    }
-
-    const els = {
-      loginScreen: document.getElementById("loginScreen"),
-      loginForm: document.getElementById("loginForm"),
-      studentName: document.getElementById("studentName"),
-      studentSemester: document.getElementById("studentSemester"),
-      dashboard: document.getElementById("dashboard"),
-      iranDate: document.getElementById("iranDate"),
-      iranTime: document.getElementById("iranTime"),
-      profilePanel: document.getElementById("profilePanel"),
-      sectionsPanel: document.getElementById("sectionsPanel"),
-      activeCoursePanel: document.getElementById("activeCoursePanel"),
-      termOfferingsPanel: document.getElementById("termOfferingsPanel"),
-      chatHeader: document.getElementById("chatHeader"),
-      chatMessages: document.getElementById("chatMessages"),
-      chatForm: document.getElementById("chatForm"),
-      chatInput: document.getElementById("chatInput"),
-      peoplePanel: document.getElementById("peoplePanel"),
-      teachersPanel: document.getElementById("teachersPanel"),
-      cloudStatus: document.getElementById("cloudStatus"),
-      adminOpenBtn: document.getElementById("adminOpenBtn"),
-      adminCloseBtn: document.getElementById("adminCloseBtn"),
-      adminDrawer: document.getElementById("adminDrawer"),
-      drawerBackdrop: document.getElementById("drawerBackdrop"),
-      adminContent: document.getElementById("adminContent"),
-      logoutBtn: document.getElementById("logoutBtn")
-    };
-
-    function makeDefaultCourses() {
-      return [
-        { id: "c-t1-1", name: "روانشناسی سالمندی پیشرفته", term: 1, kind: "اصلی" },
-        { id: "c-t1-2", name: "روش های آماری کاربردی پیشرفته", term: 1, kind: "اصلی" },
-        { id: "c-t1-3", name: "عصب روانشناسی", term: 1, kind: "اصلی" },
-        { id: "c-t1-4", name: "روانشناسی تحولی پیشرفته", term: 1, kind: "اصلی" },
-        { id: "c-t1-j1", name: "زبان تخصصی", term: 1, kind: "جبرانی" },
-        { id: "c-t1-j2", name: "آسیب شناسی روانی ۲", term: 1, kind: "جبرانی" },
-        { id: "c-t2-1", name: "روش تحقیق پیشرفته", term: 2, kind: "اصلی" },
-        { id: "c-t2-2", name: "تحول شخصیت و نقد و بررسی دیدگاه ها", term: 2, kind: "اصلی" },
-        { id: "c-t2-3", name: "روانشناسی یادگیری و تفکر", term: 2, kind: "اصلی" },
-        { id: "c-t2-4", name: "انگیزش و هیجان پیشرفته", term: 2, kind: "اصلی" },
-        { id: "c-t2-j1", name: "فلسفه علم روانشناسی", term: 2, kind: "جبرانی" },
-        { id: "c-t2-j2", name: "روانشناسی شخصیت", term: 2, kind: "جبرانی" },
-        { id: "c-t3-1", name: "مبانی روانشناسی اسلامی ۱", term: 3, kind: "اصلی" },
-        { id: "c-t3-2", name: "آسیب شناسی روانی با تکیه بر بافتار بوم شناختی", term: 3, kind: "اصلی" },
-        { id: "c-t3-3", name: "روانشناسی تجربی", term: 3, kind: "اصلی" },
-        { id: "c-t3-4", name: "روانشناسی اجتماعی پیشرفته", term: 3, kind: "اصلی" },
-        { id: "c-t3-5", name: "نظریه پردازی در روانشناسی", term: 3, kind: "اصلی" },
-        { id: "c-t3-j1", name: "انس با قرآن کریم", term: 3, kind: "جبرانی" },
-        { id: "c-t3-j2", name: "وصایای امام (ره)", term: 3, kind: "جبرانی" },
-        { id: "c-t4-1", name: "پایان نامه", term: 4, kind: "پایان نامه" }
-      ];
-    }
-
-    function makeDefaultData() {
-      const courses = makeDefaultCourses();
-      return {
-        sections: [{ id: "sec-general", name: "روانشناسی عمومی" }],
-        courses,
-        materials: [
-          {
-            id: "mat-sample-text",
-            courseId: "c-t2-1",
-            type: "text",
-            title: "جزوه روش تحقیق - فصل روش شناسی",
-            body: "این جزوه باید حداقل ۳۰ ثانیه دیده شود تا تکمیل شود. تایمر فقط وقتی محتوا در صفحه شما قابل مشاهده است جلو می‌رود. بعد از تکمیل، امتیاز خودکار به شما داده می‌شود.",
-            dataUrl: "",
-            fileName: "",
-            minViewSeconds: 30,
-            pointsReward: 8,
-            at: Date.now() - 120000,
-            authorName: "مدیریت"
-          },
-          {
-            id: "mat-sample-img",
-            courseId: "c-t1-3",
-            type: "image",
-            title: "تصویر مغز - عصب روانشناسی",
-            body: "نقشه ساختار مغز را حداقل ۱۵ ثانیه ببینید. اسکرول نکنید تا تایمر متوقف نشود.",
-            dataUrl: "https://images.unsplash.com/photo-1559757175-5700dde675bc?q=80&w=800&auto=format&fit=crop",
-            fileName: "brain.jpg",
-            minViewSeconds: 15,
-            pointsReward: 5,
-            at: Date.now() - 80000,
-            authorName: "مدیریت"
-          },
-          {
-            id: "mat-sample-video",
-            courseId: "c-t2-3",
-            type: "video",
-            title: "ویدیو یادگیری و تفکر - قسمت اول",
-            body: "ویدیو را حداقل ۶۰ ثانیه تماشا کنید تا امتیاز بگیرید.",
-            dataUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            fileName: "learning.mp4",
-            minViewSeconds: 60,
-            pointsReward: 15,
-            at: Date.now() - 50000,
-            authorName: "مدیریت"
-          }
-        ],
-        teachers: [
-          { id: "teach-1", name: "دکتر رضایی", sectionId: "sec-general", courseId: "c-t1-3", quality: "good" },
-          { id: "teach-2", name: "دکتر احمدی", sectionId: "sec-general", courseId: "c-t2-1", quality: "neutral" },
-          { id: "teach-3", name: "دکتر کریمی", sectionId: "sec-general", courseId: "c-t3-4", quality: "good" }
-        ],
-        offerings: [
-          { id: "off-1", term: 1, courseId: "c-t1-3", teacherId: "teach-1", status: "confirmed", note: "سه شنبه ۱۰-۱۲ حضوری" },
-          { id: "off-2", term: 2, courseId: "c-t2-1", teacherId: "teach-2", status: "pending", note: "در حال هماهنگی" }
-        ],
-        users: [],
-        rooms: [
-          {
-            id: "room-general",
-            code: "GENERAL",
-            name: "گفت وگوی عمومی",
-            locked: true,
-            messages: [
-              { id: "msg-welcome-v3", userId: "system", userName: "راهنما", semester: "سیستم", isVip: true, text: "خوش آمدید. درس را انتخاب کن، جزوه‌ها زمان مطالعه حداقلی دارند و امتیاز می‌دهند.", at: Date.now() - 60000 }
-            ]
-          }
-        ],
-        materialProgress: {}, // { userId: { materialId: { seconds, completed, at } } }
-        syncCodes: [] // [{code, name, createdAt, createdBy}]
-      };
-    }
-
-    function loadData() {
-      const fallback = makeDefaultData();
-      // migrate from previous storages
-      for (let key of ["qom_psy_master_app_v2", "qom_psy_master_app_v1"]) {
-        try {
-          const raw = localStorage.getItem(key);
-          if (raw && !localStorage.getItem(STORAGE_KEY)) {
-            const old = JSON.parse(raw);
-            if (old.users) fallback.users = old.users;
-            if (old.teachers) fallback.teachers = old.teachers;
-            if (old.courses) fallback.courses = old.courses;
-            if (old.materials) fallback.materials = old.materials.map(m => ({
-              ...m,
-              minViewSeconds: m.minViewSeconds || (m.type === "video" ? 60 : m.type === "image" ? 15 : 30),
-              pointsReward: m.pointsReward || 5
-            }));
-            if (old.rooms) fallback.rooms = old.rooms;
-            if (old.offerings) fallback.offerings = old.offerings;
-          }
-        } catch(e){}
-      }
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return fallback;
-        const parsed = JSON.parse(raw);
-        return normalizeData({ ...fallback, ...parsed });
-      } catch { return fallback; }
-    }
-
-    function normalizeData(source) {
-      source.sections = [{ id: "sec-general", name: "روانشناسی عمومی" }];
-      source.courses = Array.isArray(source.courses) && source.courses.length ? source.courses : makeDefaultCourses();
-      source.courses = source.courses.map(c => ({
-        id: c.id || uid("c"),
-        name: c.name || "درس بدون نام",
-        term: [1,2,3,4].includes(Number(c.term)) ? Number(c.term) : 1,
-        kind: ["اصلی","جبرانی","پایان نامه"].includes(c.kind) ? c.kind : "اصلی"
-      }));
-      source.materials = Array.isArray(source.materials) ? source.materials : [];
-      source.materials = source.materials.map(m => ({
-        id: m.id || uid("mat"),
-        courseId: m.courseId || source.courses[0]?.id || "c-t1-1",
-        type: ["text","image","video"].includes(m.type) ? m.type : "text",
-        title: m.title || "بدون عنوان",
-        body: m.body || "",
-        dataUrl: m.dataUrl || "",
-        fileName: m.fileName || "",
-        minViewSeconds: Number.isFinite(Number(m.minViewSeconds)) ? Math.max(5, Number(m.minViewSeconds)) : (m.type === "video" ? 60 : m.type === "image" ? 15 : 30),
-        pointsReward: Number.isFinite(Number(m.pointsReward)) ? Math.max(1, Number(m.pointsReward)) : 5,
-        at: m.at || Date.now(),
-        authorName: m.authorName || "مدیریت"
-      }));
-      source.teachers = Array.isArray(source.teachers) ? source.teachers : [];
-      source.teachers = source.teachers.map(t => ({
-        id: t.id || uid("teach"),
-        name: t.name || "استاد بدون نام",
-        sectionId: "sec-general",
-        courseId: t.courseId || "",
-        quality: ["good","neutral","bad"].includes(t.quality) ? t.quality : "neutral"
-      }));
-      source.offerings = Array.isArray(source.offerings) ? source.offerings : [];
-      source.offerings = source.offerings.map(o => ({
-        id: o.id || uid("off"),
-        term: [1,2,3,4].includes(Number(o.term)) ? Number(o.term) : 1,
-        courseId: o.courseId || source.courses[0]?.id || "",
-        teacherId: o.teacherId || source.teachers[0]?.id || "",
-        status: ["confirmed","pending","suggested"].includes(o.status) ? o.status : "pending",
-        note: o.note || ""
-      })).filter(o => o.courseId && o.teacherId);
-      source.users = Array.isArray(source.users) ? source.users : [];
-      source.users = source.users.map(u => ({
-        id: u.id || uid("user"),
-        name: u.name || "دانشجو",
-        semester: String(u.semester || "1"),
-        isVip: Boolean(u.isVip),
-        points: Number(u.points || 0),
-        online: Boolean(u.online),
-        lastSeen: u.lastSeen || Date.now(),
-        avatarHue: u.avatarHue || Math.floor(180 + Math.random() * 80)
-      }));
-      source.rooms = Array.isArray(source.rooms) ? source.rooms : [];
-      if (!source.rooms.some(r => r.id === "room-general")) source.rooms.unshift(makeDefaultData().rooms[0]);
-      source.rooms = source.rooms.map(r => ({
-        id: r.id || uid("room"),
-        code: r.code || `QOM${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
-        name: r.name || "لابی",
-        locked: Boolean(r.locked),
-        messages: Array.isArray(r.messages) ? r.messages.map(msg => ({
-          id: msg.id || uid("msg"),
-          userId: msg.userId || "system",
-          userName: msg.userName || "سیستم",
-          semester: msg.semester || "سیستم",
-          isVip: Boolean(msg.isVip),
-          text: msg.text || "",
-          at: msg.at || Date.now()
-        })) : []
-      }));
-      source.materialProgress = source.materialProgress && typeof source.materialProgress === "object" ? source.materialProgress : {};
-      source.syncCodes = Array.isArray(source.syncCodes) ? source.syncCodes : [];
-      source.syncCodes = source.syncCodes.map(s => ({
-        code: (s.code || '').toUpperCase().trim(),
-        name: s.name || 'کلاس عمومی',
-        createdAt: s.createdAt || Date.now(),
-        createdBy: s.createdBy || 'admin'
-      })).filter(s => s.code);
-      // clean progress for deleted materials
-      const validMatIds = new Set(source.courses.length ? source.materials.map(m => m.id) : []);
-      for (let userId in source.materialProgress) {
-        for (let matId in source.materialProgress[userId]) {
-          if (!validMatIds.has(matId)) delete source.materialProgress[userId][matId];
-        }
-      }
-      return source;
-    }
-
-    function saveData(shouldBroadcast = true) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      if (shouldBroadcast && channel) channel.postMessage({ type: "sync", data });
-      if (shouldBroadcast && !isSyncingFromCloud) {
-        debounceCloudPush();
-      }
-    }
-
-    function escapeHTML(value) { return String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" }[c])); }
-    function toFa(value) { return String(value ?? "").replace(/\d/g, d => faDigits[d]); }
-    function initials(name) { const parts = String(name||"دانشجو").trim().split(/\s+/).filter(Boolean); return (parts[0]?.[0]||"د") + (parts[1]?.[0]||""); }
-    function findCurrentUser() { const id = localStorage.getItem(CURRENT_USER_KEY); return data.users.find(u => u.id === id) || null; }
-    function formatTime(ts) { return new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", hour: "2-digit", minute: "2-digit" }).format(new Date(ts)); }
-    function formatDate(ts) { return new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", month: "short", day: "numeric" }).format(new Date(ts)); }
-    function lastSeenLabel(user) {
-      if (user.online) return "آنلاین";
-      const minutes = Math.max(1, Math.round((Date.now() - user.lastSeen) / 60000));
-      if (minutes < 60) return `${toFa(minutes)} دقیقه پیش`;
-      return `${toFa(Math.round(minutes/60))} ساعت پیش`;
-    }
-    function setUserOnline(isOnline) {
-      if (!currentUser) return;
-      const stored = data.users.find(u => u.id === currentUser.id);
-      if (!stored) return;
-      stored.online = isOnline; stored.lastSeen = Date.now(); currentUser = stored; saveData();
-    }
-    function startClock() {
-      function tick() {
-        const now = new Date();
-        els.iranDate.textContent = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { timeZone: "Asia/Tehran", weekday: "long", month: "long", day: "numeric" }).format(now);
-        els.iranTime.textContent = new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(now);
-      }
-      tick(); setInterval(tick, 1000);
-    }
-    function showDashboard() { els.loginScreen.classList.add("hidden"); els.dashboard.classList.remove("hidden"); renderAll(); }
-    function showLogin() { els.dashboard.classList.add("hidden"); els.loginScreen.classList.remove("hidden"); if (els.loginError) els.loginError.classList.add("hidden"); }
-
-    function getProgress(userId, materialId) {
-      if (!data.materialProgress[userId]) data.materialProgress[userId] = {};
-      if (!data.materialProgress[userId][materialId]) data.materialProgress[userId][materialId] = { seconds: 0, completed: false, at: null };
-      return data.materialProgress[userId][materialId];
-    }
-
-    function renderAll() {
-      renderProfile();
-      renderCoursesPanel();
-      renderActiveCoursePanel();
-      renderOfferingsPanel();
-      renderChat();
-      renderPeople();
-      renderTeachers();
-      renderAdmin();
-    }
-
-    function renderProfile() {
-      if (!currentUser) return;
-      const prog = data.materialProgress[currentUser.id] || {};
-      const completed = Object.values(prog).filter(p => p.completed).length;
-      const totalSec = Object.values(prog).reduce((s, p) => s + (p.seconds || 0), 0);
-      const totalMats = data.materials.length;
-      const percent = totalMats ? Math.round(completed / totalMats * 100) : 0;
-      els.profilePanel.innerHTML = `
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex items-center gap-4">
-            <div class="avatar grid h-[68px] w-[68px] place-items-center rounded-[22px] text-[22px] font-black" style="--hue:${currentUser.avatarHue}">${escapeHTML(initials(currentUser.name))}</div>
-            <div>
-              <h3 class="text-[18px] font-black text-slate-800">${escapeHTML(currentUser.name)}</h3>
-              <p class="mt-1 text-xs font-bold text-slate-500">ترم ${toFa(currentUser.semester)} • عمومی</p>
-              <div class="mt-2 flex gap-2">
-                <span class="neu-soft px-2.5 py-1 text-[10px] font-black text-slate-600">${currentUser.isVip ? "ویژه" : "معمولی"}</span>
-                <span class="neu-soft px-2.5 py-1 text-[10px] font-black text-slate-600 flex items-center gap-1"><span class="online-dot"></span> آنلاین</span>
-              </div>
-            </div>
-          </div>
-          <div class="neu-inset grid h-12 w-12 place-items-center rounded-full text-[11px] font-black text-slate-600">${toFa(currentUser.points||0)}<br>امتیاز</div>
+    <div style="flex:1"></div>
+    <div class="clockbox neu-in">
+      <span class="dot"></span>
+      <div>
+        <div class="t" id="clockTime">--:--:--</div>
+        <div class="d" id="clockDate">—</div>
+      </div>
+    </div>
+    <div class="wallet">
+      <span class="wchip chip neu-in" id="coinChip">🪙 <b id="coinVal">0</b></span>
+      <span class="wchip chip neu-in" id="pointChip">⭐ <b id="pointVal">0</b></span>
+    </div>
+    <div class="userchip neu-in" onclick="toggleDrawer()">
+      <div class="avatar" id="userAva">🙂</div>
+      <div>
+        <div style="font-weight:800; font-size:13.5px; display:flex; align-items:center; gap:6px">
+          <span id="userName">—</span><span id="premStar" hidden>⭐</span>
         </div>
-        <div class="mt-6 grid grid-cols-3 gap-3">
-          <div class="neu-inset p-3 text-center">
-            <p class="text-[10px] font-black text-slate-500">دیده شده</p>
-            <p class="mt-1 text-lg font-black text-slate-800">${toFa(completed)}/${toFa(totalMats)}</p>
-          </div>
-          <div class="neu-inset p-3 text-center">
-            <p class="text-[10px] font-black text-slate-500">زمان مطالعه</p>
-            <p class="mt-1 text-lg font-black text-slate-800">${toFa(Math.floor(totalSec/60))}د</p>
-          </div>
-          <div class="neu-inset p-3 text-center">
-            <p class="text-[10px] font-black text-slate-500">پیشرفت</p>
-            <p class="mt-1 text-lg font-black text-slate-800">%${toFa(percent)}</p>
-          </div>
+        <span class="chip chip-term" style="padding:2px 10px; font-size:10.5px; margin-top:3px" id="userTermChip">ترم ۱</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner" id="updateBanner" hidden>
+    <span class="em">🔔</span>
+    <div style="flex:1">
+      <b>مطالب برنامه به‌روزرسانی شد!</b>
+      <small id="bannerSub">آخرین تغییر: —</small>
+    </div>
+    <button class="btn btn-sun btn-sm" onclick="dismissBanner()">متوجه شدم ✓</button>
+  </div>
+
+  <nav class="tabs neu" id="appTabs">
+    <button class="tab active" data-tab="content" onclick="switchTab('content')">🎁 مطالب و رسانه</button>
+    <button class="tab" data-tab="courses" onclick="switchTab('courses')">📚 درس‌های ترم‌ها</button>
+    <button class="tab" data-tab="profs" onclick="switchTab('profs')">👨‍🏫 اساتید</button>
+    <button class="tab" data-tab="next" onclick="switchTab('next')">📣 ترم آینده</button>
+  </nav>
+
+  <section id="tab-content"></section>
+  <section id="tab-courses" hidden></section>
+  <section id="tab-profs" hidden></section>
+  <section id="tab-next" hidden></section>
+
+  <footer style="text-align:center; margin-top:34px; color:#a6b2c9; font-size:11.5px; font-weight:600">
+    گروه روانشناسی • دانشگاه آزاد اسلامی واحد قم <span class="ghost-lock admin-gate">🔒</span>
+  </footer>
+</section>
+
+<!-- ============ پنل ادمین ============ -->
+<section id="screen-admin" class="wrap" hidden>
+  <header class="admin-head neu">
+    <button class="btn btn-sm" onclick="exitAdmin()">→ بازگشت</button>
+    <span class="admin-badge">🔐 پنل مدیریت</span>
+    <div style="flex:1"></div>
+    <span class="chip">آخرین تغییر: <b id="adminLastUpdate" style="margin-inline-start:5px">—</b></span>
+  </header>
+
+  <nav class="admin-tabs neu" id="adminTabs">
+    <button class="atab active" data-atab="code" onclick="switchAdminTab('code')">🔑 کد دسترسی</button>
+    <button class="atab" data-atab="users" onclick="switchAdminTab('users')">👥 کاربران</button>
+    <button class="atab" data-atab="content" onclick="switchAdminTab('content')">🎁 محتوا و سکه</button>
+    <button class="atab" data-atab="courses" onclick="switchAdminTab('courses')">📚 درس‌ها و ترم‌ها</button>
+    <button class="atab" data-atab="profs" onclick="switchAdminTab('profs')">👨‍🏫 اساتید</button>
+    <button class="atab" data-atab="next" onclick="switchAdminTab('next')">📣 اطلاعیه ترم آینده</button>
+  </nav>
+
+  <section id="atab-code"></section>
+  <section id="atab-users" hidden></section>
+  <section id="atab-content" hidden></section>
+  <section id="atab-courses" hidden></section>
+  <section id="atab-profs" hidden></section>
+  <section id="atab-next" hidden></section>
+</section>
+
+<!-- ============ منوی همبرگری (کشو) ============ -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<aside class="drawer" id="drawer">
+  <button class="d-close" onclick="toggleDrawer()">✕</button>
+  <div class="d-profile">
+    <div class="avatar d-avatar" id="dAva">🙂</div>
+    <div class="d-name" id="dName">—</div>
+    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap">
+      <span class="chip chip-term" id="dTerm">ترم ۱</span>
+      <span class="chip chip-premium" id="dPrem" hidden>⭐ پریموم</span>
+      <span class="chip" id="dCode" style="direction:ltr">—</span>
+    </div>
+  </div>
+  <div class="d-stats">
+    <div class="d-stat neu-in"><div class="n" id="dCoins">0</div><div class="l">🪙 سکه</div></div>
+    <div class="d-stat neu-in"><div class="n" id="dPoints">0</div><div class="l">⭐ امتیاز</div></div>
+    <div class="d-stat neu-in"><div class="n" id="dWatched">0</div><div class="l">👁 مشاهده</div></div>
+  </div>
+  <div class="neu-in" id="dPremNote" style="padding:11px 14px; font-size:11.5px; color:#7a5a12; background:linear-gradient(135deg,#fff3d6,#ffe9b8); text-align:center" hidden>
+    ⭐ حساب پریموم — سکه‌های دریافتی شما <b>۲ برابر</b> می‌شود!
+  </div>
+  <div class="d-nav">
+    <button class="btn btn-sm" onclick="switchTab('content'); toggleDrawer()">🎁 مطالب و رسانه</button>
+    <button class="btn btn-sm" onclick="switchTab('courses'); toggleDrawer()">📚 درس‌های ترم‌ها</button>
+    <button class="btn btn-sm" onclick="switchTab('profs'); toggleDrawer()">👨‍🏫 اساتید</button>
+    <button class="btn btn-sm" onclick="switchTab('next'); toggleDrawer()">📣 ترم آینده</button>
+    <button class="btn btn-sm btn-danger" style="margin-top:8px" onclick="logout()">🚪 خروج از حساب</button>
+  </div>
+  <div class="d-version" id="versionTag">🔐 پنل مدیریت</div>
+</aside>
+
+<!-- ============ مودال نمایش محتوا ============ -->
+<div class="modal" id="viewerModal">
+  <div class="modal-card neu">
+    <button class="btn btn-sm btn-danger m-close" onclick="closeViewer()">✕</button>
+    <div id="viewerBody"></div>
+  </div>
+</div>
+
+<!-- ============ مودال رمز ادمین ============ -->
+<div class="modal" id="pwModal">
+  <div class="modal-card neu" style="width:min(380px,94vw)">
+    <button class="btn btn-sm btn-danger m-close" onclick="closePw()">✕</button>
+    <div style="text-align:center; padding:14px 0 4px">
+      <div style="font-size:40px">🔐</div>
+      <h3 class="display" style="margin:8px 0 4px; font-size:21px">ورود مدیریت</h3>
+      <p style="font-size:12px; color:var(--muted); margin:0 0 16px">فقط مدیر گروه دسترسی دارد</p>
+      <input type="password" id="pwInput" placeholder="رمز مدیریت" style="direction:ltr; text-align:center; letter-spacing:2px" onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="btn btn-coral" style="width:100%; margin-top:13px" onclick="checkPw()">ورود</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+/* ================= داده و ذخیره‌سازی ================= */
+const K = {
+  users:'iauqom_users', content:'iauqom_content', profs:'iauqom_profs',
+  next:'iauqom_next', courses:'iauqom_courses', code:'iauqom_code',
+  meta:'iauqom_meta', seeded:'iauqom_seeded', session:'iauqom_session'
+};
+const read = (k,f)=>{ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?f:v }catch(e){ return f } };
+const write = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+const nowIso = ()=>new Date().toISOString();
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const fa = x=>String(x).replace(/[0-9]/g, d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const ADMIN_PASS = 'ALIVANAPSY';
+
+function seed(){
+  if(localStorage.getItem(K.seeded)) return;
+  write(K.code, 'GENERAL');
+  write(K.meta, {version:1, lastUpdate: nowIso()});
+  write(K.users, []);
+  write(K.profs, [
+    {id:uid(), name:'دکتر علی ونایی', field:'روانشناسی عمومی'},
+    {id:uid(), name:'دکتر مریم احمدی', field:'روانشناسی رشد'},
+    {id:uid(), name:'دکتر حسین کریمی', field:'روانشناسی بالینی'}
+  ]);
+  write(K.courses, {
+    t1:[{name:'روانشناسی عمومی', prof:'دکتر علی ونایی'},{name:'زیست‌شناسی انسان', prof:'دکتر مریم احمدی'}],
+    t2:[{name:'روانشناسی رشد', prof:'دکتر مریم احمدی'},{name:'آمار و روش تحقیق', prof:'دکتر حسین کریمی'}],
+    t3:[{name:'روانشناسی شخصیت', prof:'دکتر علی ونایی'}],
+    t4:[{name:'روانشناسی بالینی', prof:'دکتر حسین کریمی'}]
+  });
+  write(K.next, [{id:uid(), prof:'دکتر علی ونایی', course:'روانشناسی شخصیت', note:'ظرفیت محدود — اولویت با انتخاب واحد زودتر'}]);
+  write(K.content, [
+    {id:uid(), type:'text', title:'آشنایی با اپلیکیشن روانشناسی عمومی', desc:'راهنمای کامل دریافت سکه و استفاده از مطالب',
+     body:'به اپلیکیشن رسمی درس روانشناسی عمومی دانشگاه آزاد قم خوش آمدید!\n\n• با دیدن هر مطلب، طبق زمان تعیین‌شده سکه دریافت می‌کنید.\n• هر مطلب فقط یک‌بار سکه می‌دهد؛ بعد از آن می‌توانید رایگان دوباره ببینید.\n• دانشجویان پریموم سکه دوبل می‌گیرند.\n• درس‌ها، اساتید و اطلاعیه‌های ترم آینده توسط مدیریت به‌روز می‌شود.',
+     coins:15, time:10, createdAt:nowIso()},
+    {id:uid(), type:'video', title:'ویدیو: دنیای شگفت‌انگیز روانشناسی', desc:'قسمت اول — مغز چگونه رفتار را می‌سازد؟',
+     url:'https://www.youtube.com/embed/vo4pMVb0R6M', coins:30, time:45, createdAt:nowIso()},
+    {id:uid(), type:'audio', title:'صوت: موسیقی آرام‌سازی برای تمرکز مطالعه', desc:'مناسب قبل از امتحان — ۳۰ ثانیه گوش دهید و سکه بگیرید',
+     url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', coins:20, time:30, createdAt:nowIso()}
+  ]);
+  localStorage.setItem(K.seeded, '1');
+}
+seed();
+
+function bumpMeta(){
+  const m = read(K.meta,{version:0,lastUpdate:nowIso()});
+  m.version++; m.lastUpdate = nowIso();
+  write(K.meta, m);
+}
+const getMeta = ()=>read(K.meta,{version:1,lastUpdate:nowIso()});
+const getUsers = ()=>read(K.users,[]);
+const saveUsers = u=>{ write(K.users,u); if(state.user){ state.user = u.find(x=>x.name===state.user.name)||state.user; } };
+
+const state = { user:null, tab:'content', atab:'code', selTerm:'t1', timer:null, verTaps:0, tapTo:null };
+
+/* ================= ابزار UI ================= */
+function toast(msg, type='ok'){
+  const t=document.createElement('div');
+  t.className='toast t-'+type; t.innerHTML=msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400) }, 2800);
+}
+function show(id){ document.getElementById(id).hidden=false }
+function hide(id){ document.getElementById(id).hidden=true }
+const faTime = d=>new Intl.DateTimeFormat('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Tehran'}).format(d);
+const faDate = d=>new Intl.DateTimeFormat('fa-IR',{weekday:'long', day:'numeric', month:'long', timeZone:'Asia/Tehran'}).format(d);
+const faDT   = d=>new Intl.DateTimeFormat('fa-IR',{day:'numeric',month:'long', hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Tehran'}).format(d);
+
+function bindReveal(){
+  const els=[...document.querySelectorAll('.reveal:not(.in)')];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.08});
+  els.forEach(el=>io.observe(el));
+}
+function coinBurst(x,y){
+  for(let i=0;i<9;i++){
+    const c=document.createElement('span');
+    c.className='coinbit'; c.textContent='🪙';
+    c.style.left=x+'px'; c.style.top=y+'px';
+    c.style.setProperty('--tx',(Math.random()*220-110)+'px');
+    c.style.setProperty('--ty',(-60-Math.random()*150)+'px');
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1000);
+  }
+}
+
+/* ================= ساعت زنده ایران ================= */
+setInterval(()=>{
+  const d=new Date();
+  const ct=document.getElementById('clockTime'), cd=document.getElementById('clockDate');
+  const lt=document.getElementById('loginTime'), ld=document.getElementById('loginDate');
+  if(ct){ ct.textContent=faTime(d); cd.textContent=faDate(d); }
+  if(lt){ lt.textContent=faTime(d); ld.textContent=faDate(d); }
+},1000);
+
+/* ================= ورود ================= */
+const AVATARS=['🙂','😊','🧑‍🎓','👩‍🎓','🦉','🐱','🌸','⚡','🌙','🍀','🦋','📖'];
+let selAva='🧑‍🎓';
+(function buildAva(){
+  const box=document.getElementById('avaPick');
+  box.innerHTML=AVATARS.map(a=>`<button type="button" class="${a===selAva?'sel':''}" onclick="pickAva(this,'${a}')">${a}</button>`).join('');
+})();
+function pickAva(btn,a){ selAva=a; [...btn.parentNode.children].forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); }
+
+function doLogin(){
+  const name=document.getElementById('regName').value.trim();
+  const term=document.getElementById('regTerm').value;
+  const code=document.getElementById('regCode').value.trim().toUpperCase();
+  if(!name) return toast('نام کاربری را وارد کنید','err');
+  if(!term) return toast('ترم تحصیلی را انتخاب کنید','err');
+  const real=read(K.code,'GENERAL');
+  if(!code) return toast('کد دسترسی آنلاین را وارد کنید','err');
+  if(code!==real) return toast('کد دسترسی اشتباه است! از مدیریت بپرسید','err');
+
+  const users=getUsers();
+  let u=users.find(x=>x.name.toLowerCase()===name.toLowerCase());
+  if(u){
+    u.term=term; u.code=code; u.avatar=u.avatar||selAva;
+    toast(`خوش آمدید دوباره ${u.name} عزیز 👋`,'info');
+  }else{
+    u={name, term, code, avatar:selAva, premium:false, coins:0, points:0, watched:{}, lastSeenVersion:getMeta().version, lastSeenAt:nowIso(), createdAt:nowIso()};
+    users.push(u);
+    toast('حساب شما ساخته و ذخیره شد 🎉');
+  }
+  write(K.users,users);
+  write(K.session,name);
+  state.user=u;
+  enterApp();
+}
+function logout(){
+  localStorage.removeItem(K.session);
+  state.user=null;
+  toggleDrawer(true);
+  hide('screen-app'); hide('screen-admin'); show('screen-login');
+  toast('از حساب خارج شدید','info');
+}
+
+/* ================= اپ اصلی ================= */
+function enterApp(){
+  hide('screen-login'); hide('screen-admin'); show('screen-app');
+  renderApp();
+}
+function renderApp(){
+  const u=state.user; if(!u) return;
+  document.getElementById('userAva').textContent=u.avatar;
+  document.getElementById('userAva').classList.toggle('premium-ring', !!u.premium);
+  document.getElementById('userName').textContent=u.name;
+  document.getElementById('userTermChip').textContent='ترم '+fa(u.term);
+  document.getElementById('premStar').hidden=!u.premium;
+  document.getElementById('coinVal').textContent=fa(u.coins);
+  document.getElementById('pointVal').textContent=fa(u.points);
+
+  const m=getMeta();
+  const banner=document.getElementById('updateBanner');
+  if(m.version>u.lastSeenVersion){
+    banner.hidden=false;
+    document.getElementById('bannerSub').textContent='آخرین تغییر: '+faDT(new Date(m.lastUpdate))+' — نسخه '+fa(m.version);
+  } else banner.hidden=true;
+
+  renderContent(); renderCourses(); renderProfs(); renderNext();
+  renderDrawer();
+  bindReveal();
+}
+function dismissBanner(){
+  const users=getUsers();
+  const u=users.find(x=>x.name===state.user.name);
+  u.lastSeenVersion=getMeta().version; u.lastSeenAt=nowIso();
+  write(K.users,users); state.user=u;
+  document.getElementById('updateBanner').hidden=true;
+  renderContent();
+}
+function switchTab(tab){
+  state.tab=tab;
+  document.querySelectorAll('#appTabs .tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  ['content','courses','profs','next'].forEach(t=>{ document.getElementById('tab-'+t).hidden = t!==tab; });
+  bindReveal();
+}
+
+const TYPE_META={ text:{icon:'📝',cls:'ib-teal',tag:'tt-text',label:'متنی'}, video:{icon:'🎬',cls:'ib-coral',tag:'tt-video',label:'ویدیو'}, image:{icon:'🖼️',cls:'ib-sky',tag:'tt-image',label:'تصویر'}, audio:{icon:'🎧',cls:'ib-sun',tag:'tt-audio',label:'صوتی'} };
+
+function renderContent(){
+  const u=state.user, list=read(K.content,[]).slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const el=document.getElementById('tab-content');
+  if(!list.length){ el.innerHTML='<div class="empty neu"><span class="em">🗂</span>هنوز مطلبی ثبت نشده — منتظر به‌روزرسانی مدیریت باشید</div>'; return; }
+  el.innerHTML=`<h2 class="sec-title"><span class="bar"></span>مطالب و رسانه <small style="font-family:Vazirmatn;font-size:11.5px;color:var(--muted);font-weight:700">با دیدن هر مطلب سکه بگیرید</small></h2>
+  <div class="grid">${list.map(c=>{
+    const t=TYPE_META[c.type]||TYPE_META.text;
+    const seen=!!u.watched[c.id];
+    const isNew=new Date(c.createdAt) > new Date(u.lastSeenAt);
+    return `<div class="card neu reveal">
+      <span class="type-tag ${t.tag}">${t.label}</span>
+      <div class="card-head">
+        <div class="icon-bubble ${t.cls}">${t.icon}</div>
+        <div><h3>${esc(c.title)}</h3><p>${esc(c.desc||'')}</p></div>
+      </div>
+      <div class="card-chips">
+        <span class="chip chip-coin">🪙 ${fa(c.coins)} سکه${u.premium?' (×۲)':''}</span>
+        <span class="chip chip-time">⏱ ${fa(c.time)} ثانیه</span>
+        ${seen?'<span class="chip chip-watched">✓ مشاهده شده</span>':(isNew?'<span class="chip chip-new">جدید!</span>':'')}
+      </div>
+      <button class="btn ${seen?'':'btn-sun'}" style="width:100%" onclick="openViewer('${c.id}')">
+        ${seen?'👁 مشاهده دوباره (بدون سکه)':'▶ مشاهده و دریافت سکه'}
+      </button>
+    </div>`;
+  }).join('')}</div>`;
+  bindReveal();
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>'); }
+
+function embedHtml(c){
+  if(c.type==='text') return `<div class="txt">${esc(c.body||'')}</div>`;
+  if(c.type==='image') return `<img src="${esc(c.url)}" alt="${esc(c.title)}">`;
+  if(c.type==='audio') return `<audio controls src="${esc(c.url)}"></audio>`;
+  const u=c.url||'';
+  if(/youtube\.com\/embed|youtu\.be|youtube\.com\/watch|aparat\.com\/video\/video\/embed|vimeo\.com\/video/.test(u))
+    return `<iframe src="${esc(u)}" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+  return `<video controls src="${esc(u)}"></video>`;
+}
+
+/* ---------- نمایشگر محتوا + تایمر ضدتقلب ---------- */
+let viewerTimer=null;
+function openViewer(id){
+  const c=read(K.content,[]).find(x=>x.id===id); if(!c) return;
+  const u=state.user, seen=!!u.watched[id];
+  const t=TYPE_META[c.type]||TYPE_META.text;
+  const body=document.getElementById('viewerBody');
+  body.innerHTML=`
+    <div style="display:flex; gap:11px; align-items:center; padding-inline-end:46px">
+      <div class="icon-bubble ${t.cls}">${t.icon}</div>
+      <div><h3 style="margin:0; font-size:16px; font-weight:800">${esc(c.title)}</h3>
+      <small style="color:var(--muted)">${t.label} • ${fa(c.coins)} سکه • ${fa(c.time)} ثانیه</small></div>
+    </div>
+    <div class="media-box">${embedHtml(c)}</div>
+    <div id="timerZone"></div>`;
+  document.getElementById('viewerModal').classList.add('show');
+
+  const zone=document.getElementById('timerZone');
+  if(seen){
+    zone.innerHTML=`<div class="earned-box"><span class="chip chip-watched" style="font-size:13px; padding:10px 18px">✓ قبلاً مشاهده شده — سکه‌ای تعلق نمی‌گیرد</span>
+      <p style="font-size:12px; color:var(--muted); margin:10px 0 0">می‌توانید این مطلب را بدون محدودیت دوباره ببینید</p></div>`;
+    return;
+  }
+  const C=2*Math.PI*52;
+  zone.innerHTML=`<div class="timer-area">
+    <div class="ring-wrap">
+      <svg width="118" height="118"><circle class="ring-bg" cx="59" cy="59" r="52"/><circle class="ring-fg" id="ringFg" cx="59" cy="59" r="52" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg>
+      <div class="ring-num" id="ringNum">${fa(c.time)}</div>
+    </div>
+    <small style="color:var(--muted); font-weight:700">تا پایان زمان مورد نیاز، صفحه را باز نگه دارید…</small>
+  </div>`;
+  const total=c.time; let left=total;
+  clearInterval(viewerTimer);
+  viewerTimer=setInterval(()=>{
+    left--;
+    const num=document.getElementById('ringNum'), fg=document.getElementById('ringFg');
+    if(!num){ clearInterval(viewerTimer); return; }
+    num.textContent=fa(Math.max(left,0));
+    fg.style.strokeDashoffset = C*(1-left/total);
+    if(left<=0){ clearInterval(viewerTimer); grantCoins(c); }
+  },1000);
+}
+function grantCoins(c){
+  const users=getUsers();
+  const u=users.find(x=>x.name===state.user.name);
+  if(u.watched[c.id]) return; // ضد تقلب
+  const gain=c.coins*(u.premium?2:1);
+  u.coins+=gain; u.watched[c.id]=nowIso();
+  write(K.users,users); state.user=u;
+  const zone=document.getElementById('timerZone');
+  if(zone) zone.innerHTML=`<div class="earned-box">
+    <div style="font-size:34px">🎉</div>
+    <div class="big">+${fa(gain)} سکه دریافت کردید!</div>
+    <small style="color:var(--muted)">${u.premium?'پاداش پریموم ×۲ اعمال شد • ':''}این مطلب دیگر سکه‌ای نمی‌دهد</small>
+    <button class="btn btn-teal" style="margin-top:13px" onclick="closeViewer()">عالی بود ✓</button>
+  </div>`;
+  coinBurst(window.innerWidth/2, window.innerHeight/2);
+  toast(`🪙 ${fa(gain)} سکه به کیف پول شما اضافه شد`,'gold');
+  renderApp();
+}
+function closeViewer(){
+  clearInterval(viewerTimer);
+  document.getElementById('viewerModal').classList.remove('show');
+}
+
+/* ---------- سایر تب‌های اپ ---------- */
+function renderCourses(){
+  const courses=read(K.courses,{t1:[],t2:[],t3:[],t4:[]});
+  const colors=['#0fb5a6','#3f9bff','#ff6b6b','#ffb52e'];
+  const el=document.getElementById('tab-courses');
+  el.innerHTML=`<h2 class="sec-title"><span class="bar" style="background:linear-gradient(180deg,#66b0ff,#2f7fe0)"></span>درس‌های ترم ۱ تا ۴</h2>`+
+  [1,2,3,4].map((t,i)=>{
+    const key='t'+t, arr=courses[key]||[];
+    return `<div class="term-card neu reveal">
+      <div class="term-head">
+        <div class="term-bubble" style="background:linear-gradient(135deg,${colors[i]},${colors[i]}cc); box-shadow:0 6px 13px ${colors[i]}55">${fa(t)}</div>
+        <div><b style="font-size:15px">ترم ${fa(t)}</b><div style="font-size:11.5px; color:var(--muted)">${fa(arr.length)} درس فعال</div></div>
+      </div>
+      ${arr.length? arr.map(l=>`<div class="lesson-row neu-in">
+        <div><b>${esc(l.name)}</b><small>👨‍🏫 ${esc(l.prof)}</small></div>
+        <span class="chip chip-term" style="padding:4px 11px; font-size:10.5px">ارائه می‌شود</span>
+      </div>`).join('') : '<div style="font-size:12px;color:var(--muted);padding:8px 6px">درسی ثبت نشده</div>'}
+    </div>`;
+  }).join('');
+  bindReveal();
+}
+function renderProfs(){
+  const profs=read(K.profs,[]);
+  const el=document.getElementById('tab-profs');
+  const colors=['#0fb5a6','#e04f4f','#2f7fe0','#e09a12','#e05585'];
+  el.innerHTML=`<h2 class="sec-title"><span class="bar" style="background:linear-gradient(180deg,#12c9b8,#0a8f84)"></span>اساتید گروه روانشناسی</h2>
+  <div class="grid">${profs.length? profs.map((p,i)=>`
+    <div class="prof-card neu reveal">
+      <div class="prof-ava" style="background:linear-gradient(135deg,${colors[i%5]},${colors[i%5]}bb)">${esc(p.name.replace('دکتر ','').trim().charAt(0))}</div>
+      <div style="flex:1">
+        <b style="font-size:14.5px">${esc(p.name)}</b><span class="online-dot" title="فعال"></span>
+        <div style="margin-top:6px"><span class="chip">${esc(p.field||'روانشناسی')}</span></div>
+      </div>
+    </div>`).join('') : '<div class="empty neu" style="grid-column:1/-1"><span class="em">👨‍🏫</span>استادی ثبت نشده</div>'}
+  </div>`;
+  bindReveal();
+}
+function renderNext(){
+  const list=read(K.next,[]);
+  const el=document.getElementById('tab-next');
+  el.innerHTML=`<h2 class="sec-title"><span class="bar" style="background:linear-gradient(180deg,#ffc95e,#e09a12)"></span>اساتید ترم آینده</h2>`+
+  (list.length? list.map((n,i)=>`
+    <div class="announce ${i%2?'alt':''} reveal">
+      <span class="meg">📣</span>
+      <small>اطلاعیه رسمی گروه</small>
+      <h3>${esc(n.prof)} — ${esc(n.course)}</h3>
+      ${n.note?`<div style="font-size:12.5px; opacity:.95; margin-top:3px">${esc(n.note)}</div>`:''}
+      <span class="pill">🗓 ترم آینده</span>
+    </div>`).join('')
+  : '<div class="empty neu"><span class="em">📣</span>اطلاعیه‌ای برای ترم آینده ثبت نشده</div>');
+  bindReveal();
+}
+
+/* ================= کشو (همبرگری) ================= */
+function renderDrawer(){
+  const u=state.user;
+  document.getElementById('dAva').textContent=u.avatar;
+  document.getElementById('dAva').classList.toggle('premium-ring', !!u.premium);
+  document.getElementById('dName').textContent=u.name;
+  document.getElementById('dTerm').textContent='ترم '+fa(u.term);
+  document.getElementById('dPrem').hidden=!u.premium;
+  document.getElementById('dCode').textContent='🔑 '+u.code;
+  document.getElementById('dCoins').textContent=fa(u.coins);
+  document.getElementById('dPoints').textContent=fa(u.points);
+  document.getElementById('dWatched').textContent=fa(Object.keys(u.watched||{}).length);
+  document.getElementById('dPremNote').hidden=!u.premium;
+}
+function toggleDrawer(forceClose){
+  const d=document.getElementById('drawer'), o=document.getElementById('overlay');
+  const willClose = forceClose===true || d.classList.contains('show');
+  d.classList.toggle('show', !willClose);
+  o.classList.toggle('show', !willClose);
+}
+function closeAll(){ toggleDrawer(true); closePw(); }
+
+/* ---------- ورود ادمین: یک ضربه روی «پنل مدیریت» ---------- */
+document.getElementById('versionTag').addEventListener('click', function(){
+  toggleDrawer(true);
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwModal').classList.add('show');
+  setTimeout(()=>document.getElementById('pwInput').focus(),200);
+});
+function closePw(){ document.getElementById('pwModal').classList.remove('show'); }
+function checkPw(){
+  const v=document.getElementById('pwInput').value;
+  if(v===ADMIN_PASS){
+    closePw(); toast('خوش آمدید مدیر عزیز 🔐','info');
+    hide('screen-app'); hide('screen-login'); show('screen-admin');
+    renderAdmin();
+  }else{
+    const card=document.querySelector('#pwModal .modal-card');
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    toast('رمز اشتباه است','err');
+  }
+}
+function exitAdmin(){
+  hide('screen-admin');
+  if(state.user){ show('screen-app'); renderApp(); toast('تغییرات برای همه کاربران به‌روز شد ✓'); }
+  else { show('screen-login'); toast('از پنل مدیریت خارج شدید','info'); }
+}
+
+/* ================= پنل ادمین ================= */
+function switchAdminTab(t){
+  state.atab=t;
+  document.querySelectorAll('#adminTabs .atab').forEach(b=>b.classList.toggle('active', b.dataset.atab===t));
+  ['code','users','content','courses','profs','next'].forEach(x=>{ document.getElementById('atab-'+x).hidden = x!==t; });
+}
+function renderAdmin(){
+  document.getElementById('adminLastUpdate').textContent=faDT(new Date(getMeta().lastUpdate));
+  renderAdminCode(); renderAdminUsers(); renderAdminContent(); renderAdminCourses(); renderAdminProfs(); renderAdminNext();
+}
+
+/* --- کد دسترسی --- */
+function renderAdminCode(){
+  document.getElementById('atab-code').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">🔑 کد دسترسی آنلاین دانشجویان</h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">دانشجویان برای ورود و دریافت همه اطلاعات آنلاین به این کد نیاز دارند (کد فعلی: پیش‌فرض GENERAL)</p>
+    <label>کد فعلی</label>
+    <div class="code-display neu-in">${esc(read(K.code,'GENERAL'))}</div>
+    <div class="form-row" style="margin-top:14px">
+      <div><label>کد جدید</label><input id="newCode" placeholder="مثلاً PSY-1404" style="direction:ltr; text-align:center"></div>
+      <div style="display:flex; align-items:flex-end; gap:8px">
+        <button class="btn btn-teal" style="flex:1" onclick="setCode()">ثبت کد</button>
+        <button class="btn" onclick="genCode()">🎲 تصادفی</button>
+      </div>
+    </div>
+    <small style="display:block; margin-top:12px; color:var(--muted); font-size:11.5px">⚠ با تغییر کد، نسخه برنامه بالا می‌رود و همه کاربران بنر به‌روزرسانی می‌بینند.</small>
+  </div>`;
+}
+function genCode(){
+  const c='PSY-'+Math.floor(1000+Math.random()*9000);
+  document.getElementById('newCode').value=c;
+}
+function setCode(){
+  const v=document.getElementById('newCode').value.trim().toUpperCase();
+  if(v.length<3) return toast('کد باید حداقل ۳ حرف باشد','err');
+  write(K.code,v); bumpMeta();
+  toast('کد دسترسی به '+v+' تغییر کرد 🔑');
+  renderAdmin();
+}
+
+/* --- کاربران --- */
+function renderAdminUsers(){
+  const users=getUsers();
+  document.getElementById('atab-users').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">👥 مدیریت کاربران <small style="color:var(--muted); font-weight:600">(${fa(users.length)} دانشجو)</small></h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">پریموم/معمولی کردن، اهدای امتیاز و سکه</p>
+    ${users.length? users.map((u,i)=>`
+      <div class="list-row neu-in">
+        <div class="avatar ${u.premium?'premium-ring':''}">${u.avatar}</div>
+        <div class="grow">
+          <b style="font-size:13.5px">${esc(u.name)}</b>
+          <small style="display:block; color:var(--muted); font-size:11px; margin-top:2px">
+            ترم ${fa(u.term)} • 🪙 ${fa(u.coins)} • ⭐ ${fa(u.points)} • 👁 ${fa(Object.keys(u.watched||{}).length)} مشاهده • کد: <span style="direction:ltr">${esc(u.code)}</span>
+          </small>
         </div>
-        <div class="mt-4 neu-progress-track"><div class="neu-progress-bar" style="width:${percent}%"></div></div>
-        <div class="mt-4 neu-inset p-3 text-center">
-          <p class="text-[10px] font-black text-slate-500">زمان ایران</p>
-          <p class="mt-1 text-xs font-black text-slate-700">${els.iranDate.textContent || ""}</p>
-          <p class="text-sm font-mono font-black text-slate-800">${els.iranTime.textContent || ""}</p>
+        <button class="btn btn-sm ${u.premium?'btn-sun':''}" onclick="togglePremium(${i})">${u.premium?'⭐ پریموم':'معمولی'}</button>
+        <div style="display:flex; gap:6px; align-items:center">
+          <input type="number" class="mini-input" id="pt-${i}" placeholder="امتیاز" value="10">
+          <button class="btn btn-sm btn-sky" onclick="givePoints(${i})">+ امتیاز</button>
+          <input type="number" class="mini-input" id="cn-${i}" placeholder="سکه" value="20">
+          <button class="btn btn-sm btn-sun" onclick="giveCoins(${i})">+ سکه</button>
         </div>
-      `;
-    }
+      </div>`).join('')
+    : '<div class="empty neu-in"><span class="em">👥</span>هنوز دانشجویی ثبت‌نام نکرده</div>'}
+  </div>`;
+}
+function togglePremium(i){
+  const users=getUsers(); users[i].premium=!users[i].premium;
+  saveUsers(users); bumpMeta();
+  toast(users[i].premium? '⭐ کاربر پریموم شد (سکه دوبل)':'کاربر معمولی شد','info');
+  renderAdminUsers();
+}
+function givePoints(i){
+  const v=parseInt(document.getElementById('pt-'+i).value)||0;
+  if(v<=0) return toast('عدد معتبر وارد کنید','err');
+  const users=getUsers(); users[i].points+=v; saveUsers(users); bumpMeta();
+  toast(`⭐ ${fa(v)} امتیاز به ${users[i].name} داده شد`);
+  renderAdminUsers();
+}
+function giveCoins(i){
+  const v=parseInt(document.getElementById('cn-'+i).value)||0;
+  if(v<=0) return toast('عدد معتبر وارد کنید','err');
+  const users=getUsers(); users[i].coins+=v; saveUsers(users); bumpMeta();
+  toast(`🪙 ${fa(v)} سکه به ${users[i].name} داده شد`,'gold');
+  renderAdminUsers();
+}
 
-    function renderCoursesPanel() {
-      const grouped = [1,2,3,4].map(term => ({ term, courses: data.courses.filter(c => c.term === term) }));
-      const htmlTerms = grouped.map(group => {
-        if (!group.courses.length) return "";
-        const main = group.courses.filter(c => c.kind === "اصلی" || c.kind === "پایان نامه");
-        const jobrani = group.courses.filter(c => c.kind === "جبرانی");
-        const labelTerm = group.term === 4 ? "ترم ۴ - پایان نامه" : `ترم ${toFa(group.term)}`;
-        const renderList = (list) => list.map(course => {
-          const mats = data.materials.filter(m => m.courseId === course.id);
-          const count = mats.length;
-          const isActive = activeCourseId === course.id;
-          let viewed = 0;
-          if (currentUser && data.materialProgress[currentUser.id]) {
-            viewed = mats.filter(m => data.materialProgress[currentUser.id][m.id]?.completed).length;
-          }
-          return `
-            <button data-course-id="${course.id}" type="button" class="neu-soft ${isActive ? "course-active" : ""} group flex w-full items-center justify-between gap-2 px-4 py-3.5 text-right transition">
-              <span class="min-w-0">
-                <span class="block truncate text-[13px] font-black text-slate-700 group-hover:text-slate-900">${escapeHTML(course.name)}</span>
-                <span class="mt-1 flex items-center gap-2 text-[11px] font-bold text-slate-500"><span>${escapeHTML(course.kind)}</span><span class="h-1 w-1 rounded-full bg-slate-400"></span><span>${toFa(viewed)}/${toFa(count)} دیده</span></span>
-              </span>
-              <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#e6ebf3] text-[11px] font-black text-slate-700 shadow-[3px_3px_6px_#c4cad6,_-3px_-3px_6px_#ffffff]">${toFa(count)}</span>
-            </button>
-          `;
-        }).join("");
-        const isStudentTerm = group.term === Number(currentUser?.semester || 1);
-        return `
-          <details class="group" ${isStudentTerm ? "open" : ""}>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-2 rounded-[18px] bg-[#e6ebf3] px-4 py-3.5 text-[13px] font-black text-slate-700 shadow-[6px_6px_12px_#c4cad6,_-6px_-6px_12px_#ffffff]">
-              <span>${labelTerm}</span>
-              <span class="neu-inset px-2.5 py-1 text-[11px] font-black text-slate-500">${toFa(group.courses.length)} درس</span>
-            </summary>
-            <div class="mt-3 space-y-3">
-              ${main.length ? `<div class="space-y-2"><p class="px-1 text-[10px] font-black tracking-widest text-slate-500">اصلی</p>${renderList(main)}</div>` : ""}
-              ${jobrani.length ? `<div class="space-y-2"><p class="px-1 text-[10px] font-black tracking-widest text-amber-700/70">جبرانی</p>${renderList(jobrani)}</div>` : ""}
-            </div>
-          </details>
-        `;
-      }).join("");
-      const roomsOptions = data.rooms.map(room => `<option value="${escapeHTML(room.id)}" ${room.id === activeRoomId ? "selected" : ""}>${escapeHTML(room.name)}</option>`).join("");
-      els.sectionsPanel.innerHTML = `
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-[15px] font-black text-slate-800">روانشناسی عمومی</h3>
-          <span class="neu-inset px-3 py-1 text-[11px] font-black text-slate-600">${toFa(data.courses.length)} درس</span>
-        </div>
-        <div class="space-y-3">${htmlTerms || `<p class="text-sm text-slate-500">درسی نیست.</p>`}</div>
-        <div class="mt-7 border-t border-white/70 pt-5">
-          <label class="block text-[11px] font-black tracking-widest text-slate-500">اتاق چت</label>
-          <select id="roomSelect" class="neu-field mt-2 text-sm">${roomsOptions}</select>
-          <form id="joinLobbyForm" class="mt-3 flex gap-2">
-            <input id="lobbyCodeInput" class="neu-field flex-1 text-sm" type="text" placeholder="کد لابی">
-            <button class="neu-btn shrink-0 px-4 text-xs" type="submit">ورود</button>
-          </form>
-          <p id="lobbyHint" class="mt-2 text-[11px] text-slate-500">کد لابی را از مدیریت بگیرید.</p>
-        </div>
-      `;
-    }
+/* --- محتوا --- */
+let pendFile=null;
+function renderAdminContent(){
+  const list=read(K.content,[]);
+  document.getElementById('atab-content').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">🎁 ساخت محتویات جایزه‌دار</h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">متن / ویدیو / عکس / صوت — با آپلود فایل یا لینک سایت. کاربر بعد از دیدنِ زمان تعیین‌شده، سکه می‌گیرد (فقط یک بار).</p>
+    <div class="form-row">
+      <div><label>نوع محتوا</label>
+        <select id="cType" onchange="typeChanged()">
+          <option value="text">📝 متنی</option><option value="video">🎬 ویدیو</option>
+          <option value="image">🖼️ تصویر</option><option value="audio">🎧 صوتی</option>
+        </select></div>
+      <div><label>عنوان</label><input id="cTitle" placeholder="مثلاً: جلسه اول روانشناسی رشد"></div>
+    </div>
+    <div style="margin-top:12px"><label>توضیح کوتاه</label><input id="cDesc" placeholder="اختیاری"></div>
+    <div id="cTextZone" style="margin-top:12px"><label>متن مطلب</label><textarea id="cBody" rows="4" placeholder="متن کامل را اینجا بنویسید…"></textarea></div>
+    <div id="cMediaZone" hidden>
+      <div class="form-row" style="margin-top:12px">
+        <div><label>لینک سایت / رسانه</label><input id="cUrl" placeholder="https://…" style="direction:ltr"></div>
+        <div><label>یا آپلود فایل</label><input type="file" id="cFile" onchange="onFile(this)"></div>
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:12px">
+      <div><label>🪙 جایزه (سکه)</label><input type="number" id="cCoins" value="20" min="1"></div>
+      <div><label>⏱ زمان لازم برای دیدن (ثانیه)</label><input type="number" id="cTime" value="30" min="5"></div>
+    </div>
+    <button class="btn btn-coral" style="width:100%; margin-top:16px" onclick="addContent()">➕ انتشار محتوا</button>
+  </div>
+  <div class="form-card neu">
+    <h3 style="margin:0 0 12px; font-size:15px; font-weight:800">محتواهای منتشرشده (${fa(list.length)})</h3>
+    ${list.length? list.map(c=>`
+      <div class="list-row neu-in">
+        <div class="icon-bubble ${TYPE_META[c.type].cls}" style="width:42px;height:42px;font-size:18px">${TYPE_META[c.type].icon}</div>
+        <div class="grow"><b style="font-size:13px">${esc(c.title)}</b>
+        <small style="display:block;color:var(--muted);font-size:11px">🪙 ${fa(c.coins)} سکه • ⏱ ${fa(c.time)} ثانیه • ${faDT(new Date(c.createdAt))}</small></div>
+        <button class="btn btn-sm btn-danger" onclick="delContent('${c.id}')">حذف</button>
+      </div>`).join('') : '<div class="empty neu-in"><span class="em">🗂</span>محتوایی نیست</div>'}
+  </div>`;
+}
+function typeChanged(){
+  const t=document.getElementById('cType').value;
+  document.getElementById('cTextZone').hidden = t!=='text';
+  document.getElementById('cMediaZone').hidden = t==='text';
+}
+function onFile(inp){
+  const f=inp.files[0]; if(!f) return;
+  if(f.size>3.5*1024*1024){ inp.value=''; pendFile=null; return toast('حجم فایل بیش از ۳٫۵ مگابایت است — از لینک استفاده کنید','err'); }
+  const r=new FileReader();
+  r.onload=()=>{ pendFile=r.result; toast('فایل آماده شد ✓','info'); };
+  r.readAsDataURL(f);
+}
+function addContent(){
+  const type=document.getElementById('cType').value;
+  const title=document.getElementById('cTitle').value.trim();
+  const desc=document.getElementById('cDesc').value.trim();
+  const coins=Math.max(1, parseInt(document.getElementById('cCoins').value)||10);
+  const time=Math.max(5, parseInt(document.getElementById('cTime').value)||15);
+  if(!title) return toast('عنوان را وارد کنید','err');
+  const c={id:uid(), type, title, desc, coins, time, createdAt:nowIso()};
+  if(type==='text'){
+    const body=document.getElementById('cBody').value.trim();
+    if(!body) return toast('متن مطلب را بنویسید','err');
+    c.body=body;
+  }else{
+    const url=document.getElementById('cUrl').value.trim();
+    c.url = pendFile || url;
+    if(!c.url) return toast('لینک یا فایل وارد کنید','err');
+  }
+  const list=read(K.content,[]); list.push(c); write(K.content,list);
+  pendFile=null; bumpMeta();
+  toast('محتوا منتشر شد — همه کاربران اطلاعیه می‌گیرند 🎁');
+  renderAdminContent();
+}
+function delContent(id){
+  write(K.content, read(K.content,[]).filter(c=>c.id!==id));
+  bumpMeta(); toast('حذف شد','info'); renderAdminContent();
+}
 
-    function renderActiveCoursePanel() {
-      // cleanup old observers
-      if (materialObserver) { materialObserver.disconnect(); }
-      if (viewingInterval) { clearInterval(viewingInterval); visibleMaterials.clear(); }
+/* --- درس‌ها و ترم‌ها --- */
+function renderAdminCourses(){
+  const courses=read(K.courses,{t1:[],t2:[],t3:[],t4:[]});
+  const profs=read(K.profs,[]);
+  const sel=state.selTerm;
+  const arr=courses[sel]||[];
+  document.getElementById('atab-courses').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 12px; font-size:15px; font-weight:800">📚 مدیریت درس‌های ترم ۱ تا ۴</h3>
+    <div style="display:flex; gap:9px; margin-bottom:16px">
+      ${[1,2,3,4].map(t=>`<button class="term-pill ${sel==='t'+t?'active':''}" onclick="state.selTerm='t${t}'; renderAdminCourses()">${fa(t)}</button>`).join('')}
+      <span class="chip" style="align-self:center">ترم انتخابی: <b style="margin-inline-start:4px">${fa(sel.replace('t',''))}</b></span>
+    </div>
+    <div class="form-row">
+      <div><label>نام درس</label><input id="lName" placeholder="مثلاً: روانشناسی یادگیری"></div>
+      <div><label>استاد درس</label><input id="lProf" list="profList" placeholder="انتخاب یا تایپ نام استاد">
+        <datalist id="profList">${profs.map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist></div>
+    </div>
+    <button class="btn btn-teal" style="width:100%; margin-top:14px" onclick="addLesson()">➕ افزودن درس به ترم ${fa(sel.replace('t',''))}</button>
+    <div style="margin-top:16px">
+      ${arr.length? arr.map((l,i)=>`
+        <div class="list-row neu-in">
+          <div class="grow"><b style="font-size:13px">${esc(l.name)}</b><small style="color:var(--muted); font-size:11px">👨‍🏫 ${esc(l.prof)}</small></div>
+          <button class="btn btn-sm btn-danger" onclick="delLesson(${i})">حذف</button>
+        </div>`).join('') : '<div class="empty neu-in"><span class="em">📚</span>درسی برای این ترم ثبت نشده</div>'}
+    </div>
+  </div>`;
+}
+function addLesson(){
+  const name=document.getElementById('lName').value.trim();
+  const prof=document.getElementById('lProf').value.trim();
+  if(!name||!prof) return toast('نام درس و استاد را وارد کنید','err');
+  const courses=read(K.courses,{t1:[],t2:[],t3:[],t4:[]});
+  (courses[state.selTerm]=courses[state.selTerm]||[]).push({name,prof});
+  write(K.courses,courses); bumpMeta();
+  toast('درس اضافه شد 📚'); renderAdminCourses();
+}
+function delLesson(i){
+  const courses=read(K.courses,{t1:[],t2:[],t3:[],t4:[]});
+  courses[state.selTerm].splice(i,1);
+  write(K.courses,courses); bumpMeta(); toast('حذف شد','info'); renderAdminCourses();
+}
 
-      if (!activeCourseId) {
-        els.activeCoursePanel.innerHTML = `
-          <div class="flex flex-col items-center justify-center gap-4 py-12 text-center">
-            <div class="neu-soft grid h-20 w-20 place-items-center rounded-[24px] text-3xl float-soft">📚</div>
-            <h3 class="text-xl font-black text-slate-800">یک درس را انتخاب کن</h3>
-            <p class="max-w-md text-[13px] leading-7 text-slate-500">هر جزوه زمان مطالعه حداقلی دارد. باید محتوا را در صفحه نگه داری تا تایمر جلو برود و امتیاز بگیری.</p>
-            <div class="mt-2 flex gap-2">
-              <span class="neu-inset px-3 py-2 text-[11px] font-black text-slate-600">متن ۳۰ ثانیه</span>
-              <span class="neu-inset px-3 py-2 text-[11px] font-black text-slate-600">عکس ۱۵ ثانیه</span>
-              <span class="neu-inset px-3 py-2 text-[11px] font-black text-slate-600">ویدیو ۶۰ ثانیه</span>
-            </div>
-          </div>
-        `;
-        return;
-      }
-      const course = data.courses.find(c => c.id === activeCourseId);
-      if (!course) { activeCourseId = null; renderActiveCoursePanel(); return; }
-      const mats = data.materials.filter(m => m.courseId === course.id).sort((a,b) => b.at - a.at);
-      const teacher = data.teachers.find(t => t.courseId === course.id);
+/* --- اساتید --- */
+function renderAdminProfs(){
+  const profs=read(K.profs,[]);
+  document.getElementById('atab-profs').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 12px; font-size:15px; font-weight:800">👨‍🏫 افزودن استاد جدید</h3>
+    <div class="form-row">
+      <div><label>نام استاد</label><input id="pName" placeholder="دکتر …"></div>
+      <div><label>تخصص</label><input id="pField" placeholder="مثلاً: روانشناسی صنعتی"></div>
+    </div>
+    <button class="btn btn-teal" style="width:100%; margin-top:14px" onclick="addProf()">➕ افزودن استاد</button>
+    <div style="margin-top:16px">
+      ${profs.map((p,i)=>`
+        <div class="list-row neu-in">
+          <div class="prof-ava" style="width:42px;height:42px;font-size:17px;background:linear-gradient(135deg,#0fb5a6,#0a8f84)">${esc(p.name.replace('دکتر ','').trim().charAt(0))}</div>
+          <div class="grow"><b style="font-size:13px">${esc(p.name)}</b><small style="color:var(--muted); font-size:11px; display:block">${esc(p.field||'—')}</small></div>
+          <button class="btn btn-sm btn-danger" onclick="delProf(${i})">حذف</button>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+function addProf(){
+  const name=document.getElementById('pName').value.trim();
+  const field=document.getElementById('pField').value.trim();
+  if(!name) return toast('نام استاد را وارد کنید','err');
+  const profs=read(K.profs,[]); profs.push({id:uid(),name,field});
+  write(K.profs,profs); bumpMeta();
+  toast('استاد جدید اضافه شد 👨‍🏫'); renderAdminProfs();
+}
+function delProf(i){
+  const profs=read(K.profs,[]); profs.splice(i,1);
+  write(K.profs,profs); bumpMeta(); toast('حذف شد','info'); renderAdminProfs();
+}
 
-      els.activeCoursePanel.innerHTML = `
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="neu-inset px-3 py-1 text-[11px] font-black text-slate-500">ترم ${toFa(course.term)} • ${escapeHTML(course.kind)}</span>
-              ${teacher ? `<span class="neu-soft px-3 py-1 text-[11px] font-black text-slate-600">${escapeHTML(teacher.name)}</span>` : ""}
-            </div>
-            <h3 class="mt-3 text-2xl font-black leading-tight text-slate-800">${escapeHTML(course.name)}</h3>
-          </div>
-          <button id="closeCourseBtn" class="neu-btn px-4 py-2 text-xs" type="button">بستن</button>
-        </div>
-        <div class="mt-6">
-          ${mats.length ? `
-            <div class="grid gap-5">
-              ${mats.map(mat => {
-                const prog = currentUser ? getProgress(currentUser.id, mat.id) : { seconds: 0, completed: false };
-                const pct = Math.min(100, Math.round((prog.seconds / mat.minViewSeconds) * 100));
-                const remaining = Math.max(0, mat.minViewSeconds - prog.seconds);
-                let media = "";
-                if (mat.type === "image" && mat.dataUrl) {
-                  media = `<img src="${escapeHTML(mat.dataUrl)}" alt="${escapeHTML(mat.title)}" class="mt-4 max-h-[360px] w-full rounded-[20px] object-cover shadow-[8px_8px_16px_#c4cad6,_-8px_-8px_16px_#ffffff]">`;
-                } else if (mat.type === "video" && mat.dataUrl) {
-                  media = `<video src="${escapeHTML(mat.dataUrl)}" controls class="mt-4 w-full rounded-[20px] bg-[#e6ebf3] shadow-[8px_8px_16px_#c4cad6,_-8px_-8px_16px_#ffffff]"></video>`;
-                }
-                return `
-                  <article data-material-id="${mat.id}" data-min-view="${mat.minViewSeconds}" data-points="${mat.pointsReward}" class="neu-soft p-5 transition-all">
-                    <div class="flex flex-wrap items-start justify-between gap-3">
-                      <div class="flex items-center gap-3">
-                        <span class="grid h-10 w-10 place-items-center rounded-[14px] bg-[#e6ebf3] text-sm shadow-[5px_5px_10px_#c4cad6,_-5px_-5px_10px_#ffffff]">${mat.type === "video" ? "🎬" : mat.type === "image" ? "🖼️" : "📝"}</span>
-                        <div>
-                          <h4 class="text-[15px] font-black text-slate-800">${escapeHTML(mat.title)}</h4>
-                          <p class="mt-1 text-[11px] font-bold text-slate-500">${escapeHTML(mat.authorName)} • ${escapeHTML(formatDate(mat.at))} • حداقل ${toFa(mat.minViewSeconds)} ثانیه • ${toFa(mat.pointsReward)} امتیاز</p>
-                        </div>
-                      </div>
-                      <span class="neu-inset px-3 py-1 text-[11px] font-black ${prog.completed ? "text-emerald-700" : "text-slate-500"}">${prog.completed ? "✅ تکمیل شد" : `⏱️ ${toFa(remaining)} ثانیه باقی`}</span>
-                    </div>
-                    ${mat.body ? `<p class="mt-4 whitespace-pre-wrap rounded-[16px] bg-[#eef2f8] p-4 text-[13px] leading-8 text-slate-600 shadow-[inset_4px_4px_8px_#c4cad6,_inset_-4px_-4px_8px_#ffffff]">${escapeHTML(mat.body)}</p>` : ""}
-                    ${media}
-                    <div class="mt-5">
-                      <div class="flex items-center justify-between text-[11px] font-black text-slate-500">
-                        <span>پیشرفت مطالعه</span>
-                        <span class="js-progress-text-${mat.id}">${toFa(prog.seconds)} / ${toFa(mat.minViewSeconds)} ثانیه • %${toFa(pct)}</span>
-                      </div>
-                      <div class="neu-progress-track mt-2"><div id="progress-bar-${mat.id}" class="neu-progress-bar" style="width:${pct}%"></div></div>
-                      ${prog.completed ? `<p class="mt-3 text-xs font-black text-emerald-700">تبریک! ${toFa(mat.pointsReward)} امتیاز گرفتی و برای استاد و ادمین ثبت شد.</p>` : `<p class="mt-3 text-[11px] text-slate-500">متن/عکس/ویدیو را در دید نگه دار تا تایمر پر شود. اگر اسکرول کنی و از دید خارج شود، تایمر متوقف می‌شود.</p>`}
-                    </div>
-                    ${adminAuthed ? `<div class="mt-4 flex gap-2"><button class="neu-btn neu-danger px-3 py-1.5 text-[11px]" data-delete-material-inline="${mat.id}" type="button">حذف این محتوا</button></div>` : ""}
-                  </article>
-                `;
-              }).join("")}
-            </div>
-          ` : `
-            <div class="neu-inset grid place-items-center p-10 text-center">
-              <p class="text-[13px] leading-7 text-slate-500">هنوز محتوایی برای این درس ثبت نشده.</p>
-            </div>
-          `}
-        </div>
-      `;
+/* --- اطلاعیه ترم آینده --- */
+function renderAdminNext(){
+  const list=read(K.next,[]);
+  document.getElementById('atab-next').innerHTML=`
+  <div class="form-card neu">
+    <h3 style="margin:0 0 6px; font-size:15px; font-weight:800">📣 اطلاع‌رسانی اساتید ترم آینده</h3>
+    <p style="font-size:12px; color:var(--muted); margin:0 0 14px">این موارد در تب «ترم آینده» همه دانشجویان نمایش داده می‌شود</p>
+    <div class="form-row">
+      <div><label>استاد</label><input id="nProf" list="profList2" placeholder="انتخاب یا تایپ استاد">
+        <datalist id="profList2">${read(K.profs,[]).map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist></div>
+      <div><label>درس</label><input id="nCourse" placeholder="نام درس"></div>
+    </div>
+    <div style="margin-top:12px"><label>توضیح (اختیاری)</label><input id="nNote" placeholder="مثلاً: ظرفیت محدود"></div>
+    <button class="btn btn-coral" style="width:100%; margin-top:14px" onclick="addNext()">📣 انتشار اطلاعیه</button>
+    <div style="margin-top:16px">
+      ${list.length? list.map((n,i)=>`
+        <div class="list-row neu-in">
+          <div class="grow"><b style="font-size:13px">${esc(n.prof)} — ${esc(n.course)}</b>
+          <small style="color:var(--muted); font-size:11px; display:block">${esc(n.note||'')}</small></div>
+          <button class="btn btn-sm btn-danger" onclick="delNext(${i})">حذف</button>
+        </div>`).join('') : '<div class="empty neu-in"><span class="em">📣</span>اطلاعیه‌ای ثبت نشده</div>'}
+    </div>
+  </div>`;
+}
+function addNext(){
+  const prof=document.getElementById('nProf').value.trim();
+  const course=document.getElementById('nCourse').value.trim();
+  const note=document.getElementById('nNote').value.trim();
+  if(!prof||!course) return toast('استاد و درس را وارد کنید','err');
+  const list=read(K.next,[]); list.push({id:uid(),prof,course,note});
+  write(K.next,list); bumpMeta();
+  toast('اطلاعیه برای همه دانشجویان منتشر شد 📣'); renderAdminNext();
+}
 
-      // setup tracking after render
-      setupMaterialTracking();
-    }
+/* ================= همگام‌سازی زنده بین تب‌ها ================= */
+window.addEventListener('storage', e=>{
+  if(!e.key || !e.key.startsWith('iauqom_')) return;
+  if(!document.getElementById('screen-app').hidden && state.user){
+    const fresh=getUsers().find(x=>x.name===state.user.name);
+    if(fresh) state.user=fresh;
+    renderApp();
+    if(e.key===K.content||e.key===K.courses||e.key===K.profs||e.key===K.next||e.key===K.code||e.key===K.meta)
+      toast('🔄 برنامه به‌روزرسانی شد','info');
+  }
+});
 
-    function setupMaterialTracking() {
-      if (!currentUser) return;
-      const articles = els.activeCoursePanel.querySelectorAll("[data-material-id]");
-      if (!articles.length) return;
-      materialObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const id = entry.target.getAttribute("data-material-id");
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) visibleMaterials.add(id);
-          else visibleMaterials.delete(id);
-        });
-      }, { threshold: [0, 0.45, 0.9] });
-      articles.forEach(el => materialObserver.observe(el));
-
-      viewingInterval = setInterval(() => {
-        if (!currentUser) return;
-        visibleMaterials.forEach(matId => {
-          const mat = data.materials.find(m => m.id === matId);
-          if (!mat) return;
-          const prog = getProgress(currentUser.id, matId);
-          if (prog.completed) { visibleMaterials.delete(matId); return; }
-          prog.seconds = (prog.seconds || 0) + 1;
-          const pct = Math.min(100, Math.round((prog.seconds / mat.minViewSeconds) * 100));
-          const bar = document.getElementById(`progress-bar-${matId}`);
-          if (bar) bar.style.width = pct + "%";
-          const textEl = els.activeCoursePanel.querySelector(`.js-progress-text-${matId}`);
-          if (textEl) textEl.textContent = `${toFa(prog.seconds)} / ${toFa(mat.minViewSeconds)} ثانیه • %${toFa(pct)}`;
-          if (prog.seconds >= mat.minViewSeconds) {
-            prog.completed = true;
-            prog.at = Date.now();
-            const user = data.users.find(u => u.id === currentUser.id);
-            if (user) { user.points = (user.points || 0) + (mat.pointsReward || 5); currentUser.points = user.points; }
-            saveData(false);
-            renderProfile();
-            renderPeople();
-            renderCoursesPanel();
-            renderActiveCoursePanel(); // to show completed badge
-          } else {
-            // throttle save every 3 sec
-            if (prog.seconds % 3 === 0) saveData(false);
-          }
-        });
-      }, 1000);
-    }
-
-    function renderOfferingsPanel() {
-      const terms = [1,2,3,4];
-      const html = terms.map(term => {
-        const list = data.offerings.filter(o => o.term === term);
-        if (!list.length) return "";
-        const rows = list.map(o => {
-          const course = data.courses.find(c => c.id === o.courseId);
-          const teacher = data.teachers.find(t => t.id === o.teacherId);
-          if (!course || !teacher) return "";
-          return `
-            <div class="flex items-center justify-between gap-3 rounded-[18px] bg-[#e6ebf3] p-4 shadow-[6px_6px_12px_#c4cad6,_-6px_-6px_12px_#ffffff]">
-              <div class="min-w-0">
-                <p class="truncate text-[13px] font-black text-slate-700">${escapeHTML(course.name)}</p>
-                <p class="mt-1 text-[11px] font-bold text-slate-500">استاد: ${escapeHTML(teacher.name)} • ${escapeHTML(o.note || "")}</p>
-              </div>
-              <span class="shrink-0 rounded-full px-3 py-1 text-[11px] font-black ${offeringStatusClasses[o.status]}">${offeringStatusLabels[o.status]}</span>
-            </div>
-          `;
-        }).join("");
-        return `<div class="space-y-3"><h4 class="px-1 text-xs font-black tracking-widest text-slate-500">ترم ${toFa(term)}</h4><div class="space-y-3">${rows}</div></div>`;
-      }).filter(Boolean).join("");
-      els.termOfferingsPanel.innerHTML = `
-        <div class="flex items-center justify-between">
-          <h3 class="text-[15px] font-black text-slate-800">برنامه ارائه اساتید</h3>
-          <span class="neu-inset px-3 py-1 text-[11px] font-black text-slate-500">${toFa(data.offerings.length)} ارائه</span>
-        </div>
-        <p class="mt-2 text-[11px] leading-6 text-slate-500">کدام استاد در کدام ترم درس را ارائه می‌دهد تا انتخاب واحد کنی.</p>
-        <div class="mt-5 grid gap-5">
-          ${html || `<div class="neu-inset grid place-items-center p-8 text-center text-[12px] text-slate-500">هنوز ارائه‌ای ثبت نشده.</div>`}
-        </div>
-      `;
-    }
-
-    function renderChat() {
-      const room = data.rooms.find(i => i.id === activeRoomId) || data.rooms[0];
-      activeRoomId = room.id;
-      els.chatHeader.innerHTML = `
-        <div class="flex flex-col justify-between gap-3 md:flex-row md:items-center">
-          <div>
-            <p class="text-[11px] font-black tracking-widest text-slate-500">CHAT ROOM</p>
-            <h3 class="mt-1 text-[16px] font-black text-slate-800">${escapeHTML(room.name)}</h3>
-          </div>
-          <div class="neu-inset px-4 py-2 text-xs font-bold text-slate-600">کد: <strong dir="ltr" class="font-mono text-slate-800">${escapeHTML(room.code)}</strong></div>
-        </div>
-      `;
-      if (!room.messages.length) {
-        els.chatMessages.innerHTML = `<div class="grid h-full min-h-32 place-items-center text-xs text-slate-500">پیامی نیست.</div>`;
-        return;
-      }
-      els.chatMessages.innerHTML = room.messages.map(m => {
-        const isMine = currentUser && m.userId === currentUser.id;
-        return `
-          <div class="flex ${isMine ? "justify-start" : "justify-end"}">
-            <div class="max-w-[84%] rounded-[18px] ${isMine ? "bg-[#e6ebf3] shadow-[6px_6px_12px_#c4cad6,_-6px_-6px_12px_#ffffff] text-slate-800" : "bg-[#eef3fb] shadow-[inset_4px_4px_8px_#c4cad6,_inset_-4px_-4px_8px_#ffffff] text-slate-600"} px-4 py-3">
-              <div class="mb-1 flex items-center gap-2 text-[10px] font-black ${isMine ? "text-slate-600" : "text-slate-500"}">
-                <span>${escapeHTML(m.userName)}</span><span>ترم ${toFa(m.semester)}</span>${m.isVip ? `<span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] text-emerald-800">ویژه</span>` : ""}<span>${formatTime(m.at)}</span>
-              </div>
-              <p class="whitespace-pre-wrap text-[13px] leading-7">${escapeHTML(m.text)}</p>
-            </div>
-          </div>
-        `;
-      }).join("");
-      requestAnimationFrame(() => { els.chatMessages.scrollTop = els.chatMessages.scrollHeight; });
-    }
-
-    function renderPeople() {
-      const users = [...data.users].sort((a,b) => Number(b.online) - Number(a.online) || (b.points||0)-(a.points||0));
-      const rows = users.map(user => {
-        const prog = data.materialProgress[user.id] || {};
-        const completed = Object.values(prog).filter(p=>p.completed).length;
-        return `
-        <li class="flex items-center gap-3 border-b border-white/60 py-3.5 last:border-0">
-          <div class="avatar h-11 w-11 shrink-0 rounded-[14px] text-[12px]">${escapeHTML(initials(user.name))}</div>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2">
-              <p class="truncate text-[13px] font-black text-slate-700">${escapeHTML(user.name)}</p>
-              ${user.isVip ? `<span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-black text-emerald-800">ویژه</span>` : ""}
-            </div>
-            <p class="mt-1 text-[11px] font-bold text-slate-500">ترم ${toFa(user.semester)} • ${toFa(user.points||0)} امتیاز • ${toFa(completed)} دیده</p>
-          </div>
-          <div class="flex flex-col items-center gap-1">
-            <span class="online-dot ${user.online ? "" : "offline-dot"}"></span>
-            <span class="text-[10px] font-bold text-slate-500">${lastSeenLabel(user)}</span>
-          </div>
-        </li>
-      `; }).join("") || `<li class="py-4 text-xs text-slate-500">دانشجویی نیست.</li>`;
-      els.peoplePanel.innerHTML = `
-        <div class="mb-4 flex items-center justify-between">
-          <h3 class="text-[14px] font-black text-slate-800">دانشجویان</h3>
-          <span class="neu-inset px-2.5 py-1 text-[11px] font-black text-slate-500">${toFa(users.filter(u=>u.online).length)} آنلاین</span>
-        </div>
-        <ul>${rows}</ul>
-      `;
-    }
-
-    function renderTeachers() {
-      const rows = data.teachers.map(t => {
-        const courseName = data.courses.find(c => c.id === t.courseId)?.name || "عمومی";
-        return `
-        <li class="flex items-center justify-between gap-3 border-b border-white/60 py-3.5 last:border-0">
-          <div class="min-w-0">
-            <p class="truncate text-[13px] font-black text-slate-700">${escapeHTML(t.name)}</p>
-            <p class="mt-1 text-[11px] font-bold text-slate-500">${escapeHTML(courseName)}</p>
-          </div>
-          <span class="rounded-full px-3 py-1 text-[11px] font-black ${qualityClasses[t.quality]}">${qualityLabels[t.quality]}</span>
-        </li>
-      `; }).join("") || `<li class="py-4 text-xs text-slate-500">استادی نیست.</li>`;
-      els.teachersPanel.innerHTML = `
-        <div class="mb-4 flex items-center justify-between">
-          <h3 class="text-[14px] font-black text-slate-800">اساتید</h3>
-          <span class="text-[11px] font-bold text-slate-500">کیفیت</span>
-        </div>
-        <ul>${rows}</ul>
-      `;
-    }
-
-    function adminShell(content) {
-      const tabs = [
-        ["courses", "درس‌ها"],
-        ["materials", "جزوه‌ها"],
-        ["teachers", "اساتید"],
-        ["offerings", "ارائه ترم"],
-        ["people", "دانشجویان"],
-        ["lobbies", "لابی"],
-        ["sync", "کد همگام‌سازی"],
-        ["backup", "ذخیره"]
-      ];
-      return `
-        <div class="neu-inset p-4 text-[12px] leading-7 text-slate-600">
-          برای هر جزوه زمان حداقل و امتیاز تعیین کن. دانشجو باید محتوا را در دید نگه دارد تا امتیاز بگیرد. حذف و اضافه محتوا و ارائه ترم‌ها اینجا انجام می‌شود.
-        </div>
-        <div class="mt-5 flex flex-wrap gap-2">
-          ${tabs.map(([k,l]) => `<button class="neu-btn ${activeAdminTab===k ? "pressed" : ""} px-3 py-1.5 text-[12px]" data-admin-tab="${k}" type="button">${l}</button>`).join("")}
-        </div>
-        <div class="mt-6">${content}</div>
-      `;
-    }
-
-    function renderAdmin() {
-      if (!adminAuthed) {
-        els.adminContent.innerHTML = `
-          <form id="adminLoginForm" class="neu-panel p-6">
-            <label class="block"><span class="mb-2 block text-xs font-black text-slate-600">رمز مدیریت</span><input id="adminPassword" class="neu-field" type="password" placeholder="رمز را وارد کنید" required></label>
-            <button class="neu-primary mt-4 w-full" type="submit">ورود</button>
-            <p class="mt-3 text-[11px] text-slate-500">فقط مدیر دسترسی دارد.</p>
-          </form>
-        `;
-        return;
-      }
-      const map = { courses: renderAdminCourses, materials: renderAdminMaterials, teachers: renderAdminTeachers, offerings: renderAdminOfferings, people: renderAdminPeople, lobbies: renderAdminLobbies, sync: renderAdminSync, backup: renderAdminBackup };
-      els.adminContent.innerHTML = adminShell((map[activeAdminTab]||renderAdminCourses)());
-    }
-
-    function renderAdminCourses() {
-      const rows = data.courses.map(c => `
-        <li class="flex items-center justify-between gap-3 border-b border-white/60 py-3 last:border-0">
-          <div class="min-w-0"><p class="truncate text-sm font-black text-slate-700">${escapeHTML(c.name)}</p><p class="mt-1 text-[11px] font-bold text-slate-500">ترم ${toFa(c.term)} • ${escapeHTML(c.kind)}</p></div>
-          <button class="neu-btn neu-danger px-3 py-1.5 text-[11px]" data-delete-course="${c.id}" type="button">حذف</button>
-        </li>
-      `).join("");
-      return `
-        <section class="neu-soft p-5">
-          <h3 class="text-[15px] font-black text-slate-800">مدیریت دروس</h3>
-          <form id="addCourseForm" class="mt-4 grid gap-3">
-            <input id="newCourseName" class="neu-field" type="text" placeholder="نام درس" required>
-            <div class="grid grid-cols-2 gap-3">
-              <select id="newCourseTerm" class="neu-field text-sm"><option value="1">ترم ۱</option><option value="2">ترم ۲</option><option value="3">ترم ۳</option><option value="4">ترم ۴</option></select>
-              <select id="newCourseKind" class="neu-field text-sm"><option value="اصلی">اصلی</option><option value="جبرانی">جبرانی</option><option value="پایان نامه">پایان نامه</option></select>
-            </div>
-            <button class="neu-primary" type="submit">افزودن درس</button>
-          </form>
-          <ul class="mt-4 max-h-80 overflow-y-auto scrollbar-thin pr-1">${rows}</ul>
-        </section>
-      `;
-    }
-
-    function renderAdminMaterials() {
-      const courseOptions = data.courses.map(c => `<option value="${c.id}">${escapeHTML(c.name)} - ترم ${toFa(c.term)}</option>`).join("");
-      const mats = [...data.materials].sort((a,b)=> b.at - a.at);
-      const rows = mats.map(mat => {
-        const cname = data.courses.find(c => c.id === mat.courseId)?.name || "";
-        const viewers = Object.values(data.materialProgress).filter(up => up[mat.id]?.completed).length;
-        return `
-          <li class="flex items-center justify-between gap-3 border-b border-white/60 py-3 last:border-0">
-            <div class="min-w-0"><p class="truncate text-sm font-black text-slate-700">${escapeHTML(mat.title)} <span class="text-[11px] text-slate-500">(${mat.type} • ${toFa(mat.minViewSeconds)}ث • ${toFa(mat.pointsReward)} امتیاز • ${toFa(viewers)} نفر دیده)</span></p><p class="mt-1 truncate text-[11px] text-slate-500">${escapeHTML(cname)}</p></div>
-            <div class="flex gap-2"><button class="neu-btn neu-danger px-2.5 py-1 text-[11px]" data-delete-material="${mat.id}" type="button">حذف</button></div>
-          </li>
-        `;
-      }).join("") || `<li class="py-3 text-xs text-slate-500">محتوایی نیست.</li>`;
-      return `
-        <section class="neu-soft p-5">
-          <h3 class="text-[15px] font-black text-slate-800">آپلود جزوه با زمان حداقل و امتیاز</h3>
-          <p class="mt-2 text-[11px] leading-6 text-slate-500">هر محتوا را که دانشجو ببیند، بعد از تکمیل زمان حداقل، امتیاز می‌گیرد. زمان را بر اساس نوع محتوا تنظیم کن.</p>
-          <form id="addMaterialForm" class="mt-4 grid gap-3">
-            <select id="matCourseId" class="neu-field text-sm" required>${courseOptions}</select>
-            <div class="grid grid-cols-2 gap-3">
-              <select id="matType" class="neu-field text-sm"><option value="text">متن / جزوه</option><option value="image">عکس</option><option value="video">فیلم</option></select>
-              <input id="matTitle" class="neu-field text-sm" type="text" placeholder="عنوان" required>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <label class="block"><span class="mb-1 block text-[11px] font-black text-slate-500">حداقل زمان دیدن (ثانیه)</span><input id="matMinView" class="neu-field text-sm" type="number" min="5" max="600" value="30"></label>
-              <label class="block"><span class="mb-1 block text-[11px] font-black text-slate-500">امتیاز پس از تکمیل</span><input id="matPoints" class="neu-field text-sm" type="number" min="1" max="100" value="5"></label>
-            </div>
-            <textarea id="matBody" class="neu-field min-h-24 text-sm" placeholder="متن جزوه یا توضیح"></textarea>
-            <div class="neu-inset p-4">
-              <p class="text-[11px] font-black text-slate-600">آپلود عکس یا فیلم (اختیاری برای متن)</p>
-              <input id="matFileInput" class="mt-3 w-full text-xs text-slate-500 file:mr-3 file:rounded-full file:border-0 file:bg-[#e6ebf3] file:px-4 file:py-2 file:text-xs file:font-black file:text-slate-700 file:shadow-[4px_4px_8px_#c4cad6,_-4px_-4px_8px_#ffffff]" type="file" accept="image/*,video/*">
-              <p id="matFileStatus" class="mt-2 text-[11px] text-slate-500">فایلی انتخاب نشده.</p>
-            </div>
-            <button class="neu-primary" type="submit">ذخیره محتوا</button>
-          </form>
-          <ul class="mt-5 max-h-[420px] overflow-y-auto pr-1">${rows}</ul>
-        </section>
-      `;
-    }
-
-    function renderAdminTeachers() {
-      const courseOptions = `<option value="">عمومی - بدون درس خاص</option>` + data.courses.map(c => `<option value="${c.id}">${escapeHTML(c.name)}</option>`).join("");
-      const rows = data.teachers.map(t => `
-        <li class="space-y-3 border-b border-white/60 py-4 last:border-0">
-          <div class="flex items-center justify-between gap-3"><div><p class="text-sm font-black text-slate-700">${escapeHTML(t.name)}</p><p class="mt-1 text-[11px] text-slate-500">${escapeHTML(data.courses.find(c=>c.id===t.courseId)?.name||"عمومی")}</p></div><button class="neu-btn neu-danger px-3 py-1 text-[11px]" data-delete-teacher="${t.id}" type="button">حذف</button></div>
-          <div class="flex flex-wrap gap-2">${["good","neutral","bad"].map(k => `<button class="neu-btn px-3 py-1 text-[11px] ${t.quality===k ? "pressed" : ""}" data-teacher-quality="${t.id}" data-quality="${k}" type="button">${qualityLabels[k]}</button>`).join("")}</div>
-        </li>
-      `).join("") || `<li class="py-4 text-xs text-slate-500">استادی نیست.</li>`;
-      return `<section class="neu-soft p-5"><h3 class="text-[15px] font-black text-slate-800">اساتید</h3><form id="addTeacherForm" class="mt-4 grid gap-3"><input id="newTeacherName" class="neu-field text-sm" type="text" placeholder="نام استاد" required><select id="newTeacherCourse" class="neu-field text-sm">${courseOptions}</select><select id="newTeacherQuality" class="neu-field text-sm"><option value="good">خوب</option><option value="neutral">متوسط</option><option value="bad">بد</option></select><button class="neu-primary" type="submit">افزودن استاد</button></form><ul class="mt-4">${rows}</ul></section>`;
-    }
-
-    function renderAdminOfferings() {
-      const courseOptions = data.courses.map(c => `<option value="${c.id}">${escapeHTML(c.name)} - ترم ${toFa(c.term)}</option>`).join("");
-      const teacherOptions = data.teachers.map(t => `<option value="${t.id}">${escapeHTML(t.name)}</option>`).join("") || `<option value="">ابتدا استاد اضافه کنید</option>`;
-      const rows = [...data.offerings].sort((a,b)=> a.term-b.term).map(o => {
-        const course = data.courses.find(c=>c.id===o.courseId); const teacher = data.teachers.find(t=>t.id===o.teacherId);
-        return `<li class="flex items-center justify-between gap-3 border-b border-white/60 py-3 last:border-0"><div class="min-w-0"><p class="truncate text-sm font-black text-slate-700">${escapeHTML(course?.name||"")} - ${escapeHTML(teacher?.name||"")}</p><p class="mt-1 text-[11px] text-slate-500">ترم ${toFa(o.term)} • ${offeringStatusLabels[o.status]}</p></div><button class="neu-btn neu-danger px-2.5 py-1 text-[11px]" data-delete-offering="${o.id}" type="button">حذف</button></li>`;
-      }).join("") || `<li class="py-3 text-xs text-slate-500">ارائه‌ای نیست.</li>`;
-      return `<section class="neu-soft p-5"><h3 class="text-[15px] font-black text-slate-800">اعلام ارائه استاد برای هر ترم</h3><form id="addOfferingForm" class="mt-4 grid gap-3"><div class="grid grid-cols-2 gap-3"><select id="offTerm" class="neu-field text-sm"><option value="1">ترم ۱</option><option value="2">ترم ۲</option><option value="3">ترم ۳</option><option value="4">ترم ۴</option></select><select id="offStatus" class="neu-field text-sm"><option value="confirmed">قطعی</option><option value="pending">در حال هماهنگی</option><option value="suggested">پیشنهادی</option></select></div><select id="offCourse" class="neu-field text-sm" required>${courseOptions}</select><select id="offTeacher" class="neu-field text-sm" required>${teacherOptions}</select><input id="offNote" class="neu-field text-sm" type="text" placeholder="توضیح"><button class="neu-primary" type="submit">ثبت ارائه</button></form><ul class="mt-5 max-h-96 overflow-y-auto">${rows}</ul></section>`;
-    }
-
-    function renderAdminPeople() {
-      const rows = data.users.map(user => {
-        const prog = data.materialProgress[user.id] || {};
-        const completed = Object.values(prog).filter(p=>p.completed).length;
-        return `
-        <li class="space-y-3 border-b border-white/60 py-4 last:border-0">
-          <div class="flex items-center gap-3"><div class="avatar h-11 w-11 rounded-[14px] text-[11px]">${escapeHTML(initials(user.name))}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-black text-slate-700">${escapeHTML(user.name)}</p><p class="text-[11px] text-slate-500">ترم ${toFa(user.semester)} • ${toFa(user.points||0)} امتیاز • ${toFa(completed)} جزوه دیده</p></div></div>
-          <div class="grid gap-2 sm:grid-cols-[1fr_auto_auto]"><input class="neu-field text-sm" data-points-input="${user.id}" type="number" value="${Number(user.points||0)}"><button class="neu-btn px-3 py-1 text-[11px]" data-apply-points="${user.id}" type="button">ثبت امتیاز</button><button class="neu-btn px-3 py-1 text-[11px]" data-toggle-vip="${user.id}" type="button">${user.isVip ? "معمولی" : "ویژه"}</button></div>
-        </li>
-      `; }).join("") || `<li class="py-4 text-xs text-slate-500">دانشجویی نیست.</li>`;
-      return `<section class="neu-soft p-5"><h3 class="text-[15px] font-black text-slate-800">امتیاز کاربران + آمار مطالعه</h3><ul class="mt-4">${rows}</ul></section>`;
-    }
-
-    function renderAdminLobbies() {
-      const rows = data.rooms.map(r => {
-        const link = getShareLinkForCode(r.code);
-        const isActive = getRoomCode() === r.code.toUpperCase();
-        return `<li class="flex flex-col gap-3 border-b border-white/60 py-4 last:border-0">
-          <div class="flex items-center justify-between gap-3">
-            <div class="min-w-0"><p class="truncate text-sm font-black text-slate-700">${escapeHTML(r.name)} ${isActive ? '<span class="neu-inset ml-2 px-2 py-0.5 text-[9px]">فعال</span>' : ''}</p><p class="mt-1 text-[11px] font-bold text-slate-500">کد: <b dir="ltr" class="font-mono">${escapeHTML(r.code)}</b> • ${toFa(r.messages.length)} پیام • ${toFa(data.users.filter(u => (u.joinedRoomCode||'').toUpperCase()===r.code.toUpperCase()).length)} عضو</p></div>
-            <div class="flex gap-2"><button class="neu-btn px-2.5 py-1 text-[11px]" onclick="copyShareLink('${escapeHTML(r.code)}')" type="button">کپی لینک</button><button class="neu-btn neu-danger px-2.5 py-1 text-[11px]" data-delete-room="${r.id}" ${r.locked ? "disabled" : ""} type="button">حذف</button></div>
-          </div>
-          <div class="neu-inset p-3">
-            <p class="text-[10px] font-black text-slate-500">لینک دعوت مستقیم (دانشجو با کلیک مستقیم وارد می‌شود):</p>
-            <p class="mt-1 break-all text-[11px] font-mono text-slate-700">${escapeHTML(link)}</p>
-            <p class="mt-2 text-[10px] leading-5 text-slate-500">هر دانشجو که با این کد/لینک ثبت‌نام کند وارد همین اتاق می‌شود، دیتابیس این اتاق برای همه اعضای آن محفوظ می‌ماند و همه آپدیت‌های ادمین (دکمه جدید، جزوه، ارائه استاد) را می‌بیند.</p>
-          </div>
-        </li>`;
-      }).join("");
-      return `<section class="neu-soft p-5">
-        <h3 class="text-[15px] font-black text-slate-800">طراحی اتاق کلاس با کد و لینک اشتراکی</h3>
-        <p class="mt-2 text-[11px] leading-7 text-slate-500">ادمین یک اتاق می‌سازد (مثلا QOM1404). سیستم یک لینک می‌سازد مثل <span dir="ltr" class="font-mono text-xs">${escapeHTML(location.origin + location.pathname)}?join=CODE</span>. هر دانشجو که با آن کد یا لینک ثبت‌نام کند وارد همین اتاق می‌شود و تمام آپدیت‌های برنامه را زنده می‌بیند. دیتابیس هر اتاق جداگانه در ابر ذخیره و محفوظ می‌ماند.</p>
-        <form id="createLobbyForm" class="mt-4 grid gap-3"><input id="newLobbyName" class="neu-field text-sm" type="text" placeholder="نام کلاس/اتاق مثلا کلاس ترم ۱ - ۱۴۰۴" required><input id="newLobbyCode" class="neu-field text-sm" type="text" placeholder="کد دلخواه مثلا QOM1404 (خالی = خودکار)"><button class="neu-primary" type="submit">ساخت اتاق اشتراکی</button></form>
-        <ul class="mt-6">${rows}</ul>
-      </section>`;
-    }
-
-    function renderAdminBackup() {
-      const code = getRoomCode();
-      return `<section class="neu-soft p-5"><h3 class="text-[15px] font-black text-slate-800">ذخیره و بک‌آپ - دیتابیس محفوظ اتاق ${escapeHTML(code)}</h3><p class="mt-2 text-[11px] leading-6 text-slate-500">دیتابیس هر اتاق جداگانه در ابر Gun ذخیره و محفوظ می‌ماند. حتی اگر همه کاربران خارج شوند، با ورود دوباره با همین کد، تمام اطلاعات (کاربران، پیام‌ها، جزوه‌ها) برمی‌گردد. برای اطمینان بیشتر خروجی JSON بگیرید.</p>
-        <div class="mt-3 neu-inset p-3"><p class="text-[10px] font-black text-slate-500">اتاق فعال:</p><p class="mt-1 font-mono text-xs text-slate-700">${escapeHTML(code)}</p><p class="mt-2 break-all text-[11px] text-slate-600">${escapeHTML(getShareLinkForCode(code))}</p><button class="neu-btn mt-2 px-3 py-1 text-[11px]" onclick="copyShareLink('${escapeHTML(code)}')" type="button">کپی لینک اتاق فعال</button></div>
-        <div class="mt-4 grid gap-3"><button id="exportDataBtn" class="neu-primary" type="button">ساخت خروجی JSON کامل</button><textarea id="backupText" class="neu-field min-h-40 text-left text-xs" dir="ltr">${escapeHTML(exportText)}</textarea><form id="importDataForm" class="grid gap-3"><button class="neu-btn" type="submit">وارد کردن و پوش به ابری همین اتاق</button></form><button class="neu-btn neu-danger" id="adminLogoutBtn" type="button">خروج از مدیریت</button></div></section>`;
-    }
-
-    function renderAdminSync() {
-      const rows = data.syncCodes.map(s => {
-        const link = `${location.origin}${location.pathname}?sync=${encodeURIComponent(s.code)}`;
-        return `<li class="flex flex-col gap-3 border-b border-white/60 py-4 last:border-0">
-          <div class="flex items-center justify-between gap-3">
-            <div class="min-w-0"><p class="truncate text-sm font-black text-slate-700">کد: <b dir="ltr" class="font-mono">${escapeHTML(s.code)}</b></p><p class="mt-1 text-[11px] text-slate-500">${escapeHTML(s.name)} • ${formatDate(s.createdAt)}</p></div>
-            <div class="flex gap-2"><button class="neu-btn px-2.5 py-1 text-[11px]" onclick="copyText('${escapeHTML(link)}')" type="button">کپی لینک</button><button class="neu-btn px-2.5 py-1 text-[11px]" onclick="copyText('${escapeHTML(s.code)}')" type="button">کپی کد</button><button class="neu-btn neu-danger px-2.5 py-1 text-[11px]" data-delete-sync="${s.code}" type="button">حذف</button></div>
-          </div>
-          <div class="neu-inset p-3"><p class="text-[10px] font-black text-slate-500">لینک مستقیم همگام‌سازی:</p><p class="mt-1 break-all font-mono text-[11px] text-slate-700">${escapeHTML(link)}</p></div>
-        </li>`;
-      }).join("") || `<li class="py-6 text-center text-xs text-slate-500">هنوز کدی ساخته نشده. یک کد بساز تا کاربران جدید با وارد کردن آن، تمام بخش‌ها، دکمه‌ها، جزوه‌ها و اساتید که ساختی را ببینند.</li>`;
-
-      return `<section class="neu-soft p-5">
-        <h3 class="text-[15px] font-black text-slate-800">کد همگام‌سازی دیتابیس ادمین</h3>
-        <p class="mt-2 text-[11px] leading-7 text-slate-500">ادمین تمام بخش‌ها، دروس، جزوه‌ها، اساتید و ارائه ترم‌ها را می‌سازد. سپس یک کد همگام‌سازی می‌سازد (مثلا <b>QOM-CLASS-1404</b>). این کد حاوی کل دیتابیس فعلی است و در ابر ذخیره می‌شود. هر کاربر جدیدی که بار اول وارد می‌شود همه چیز برایش خالی/جدید است، ولی وقتی همین کد را در پنل همگام‌سازی وارد کند، صفحه یک ثانیه بعد رفرش می‌شود و وارد حالت آنلاین می‌شود و دقیقا همان دکمه‌ها و بخش‌هایی که ادمین ساخته را می‌بیند. دیتابیس محفوظ می‌ماند.</p>
-        <form id="createSyncForm" class="mt-5 grid gap-3">
-          <input id="syncName" class="neu-field text-sm" type="text" placeholder="نام کلاس مثلا ارشد عمومی ۱۴۰۴ - نسخه ادمین" required>
-          <div class="grid grid-cols-[1fr_auto] gap-3">
-            <input id="syncCode" class="neu-field text-sm font-mono" type="text" placeholder="کد دلخواه مثلا QOM1404 (خالی = خودکار)">
-            <button class="neu-primary px-5" type="submit">ساخت کد از دیتابیس فعلی</button>
-          </div>
-        </form>
-        <div class="mt-5 neu-inset p-4">
-          <p class="text-[11px] font-black text-slate-500">اتاق فعال فعلی برای همگام‌سازی:</p>
-          <p class="mt-1 font-mono text-sm font-black text-slate-700">${escapeHTML(getRoomCode())}</p>
-          <p class="mt-2 text-[11px] text-slate-500">لینک فعال: <span class="break-all font-mono text-xs">${escapeHTML(getShareLinkForCode(getRoomCode()))}</span></p>
-        </div>
-        <ul class="mt-6 max-h-[420px] overflow-y-auto">${rows}</ul>
-      </section>`;
-    }
-
-    function openDrawer() { renderAdmin(); els.drawerBackdrop.classList.remove("hidden"); els.adminDrawer.classList.remove("drawer-closed"); els.adminDrawer.classList.add("drawer-open"); }
-    function closeDrawer() { els.drawerBackdrop.classList.add("hidden"); els.adminDrawer.classList.remove("drawer-open"); els.adminDrawer.classList.add("drawer-closed"); }
-    function createLobbyCode() { let c; do { c = `QOM${Math.random().toString(36).slice(2,6).toUpperCase()}`; } while (data.rooms.some(r=>r.code.toUpperCase()===c)); return c; }
-
-    els.loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const name = els.studentName.value.trim();
-      const semester = els.studentSemester.value;
-      if (!name) return;
-      try {
-        const fresh = localStorage.getItem(STORAGE_KEY);
-        if (fresh) {
-          const parsedFresh = JSON.parse(fresh);
-          data = normalizeData({ ...makeDefaultData(), ...parsedFresh });
-        }
-      } catch {}
-      let user = data.users.find(u => u.name.trim().toLowerCase()===name.toLowerCase() && String(u.semester)===String(semester));
-      if (!user) { user = { id: uid("user"), name, semester, isVip:false, points:0, online:true, lastSeen:Date.now(), avatarHue: Math.floor(180+Math.random()*80) }; data.users.push(user); }
-      user.online=true; user.lastSeen=Date.now();
-      currentUser=user;
-      localStorage.setItem(CURRENT_USER_KEY, user.id);
-      saveData(true);
-      activeCourseId = null;
-      showDashboard();
-      setTimeout(() => { renderAll(); pushToCloud(); }, 80);
-    });
-    els.logoutBtn.addEventListener("click", () => {
-      setUserOnline(false);
-      localStorage.removeItem(CURRENT_USER_KEY);
-      currentUser=null;
-      activeCourseId=null;
-      showLogin();
-    });
-    els.cloudStatus?.addEventListener("click", () => {
-      if (cloudConnected) {
-        pushToCloud();
-        els.cloudStatus.innerHTML = `<span class="online-dot"></span> همگام‌سازی شد - ${new Date().toLocaleTimeString('fa-IR')}`;
-        setTimeout(updateCloudStatusUI, 2000);
-      } else {
-        initGun();
-        els.cloudStatus.innerHTML = `<span class="offline-dot"></span> تلاش برای اتصال مجدد...`;
-        setTimeout(() => { pushToCloud(); }, 1500);
-      }
-    });
-    els.adminOpenBtn.addEventListener("click", openDrawer);
-    els.adminCloseBtn.addEventListener("click", closeDrawer);
-    els.drawerBackdrop.addEventListener("click", closeDrawer);
-
-    els.sectionsPanel.addEventListener("change", e => {
-      if (e.target.id==="roomSelect") {
-        activeRoomId=e.target.value;
-        const room = data.rooms.find(r => r.id === activeRoomId);
-        if (room) {
-          currentRoomCode = room.code.toUpperCase();
-          localStorage.setItem('qom_current_room_code', currentRoomCode);
-          initGunForRoom(currentRoomCode);
-        }
-        localStorage.setItem(ACTIVE_ROOM_KEY, activeRoomId);
-        saveData(true);
-        renderAll();
-      }
-    });
-    els.sectionsPanel.addEventListener("click", e => {
-      const b = e.target.closest("[data-course-id]"); if (!b) return;
-      activeCourseId=b.dataset.courseId; renderCoursesPanel(); renderActiveCoursePanel();
-      if (window.innerWidth<1024) els.activeCoursePanel.scrollIntoView({ behavior:"smooth", block:"start" });
-    });
-    els.activeCoursePanel.addEventListener("click", e => {
-      if (e.target.id==="closeCourseBtn") { activeCourseId=null; renderCoursesPanel(); renderActiveCoursePanel(); }
-      const del = e.target.closest("[data-delete-material-inline]");
-      if (del && adminAuthed) { data.materials=data.materials.filter(m=>m.id!==del.dataset.deleteMaterialInline); saveData(); renderAll(); }
-    });
-    els.sectionsPanel.addEventListener("submit", e => {
-      if (e.target.id!=="joinLobbyForm") return;
-      e.preventDefault();
-      const input=document.getElementById("lobbyCodeInput"); const hint=document.getElementById("lobbyHint");
-      const code=input.value.trim().toUpperCase(); const room=data.rooms.find(r=>r.code.toUpperCase()===code);
-      if (!room) { hint.textContent="لابی پیدا نشد. کدها: " + data.rooms.map(r=>r.code).join(", "); hint.className="mt-2 text-[11px] text-red-500"; return; }
-      activeRoomId=room.id;
-      currentRoomCode = code;
-      localStorage.setItem(ACTIVE_ROOM_KEY, activeRoomId);
-      localStorage.setItem('qom_current_room_code', code);
-      initGunForRoom(code);
-      if (currentUser) { currentUser.lastLobbyCode = code; currentUser.joinedRoomCode = code; const stored = data.users.find(u=>u.id===currentUser.id); if (stored) { stored.lastLobbyCode = code; stored.joinedRoomCode = code; } }
-      input.value="";
-      hint.textContent=`وارد ${room.name} شدید. لینک اشتراک: ${getShareLinkForCode(code)} - همه بخش‌ها بروز شد.`;
-      hint.className="mt-2 text-[11px] text-emerald-700 font-black break-all";
-      saveData(true);
-      renderAll();
-      setTimeout(pushToCloud, 300);
-    });
-    els.chatForm.addEventListener("submit", e => {
-      e.preventDefault(); if (!currentUser) return;
-      const text=els.chatInput.value.trim(); if (!text) return;
-      const room=data.rooms.find(r=>r.id===activeRoomId); if (!room) return;
-      room.messages.push({ id:uid("msg"), userId:currentUser.id, userName:currentUser.name, semester:currentUser.semester, isVip:currentUser.isVip, text, at:Date.now() });
-      if (room.messages.length>250) room.messages=room.messages.slice(-250);
-      els.chatInput.value=""; saveData(); renderChat();
-    });
-
-    els.adminContent.addEventListener("click", e => {
-      const tab=e.target.closest("[data-admin-tab]"); if (tab) { activeAdminTab=tab.dataset.adminTab; renderAdmin(); return; }
-      const delC=e.target.closest("[data-delete-course]"); if (delC) { const id=delC.dataset.deleteCourse; data.courses=data.courses.filter(c=>c.id!==id); data.materials=data.materials.filter(m=>m.courseId!==id); data.offerings=data.offerings.filter(o=>o.courseId!==id); if (activeCourseId===id) activeCourseId=null; saveData(); renderAll(); return; }
-      const delM=e.target.closest("[data-delete-material]"); if (delM) { data.materials=data.materials.filter(m=>m.id!==delM.dataset.deleteMaterial); saveData(); renderAll(); return; }
-      const delO=e.target.closest("[data-delete-offering]"); if (delO) { data.offerings=data.offerings.filter(o=>o.id!==delO.dataset.deleteOffering); saveData(); renderAll(); return; }
-      const delT=e.target.closest("[data-delete-teacher]"); if (delT) { data.teachers=data.teachers.filter(t=>t.id!==delT.dataset.deleteTeacher); data.offerings=data.offerings.filter(o=>o.teacherId!==delT.dataset.deleteTeacher); saveData(); renderAll(); return; }
-      const qBtn=e.target.closest("[data-teacher-quality]"); if (qBtn) { const t=data.teachers.find(x=>x.id===qBtn.dataset.teacherQuality); if (t) t.quality=qBtn.dataset.quality; saveData(); renderAll(); return; }
-      const ap=e.target.closest("[data-apply-points]"); if (ap) { const id=ap.dataset.applyPoints; const input=els.adminContent.querySelector(`[data-points-input="${id}"]`); const u=data.users.find(x=>x.id===id); if (u&&input) u.points=Number(input.value||0); if (currentUser?.id===id) currentUser=u; saveData(); renderAll(); return; }
-      const tv=e.target.closest("[data-toggle-vip]"); if (tv) { const u=data.users.find(x=>x.id===tv.dataset.toggleVip); if (u) u.isVip=!u.isVip; if (currentUser?.id===u?.id) currentUser=u; saveData(); renderAll(); return; }
-      const delR=e.target.closest("[data-delete-room]"); if (delR) { const r=data.rooms.find(x=>x.id===delR.dataset.deleteRoom); if (!r||r.locked) return; data.rooms=data.rooms.filter(x=>x.id!==r.id); if (activeRoomId===r.id) { activeRoomId="room-general"; localStorage.setItem(ACTIVE_ROOM_KEY, activeRoomId); } saveData(); renderAll(); return; }
-      if (e.target.id==="exportDataBtn") { exportText=JSON.stringify(data,null,2); renderAdmin(); const ta=document.getElementById("backupText"); ta?.select(); navigator.clipboard?.writeText(exportText).catch(()=>{}); return; }
-      if (e.target.id==="adminLogoutBtn") { adminAuthed=false; sessionStorage.removeItem(ADMIN_SESSION_KEY); renderAdmin(); }
-    });
-    els.adminContent.addEventListener("change", e => {
-      if (e.target.id==="matFileInput") {
-        const file=e.target.files?.[0]; const status=document.getElementById("matFileStatus");
-        if (!file) { pendingMaterial={dataUrl:"",fileName:""}; if (status) status.textContent="فایلی انتخاب نشده."; return; }
-        if (status) status.textContent=`در حال خواندن ${file.name} ...`;
-        const reader=new FileReader();
-        reader.onload=()=>{ pendingMaterial={dataUrl:String(reader.result||""), fileName:file.name}; if (status) status.textContent=`آماده: ${file.name}`; };
-        reader.onerror=()=>{ if (status) status.textContent="خطا در خواندن فایل"; };
-        reader.readAsDataURL(file);
-      }
-    });
-    els.adminContent.addEventListener("submit", e => {
-      e.preventDefault();
-      if (e.target.id==="adminLoginForm") {
-        const pw=document.getElementById("adminPassword").value;
-        if (pw===ADMIN_PASSWORD) { adminAuthed=true; sessionStorage.setItem(ADMIN_SESSION_KEY,"yes"); renderAdmin(); }
-        else { document.getElementById("adminPassword").value=""; document.getElementById("adminPassword").placeholder="رمز اشتباه است"; }
-        return;
-      }
-      if (e.target.id==="addCourseForm") { const name=document.getElementById("newCourseName").value.trim(); const term=Number(document.getElementById("newCourseTerm").value); const kind=document.getElementById("newCourseKind").value; if (name) data.courses.push({ id:uid("c"), name, term, kind }); saveData(); renderAll(); return; }
-      if (e.target.id==="addMaterialForm") {
-        const courseId=document.getElementById("matCourseId").value; const type=document.getElementById("matType").value; const title=document.getElementById("matTitle").value.trim(); const body=document.getElementById("matBody").value.trim();
-        const minView=Number(document.getElementById("matMinView").value)||30; const points=Number(document.getElementById("matPoints").value)||5;
-        if (!courseId||!title) return;
-        if (type!=="text" && !pendingMaterial.dataUrl) { const s=document.getElementById("matFileStatus"); if (s) s.textContent="برای عکس یا فیلم باید فایل انتخاب کنی."; return; }
-        data.materials.push({ id:uid("mat"), courseId, type, title, body, dataUrl: type==="text"?"":pendingMaterial.dataUrl, fileName: pendingMaterial.fileName, minViewSeconds: minView, pointsReward: points, at:Date.now(), authorName:"مدیریت" });
-        pendingMaterial={dataUrl:"",fileName:""}; saveData(); renderAll(); activeCourseId=courseId; activeAdminTab="materials"; renderAdmin(); renderCoursesPanel(); renderActiveCoursePanel(); return;
-      }
-      if (e.target.id==="addTeacherForm") { const name=document.getElementById("newTeacherName").value.trim(); const courseId=document.getElementById("newTeacherCourse").value; const quality=document.getElementById("newTeacherQuality").value; if (name) data.teachers.push({ id:uid("teach"), name, sectionId:"sec-general", courseId, quality }); saveData(); renderAll(); return; }
-      if (e.target.id==="addOfferingForm") { const term=Number(document.getElementById("offTerm").value); const courseId=document.getElementById("offCourse").value; const teacherId=document.getElementById("offTeacher").value; const status=document.getElementById("offStatus").value; const note=document.getElementById("offNote").value.trim(); if (!courseId||!teacherId) return; data.offerings.push({ id:uid("off"), term, courseId, teacherId, status, note }); saveData(); renderAll(); return; }
-      if (e.target.id==="createLobbyForm") {
-        const name=document.getElementById("newLobbyName").value.trim();
-        let code=document.getElementById("newLobbyCode").value.trim().toUpperCase()||createLobbyCode();
-        code=code.replace(/\s+/g,"-");
-        if (!name) return;
-        if (data.rooms.some(r=>r.code.toUpperCase()===code)) { document.getElementById("newLobbyCode").value=""; document.getElementById("newLobbyCode").placeholder="این کد قبلا استفاده شده"; return; }
-        const newRoom = { id:uid("room"), code, name, locked:false, messages:[{ id: uid("msg"), userId: "system", userName: "سیستم", semester: "سیستم", isVip: true, text: `اتاق ${name} با کد ${code} ساخته شد. لینک: ${getShareLinkForCode(code)} - تمام آپدیت‌های بعدی برای اعضای این اتاق محفوظ می‌ماند.`, at: Date.now() }] };
-        data.rooms.push(newRoom);
-        activeRoomId=newRoom.id;
-        currentRoomCode = code;
-        localStorage.setItem(ACTIVE_ROOM_KEY, activeRoomId);
-        localStorage.setItem('qom_current_room_code', code);
-        initGunForRoom(code);
-        saveData();
-        renderAll();
-        setTimeout(() => { pushToCloud(); copyShareLink(code); }, 400);
-        return;
-      }
-      if (e.target.id==="importDataForm") { const ta=document.getElementById("backupText"); try { const imp=normalizeData(JSON.parse(ta.value)); data=imp; currentUser=findCurrentUser(); if (currentUser) currentUser.online=true; saveData(); exportText=""; renderAll(); } catch { ta.value="JSON نامعتبر است"; } }
-    });
-
-    window.addEventListener("storage", e => { if (e.key!==STORAGE_KEY||!e.newValue) return; try { data=normalizeData(JSON.parse(e.newValue)); currentUser=findCurrentUser(); renderAll(); } catch {} });
-    if (channel) channel.addEventListener("message", e => { if (e.data?.type!=="sync") return; data=normalizeData(e.data.data); currentUser=findCurrentUser(); renderAll(); });
-    document.addEventListener("visibilitychange", () => { if (!currentUser) return; setUserOnline(!document.hidden); renderPeople(); });
-    window.addEventListener("beforeunload", () => { if (!currentUser) return; const s=data.users.find(u=>u.id===currentUser.id); if (s) { s.online=false; s.lastSeen=Date.now(); localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } if (viewingInterval) clearInterval(viewingInterval); });
-
-    // پر کردن خودکار کد لابی از لینک اشتراکی ?join=CODE
-    (function autoFillFromLink(){
-      try {
-        const params = new URLSearchParams(location.search);
-        const joinCode = (params.get('join') || params.get('room') || params.get('code') || '').trim().toUpperCase();
-        if (joinCode) {
-          const input = document.getElementById('studentLobbyCode');
-          if (input) { input.value = joinCode; input.classList.add('pressed'); }
-          const err = document.getElementById('loginError');
-          if (err) { err.textContent = `لینک دعوت اتاق ${joinCode} تشخیص داده شد. نام و ترم را وارد کن تا با همین لینک وارد شوی و همه آپدیت‌ها را ببینی.`; err.classList.remove('hidden'); err.className = 'rounded-[14px] bg-[#e0f7ec] px-4 py-3 text-xs font-black leading-6 text-emerald-800 shadow-[inset_3px_3px_6px_#a8c4b5,_inset_-3px_-3px_6px_#ffffff]'; }
-          currentRoomCode = joinCode;
-          localStorage.setItem('qom_current_room_code', joinCode);
-          // اگر اتاق با این کد وجود ندارد، یک اتاق موقت در لیست محلی بساز تا لاگین قبول شود و بعد از اتصال ابری تکمیل شود
-          if (!data.rooms.some(r => r.code.toUpperCase() === joinCode)) {
-            data.rooms.push({ id: 'room-' + joinCode.toLowerCase(), code: joinCode, name: 'کلاس ' + joinCode, locked: false, messages: [] });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-          }
-        }
-      } catch {}
-    })();
-
-    initGun();
-    startClock();
-    setInterval(() => { if (currentUser) { renderProfile(); } }, 1000);
-    currentUser=findCurrentUser();
-    const hasValidLobby = localStorage.getItem(ACTIVE_ROOM_KEY) && data.rooms.some(r => r.id === localStorage.getItem(ACTIVE_ROOM_KEY));
-    if (currentUser && hasValidLobby) {
-      currentUser.online=true; currentUser.lastSeen=Date.now();
-      activeRoomId = localStorage.getItem(ACTIVE_ROOM_KEY);
-      saveData(false);
-      showDashboard();
-    } else {
-      if (currentUser && !hasValidLobby) {
-        // کد لابی قبلی معتبر نیست یا پاک شده - باید دوباره کد وارد کند
-        localStorage.removeItem(CURRENT_USER_KEY);
-        currentUser = null;
-      }
-      showLogin();
-    }
-  </script>
+/* ================= شروع ================= */
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeViewer(); closePw(); toggleDrawer(true); }
+});
+document.querySelectorAll('.admin-gate').forEach(l=>l.addEventListener('click', ()=>{
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwModal').classList.add('show');
+  setTimeout(()=>document.getElementById('pwInput').focus(),200);
+}));
+(function boot(){
+  const s=localStorage.getItem(K.session);
+  if(s){
+    const u=getUsers().find(x=>x.name===JSON.parse(s)||x.name===s.replace(/"/g,''));
+    if(u){ state.user=u; enterApp(); return; }
+  }
+  show('screen-login');
+})();
+</script>
 </body>
 </html>
