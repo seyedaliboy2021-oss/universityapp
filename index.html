@@ -90,6 +90,9 @@
   .timer-ring{transition:stroke-dashoffset 1s linear}
 
   .scroll-hide::-webkit-scrollbar{display:none}
+  /* marquee ticker */
+  .marquee-track{display:inline-flex;white-space:nowrap;animation:scrollLTR 24s linear infinite}
+  @keyframes scrollLTR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 </style>
 </head>
 <body>
@@ -112,12 +115,12 @@
     </div>
     <h1 class="text-2xl sm:text-3xl font-black text-white drop-shadow">روان‌شناسی عمومی</h1>
     <p class="text-white/90 font-bold mt-1">دانشگاه آزاد اسلامی واحد قم</p>
-    <p class="text-sm text-white/80 mt-4 leading-7">سلام دانشجو جان! 👋 اسمت و ترمت رو وارد کن تا وارد دنیای رنگی روان‌شناسی بشی 🎨</p>
+    <p class="text-sm text-white/80 mt-4 leading-7">سلام دانشجو جان! 👋 اسمت و ترمت رو وارد کن تا از اخرین اطلاع رسانی ها مطلع بشی. 🎨</p>
 
     <div class="space-y-3 mt-6 text-right">
       <div>
         <label class="block text-white font-bold mb-1.5 text-sm">👤 نام و نام خانوادگی</label>
-        <input id="inName" class="field" placeholder="مثلاً: مریم احمدی">
+        <input id="inName" class="field" placeholder="مثلاً: سید علی لاجوردی">
       </div>
       <div>
         <label class="block text-white font-bold mb-1.5 text-sm">🎓 ترم تحصیلی</label>
@@ -125,8 +128,6 @@
           <option value="">انتخاب ترم…</option>
           <option value="1">ترم اول</option><option value="2">ترم دوم</option>
           <option value="3">ترم سوم</option><option value="4">ترم چهارم</option>
-          <option value="5">ترم پنجم</option><option value="6">ترم ششم</option>
-          <option value="7">ترم هفتم</option><option value="8">ترم هشتم</option>
         </select>
       </div>
     </div>
@@ -139,7 +140,8 @@
 <section id="app" class="hidden relative z-10 min-h-screen pb-24">
 
   <!-- Header -->
-  <header class="glass sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center gap-3 border-b border-white/50">
+  <header class="glass sticky top-0 z-40 border-b border-white/50">
+  <div class="px-4 sm:px-6 py-3 flex items-center gap-3">
     <button onclick="openDrawer()" class="btn-3d b-grad2 !p-3 !rounded-2xl" title="منو">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
     </button>
@@ -154,6 +156,17 @@
     <div class="chip text-white shrink-0" style="background:linear-gradient(135deg,#ffd23f,#ff9d4d)">
       ⭐ <span id="hdrPoints">0</span> امتیاز
     </div>
+  </div>
+  <!-- ===== Iran online clock + scrolling notice ===== -->
+  <div class="px-3 sm:px-6 py-1.5 flex items-center gap-2.5 text-white" style="background:rgba(28,20,50,.93)">
+    <div id="clockIR" class="chip shrink-0 bg-white/15 text-[11px]">--:--:--</div>
+    <div class="overflow-hidden flex-1 text-[11px] font-bold text-white/95" dir="ltr">
+      <div class="marquee-track">
+        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>برای آپدیت و به‌روز نگه داشتن برنامه، فيلترشکن خود را روشن کنید تا آنلاین باشید</span>
+        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>برای آپدیت و به‌روز نگه داشتن برنامه، فیلتر شکن خود را روشن کنید تا آنلاین باشید</span>
+      </div>
+    </div>
+  </div>
   </header>
 
   <!-- Tabs -->
@@ -171,6 +184,9 @@
       <span class="text-2xl">🔮</span><span class="text-[11px] sm:text-xs font-bold">ترم آینده</span>
     </button>
   </nav>
+
+  <!-- ===== Broadcast updates (for everyone) ===== -->
+  <div id="updatesBar" class="px-4 sm:px-5 mt-3 max-w-3xl mx-auto space-y-2 hidden"></div>
 
   <!-- ===== TAB 1 : COURSES ===== -->
   <div id="tab1" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto"></div>
@@ -249,12 +265,13 @@
     </div>
 
     <!-- admin sub tabs -->
-    <div class="grid grid-cols-5 gap-1.5 p-3">
-      <button data-atab="1" onclick="switchAdmin(1)" class="atab-btn btn-3d b-grad1 !p-1.5 !px-1 text-[11px] sm:text-xs">📚 درس‌ها</button>
-      <button data-atab="2" onclick="switchAdmin(2)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#9333ea">👨‍🏫 اساتید</button>
-      <button data-atab="3" onclick="switchAdmin(3)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#db2777">📰 مطالب</button>
-      <button data-atab="4" onclick="switchAdmin(4)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#0891b2">🔮 ترم بعد</button>
-      <button data-atab="5" onclick="switchAdmin(5)" class="atab-btn btn-3d !p-1.5 !px-1 text-[11px] sm:text-xs" style="background:#0f766e">🌐 آنلاین</button>
+    <div class="grid grid-cols-6 gap-1 p-3">
+      <button data-atab="1" onclick="switchAdmin(1)" class="atab-btn btn-3d b-grad1 !p-1.5 !px-0.5 text-[10px] sm:text-xs">📚 درس‌ها</button>
+      <button data-atab="2" onclick="switchAdmin(2)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#9333ea">👨‍🏫 اساتید</button>
+      <button data-atab="3" onclick="switchAdmin(3)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#db2777">📰 مطالب</button>
+      <button data-atab="4" onclick="switchAdmin(4)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#0891b2">🔮 ترم بعد</button>
+      <button data-atab="5" onclick="switchAdmin(5)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#0f766e">🌐 آنلاین</button>
+      <button data-atab="6" onclick="switchAdmin(6)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#b45309">📢 اطلاعیه</button>
     </div>
 
     <div class="overflow-y-auto px-4 pb-4">
@@ -263,13 +280,17 @@
         <h4 class="font-black text-lg mb-2">➕ افزودن / حذف درس و استاد هر ترم</h4>
         <div class="glass rounded-2xl p-3 grid sm:grid-cols-3 gap-2">
           <select id="cTerm" class="field">
-            <option value="1">ترم ۱</option><option value="2">ترم ۲</option><option value="3">ترم ۳</option><option value="4">ترم ۴</option>
-            <option value="5">ترم ۵</option><option value="6">ترم ۶</option><option value="7">ترم ۷</option><option value="8">ترم ۸</option>
+            <option value="1">ترم ۱</option><option value="2">ترم ۲</option>
+            <option value="3">ترم ۳</option><option value="4">ترم ۴</option>
           </select>
           <input id="cName" class="field" placeholder="نام درس">
-          <input id="cProf" class="field" placeholder="استاد درس">
+          <select id="cType" class="field">
+            <option value="main">📘 درس اصلی</option>
+            <option value="comp">🔁 درس جبرانی</option>
+          </select>
         </div>
         <button onclick="addCourse()" class="btn-3d b-grad3 w-full mt-2">➕ افزودن درس</button>
+        <p class="text-[11px] opacity-60 mt-1.5">👨‍🏫 اساتید هر درس را بعد از افزودن، از داخل کارت همان درس اضافه یا حذف کنید (برای همه نمایش داده می‌شود).</p>
         <div id="adminCourseList" class="space-y-2 mt-3"></div>
       </div>
 
@@ -337,6 +358,17 @@
 
       <!-- admin section 5: ONLINE / STUDENTS -->
       <div id="admin5" class="atab-panel hidden"><div id="admin5Body"></div></div>
+
+      <!-- admin section 6: BROADCAST UPDATES -->
+      <div id="admin6" class="atab-panel hidden">
+        <h4 class="font-black text-lg mb-2">📢 پخش اطلاعیه / آپدیت برای همهٔ دانشجویان</h4>
+        <p class="text-xs opacity-60 mb-2">اطلاعیه‌ها بلافاصله و بدون نیاز به آپدیت برنامه، بالای صفحهٔ همهٔ کاربران نمایش داده می‌شود.</p>
+        <div class="glass rounded-2xl p-3">
+          <textarea id="uText" class="field" rows="2" placeholder="متن اطلاعیه یا خبر آپدیت جدید…"></textarea>
+        </div>
+        <button onclick="addUpdate()" class="btn-3d w-full mt-2" style="background:linear-gradient(135deg,#b45309,#f59e0b)">➕ انتشار اطلاعیه (پخش برای همه)</button>
+        <div id="adminUpdateList" class="space-y-2 mt-3"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -370,7 +402,7 @@
 /* ============================================================
    DATA LAYER  (localStorage)
 ============================================================ */
-const KEY = 'psy_qom_app_v1';
+const KEY = 'psy_qom_app_v2';
 const ADMIN_PASS = 'ALIVANAPSY';
 
 /* ============================================================
@@ -392,14 +424,14 @@ let savedCfg=null; try{savedCfg=JSON.parse(localStorage.getItem('psy_fb_cfg')||'
 const CFG=(FB_CONFIG.apiKey&&FB_CONFIG.databaseURL)?FB_CONFIG:(savedCfg&&savedCfg.apiKey?savedCfg:null);
 
 function sid(){let id=localStorage.getItem('psy_sid');if(!id){id='s'+uid();localStorage.setItem('psy_sid',id)}return id}
-function sharedCount(){let t=0;for(const k in DB.terms)t+=(DB.terms[k]||[]).length;for(const k in DB.professors)t+=(DB.professors[k]||[]).length;t+=(DB.content||[]).length+(DB.nextTerm||[]).length;return t}
-function shareSnapshot(){return{terms:DB.terms,professors:DB.professors,content:DB.content,nextTerm:DB.nextTerm}}
+function sharedCount(){let t=0;for(const k in DB.terms)t+=(DB.terms[k]||[]).length;for(const k in DB.professors)t+=(DB.professors[k]||[]).length;t+=(DB.content||[]).length+(DB.nextTerm||[]).length+(DB.updates||[]).length;return t}
+function shareSnapshot(){return{terms:DB.terms,professors:DB.professors,content:DB.content,nextTerm:DB.nextTerm,updates:DB.updates||[]}}
 function cloudPush(){if(NET.ready&&NET.box){NET.box.child('db').set(shareSnapshot())}}
 function netInit(){
   if(!CFG||typeof firebase==='undefined'){netBadge();return}
   try{
     firebase.initializeApp(CFG);
-    const root=firebase.database().ref('psyqom');
+    const root=firebase.database().ref('psyqom2');
     NET.ready=true; NET.box=root;
     root.child('db').on('value',snap=>{
       const v=snap.val();
@@ -418,6 +450,7 @@ function applyRemote(v){
   DB.professors=v.professors||{good:[],medium:[],weak:[]};
   DB.content=v.content||[];
   DB.nextTerm=v.nextTerm||[];
+  DB.updates=v.updates||[];
   save(); lastShared=sharedCount();
   rerender(); netBadge();
   if(!firstCloudSync&&lastShared>prev){toast('📢 محتوای جدید اضافه شد! ببین 📚','🔔');}
@@ -431,6 +464,7 @@ function rerender(){
   else if(activeTab==2)renderProfessors();
   else if(activeTab==3)renderContent();
   else if(activeTab==4)renderNext();
+  renderUpdates();
   refreshUser();
   if(adminOpen)switchAdmin(currentAdminTab);
   window.scrollTo(0,y);
@@ -536,23 +570,37 @@ function seed(){
     watchedAds:[],
     terms:{
       1:[
-        {id:uid(),name:'روان‌شناسی عمومی',prof:'دکتر رضایی'},
-        {id:uid(),name:'زبان انگلیسی عمومی',prof:'دکتر موسوی'},
-        {id:uid(),name:'اندیشه اسلامی ۱',prof:'دکتر صادقی'},
-        {id:uid(),name:'مبانی کامپیوتر',prof:'مهندس قاسمی'},
+        {id:uid(),name:'روانشناسی سالمندی پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'روش‌های آماری کاربردی پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'عصب‌روانشناسی',type:'main',profs:[]},
+        {id:uid(),name:'روانشناسی تحولی پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'زبان تخصصی',type:'comp',profs:[]},
+        {id:uid(),name:'آسیب‌شناسی روانی ۲',type:'comp',profs:[]},
       ],
       2:[
-        {id:uid(),name:'روان‌شناسی رشد (کودکی و نوجوانی)',prof:'دکتر محمدی'},
-        {id:uid(),name:'آمار و کاربرد آن',prof:'دکتر اکبری'},
-        {id:uid(),name:'فیزیولوژی اعصاب',prof:'دکتر حسینی'},
+        {id:uid(),name:'روش تحقیق پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'تحول شخصیت و نقد و بررسی دیدگاه‌ها',type:'main',profs:[]},
+        {id:uid(),name:'روانشناسی یادگیری و تفکر',type:'main',profs:[]},
+        {id:uid(),name:'انگیزش و هیجان پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'فلسفه علم روانشناسی',type:'comp',profs:[]},
+        {id:uid(),name:'روانشناسی شخصیت',type:'comp',profs:[]},
       ],
       3:[
-        {id:uid(),name:'روان‌شناسی اجتماعی',prof:'دکتر کریمی'},
-        {id:uid(),name:'یادگیری و یاددهی',prof:'دکتر محمدی'},
-        {id:uid(),name:'روش تحقیق در روان‌شناسی',prof:'دکتر اکبری'},
+        {id:uid(),name:'مبانی روانشناسی اسلامی ۱',type:'main',profs:[]},
+        {id:uid(),name:'آسیب‌شناسی روانی با تکیه بر بافتار بوم‌شناختی',type:'main',profs:[]},
+        {id:uid(),name:'روانشناسی تجربی',type:'main',profs:[]},
+        {id:uid(),name:'روانشناسی اجتماعی پیشرفته',type:'main',profs:[]},
+        {id:uid(),name:'نظریه‌پردازی در روانشناسی',type:'main',profs:[]},
+        {id:uid(),name:'انس با قرآن کریم',type:'comp',profs:[]},
+        {id:uid(),name:'وصایای امام (ره)',type:'comp',profs:[]},
       ],
-      4:[],5:[],6:[],7:[],8:[]
+      4:[
+        {id:uid(),name:'پایان‌نامه',type:'main',profs:[]},
+      ]
     },
+    updates:[
+      {id:uid(),text:'به اپلیکیشن روانشناسی عمومی دانشگاه آزاد قم خوش آمدید 🎉',ts:Date.now()},
+    ],
     professors:{
       good:[
         {id:uid(),name:'دکتر محمدی',info:'توضیح‌رسانی عالی، اخلاق خوب'},
@@ -642,6 +690,7 @@ function termName(n){return ['','ترم اول','ترم دوم','ترم سوم',
 let activeTab=1;
 function switchTab(n){
   activeTab=n;
+  renderUpdates();
   document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.toggle('active',b.dataset.tab==n)});
   for(let i=1;i<=4;i++)document.getElementById('tab'+i).classList.toggle('hidden',i!=n);
   if(n==1)renderCourses();
@@ -655,25 +704,35 @@ function switchTab(n){
    TAB 1 — COURSES
 ============================================================ */
 let selTerm='1';
+function profsOf(c){return Array.isArray(c.profs)?c.profs:(c.prof?[c.prof]:[])}
 function renderCourses(){
   const wrap=document.getElementById('tab1');
-  const termBtns=[1,2,3,4,5,6,7,8].map(t=>{
+  const termBtns=[1,2,3,4].map(t=>{
     const on=String(t)===String(selTerm);
-    return `<button onclick="selTerm='${t}';renderCourses()" class="btn-3d ${on?'b-grad1':'!p-2.5'} ${on?'':'opacity-80'}" style="${on?'':'background:#fff;color:#6d5efc;box-shadow:0 5px 0 rgba(0,0,0,.12)'}">ترم ${t.toLocaleString('fa-ir')}</button>`;
+    return `<button onclick="selTerm='${t}';renderCourses()" class="btn-3d ${on?'b-grad1':'!p-2.5'} ${on?'':'opacity-90'}" style="${on?'':'background:#fff;color:#6d5efc;box-shadow:0 5px 0 rgba(0,0,0,.12)'}">ترم ${t.toLocaleString('fa-ir')}</button>`;
   }).join('');
-  const list=(DB.terms[selTerm]||[]).map(c=>`
-    <div class="card-iso glass rounded-2xl p-4 flex items-center gap-3 fade-in">
-      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0" style="background:linear-gradient(135deg,#6d5efc,#a64bff)">📘</div>
-      <div class="flex-1 min-w-0">
-        <h3 class="font-bold leading-tight truncate">${esc(c.name)}</h3>
-        <p class="text-sm opacity-70 mt-0.5">👨‍🏫 ${esc(c.prof)}</p>
+  const all=DB.terms[selTerm]||[];
+  const main=all.filter(c=>(c.type||'main')==='main');
+  const comp=all.filter(c=>c.type==='comp');
+  const card=c=>`
+    <div class="card-iso glass rounded-2xl p-4 fade-in">
+      <div class="flex items-start gap-3">
+        <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0" style="background:linear-gradient(135deg,${c.type==='comp'?'#ff9d4d,#ff5d9e':'#6d5efc,#a64bff'})">${c.type==='comp'?'🔁':'📘'}</div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-bold leading-tight">${esc(c.name)}</h3>
+          <div class="flex flex-wrap gap-1.5 mt-1.5">
+            ${profsOf(c).length?profsOf(c).map(p=>`<span class="chip text-white" style="background:rgba(28,20,50,.85);font-size:11px">👨‍🏫 ${esc(p)}</span>`).join(''):'<span class="text-[11px] opacity-60">👨‍🏫 استاد: اعلام نشده</span>'}
+          </div>
+        </div>
       </div>
-    </div>`).join('');
+    </div>`;
   wrap.innerHTML=`
     <h2 class="text-xl font-black mb-1 text-white drop-shadow">📚 درس‌های هر ترم</h2>
     <p class="text-white/85 text-sm mb-3">ترم خودت رو انتخاب کن تا درس‌ها و اساتیدش رو ببینی</p>
     <div class="flex flex-wrap gap-2 mb-4">${termBtns}</div>
-    <div class="space-y-2.5">${list||'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز درسی برای این ترم ثبت نشده 😴</p>'}</div>`;
+    ${main.length?`<p class="font-black text-white drop-shadow mb-2">📘 دروس اصلی</p><div class="space-y-2.5 mb-4">${main.map(card).join('')}</div>`:''}
+    ${comp.length?`<p class="font-black text-white drop-shadow mb-2">🔁 دروس جبرانی</p><div class="space-y-2.5">${comp.map(card).join('')}</div>`:''}
+    ${(!main.length&&!comp.length)?'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز درسی برای این ترم ثبت نشده 😴</p>':''}`;
 }
 
 /* ============================================================
@@ -862,38 +921,63 @@ function closeAdmin(){
 function switchAdmin(n){
   currentAdminTab=n;
   document.querySelectorAll('.atab-btn').forEach(b=>b.classList.toggle('active',b.dataset.atab==n));
-  for(let i=1;i<=5;i++)document.getElementById('admin'+i).classList.toggle('hidden',i!=n);
+  for(let i=1;i<=6;i++)document.getElementById('admin'+i).classList.toggle('hidden',i!=n);
   if(n==1)renderAdminCourses();
   if(n==2)renderAdminProf();
   if(n==3)renderAdminContent();
   if(n==4)renderAdminNext();
   if(n==5)renderAdminOnline();
+  if(n==6)renderAdminUpdates();
 }
 
 /* ---- Admin: courses ---- */
 function addCourse(){
   const term=document.getElementById('cTerm').value;
   const name=document.getElementById('cName').value.trim();
-  const prof=document.getElementById('cProf').value.trim();
+  const type=document.getElementById('cType').value;
   if(!name){toast('نام درس را وارد کن','⚠️');return}
-  if(!prof){toast('نام استاد را وارد کن','⚠️');return}
   DB.terms[term]=DB.terms[term]||[];
-  DB.terms[term].push({id:uid(),name,prof});
+  DB.terms[term].push({id:uid(),name,type,profs:[]});
   save(); cloudPush();
-  document.getElementById('cName').value='';document.getElementById('cProf').value='';
+  document.getElementById('cName').value='';
   renderAdminCourses(); toast('درس اضافه شد');
 }
 function delCourse(term,id){
   if(!confirm('حذف این درس؟'))return;
   DB.terms[term]=(DB.terms[term]||[]).filter(c=>c.id!==id);save();cloudPush();renderAdminCourses();toast('حذف شد','🗑️');
 }
+function addCourseProf(term,cid){
+  const inp=document.getElementById('pa-'+cid);
+  const v=((inp&&inp.value)||'').trim();
+  if(!v){toast('نام استاد را وارد کن','⚠️');return}
+  const c=(DB.terms[term]||[]).find(x=>x.id===cid); if(!c)return;
+  c.profs=profsOf(c); c.profs.push(v);
+  save();cloudPush();renderAdminCourses();toast('استاد برای این درس ثبت شد 👨‍🏫');
+}
+function delCourseProf(term,cid,i){
+  const c=(DB.terms[term]||[]).find(x=>x.id===cid); if(!c)return;
+  c.profs=profsOf(c); c.profs.splice(i,1);
+  save();cloudPush();renderAdminCourses();toast('حذف شد','🗑️');
+}
 function renderAdminCourses(){
   const term=document.getElementById('cTerm').value||'1';
   const list=(DB.terms[term]||[]).map(c=>`
-    <div class="bg-white/80 rounded-xl p-3 flex items-center gap-2">
-      <span class="text-xl">📘</span>
-      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(c.name)}</p><p class="text-xs opacity-60">👨‍🏫 ${esc(c.prof)}</p></div>
-      <button onclick="delCourse('${term}','${c.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    <div class="bg-white/85 rounded-xl p-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">${c.type==='comp'?'🔁':'📘'}</span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-sm truncate">${esc(c.name)}</p>
+          <p class="text-[10px] opacity-60">${c.type==='comp'?'درس جبرانی':'درس اصلی'}</p>
+        </div>
+        <button onclick="delCourse('${term}','${c.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+      </div>
+      <div class="flex flex-wrap gap-1.5 mt-2">
+        ${profsOf(c).length?profsOf(c).map((p,i)=>`<span class="chip text-white inline-flex items-center gap-1" style="background:#4c1d95;font-size:11px">👨‍🏫 ${esc(p)} <button onclick="delCourseProf('${term}','${c.id}',${i})" title="حذف استاد" style="background:rgba(255,255,255,.25)" class="rounded-full w-4 h-4 leading-none text-[10px]">✕</button></span>`).join(''):'<span class="text-[11px] opacity-50">هنوز استادی ثبت نشده</span>'}
+      </div>
+      <div class="flex gap-1.5 mt-2">
+        <input id="pa-${c.id}" class="field !py-1.5 !px-2.5 !text-[12px]" placeholder="➕ نام استاد این درس…">
+        <button onclick="addCourseProf('${term}','${c.id}')" class="btn-3d b-grad3 !py-1.5 !px-3 !rounded-xl text-xs shrink-0">ثبت استاد</button>
+      </div>
     </div>`).join('');
   document.getElementById('adminCourseList').innerHTML=list||'<p class="text-center text-sm opacity-50 py-3">درسی برای این ترم نیست</p>';
 }
@@ -1019,6 +1103,58 @@ function renderAdminNext(){
       <button onclick="delNext('${n.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
     </div>`).join('')||'<p class="text-center text-sm opacity-50 py-3">خالی</p>';
 }
+
+/* ============================================================
+   BROADCAST UPDATES + IRAN CLOCK
+============================================================ */
+function fmtTs(ts){
+  try{return new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(ts))}catch(e){return''}
+}
+function renderUpdates(){
+  const el=document.getElementById('updatesBar'); if(!el)return;
+  const u=DB.updates||[];
+  if(!u.length){el.innerHTML='';el.classList.add('hidden');return}
+  el.classList.remove('hidden');
+  el.innerHTML=u.map(x=>`
+    <div class="fade-in rounded-2xl px-4 py-2.5 text-white flex items-start gap-2 shadow-lg" style="background:linear-gradient(135deg,#b45309,#f59e0b)">
+      <span class="shrink-0">📢</span>
+      <div class="flex-1 text-sm font-bold leading-6 min-w-0">${esc(x.text)}</div>
+      <span class="text-[10px] opacity-85 shrink-0 mt-1">${fmtTs(x.ts)}</span>
+    </div>`).join('');
+}
+function addUpdate(){
+  const t=(document.getElementById('uText').value||'').trim();
+  if(!t){toast('متن اطلاعیه را بنویس','⚠️');return}
+  DB.updates=DB.updates||[];
+  DB.updates.unshift({id:uid(),text:t,ts:Date.now()});
+  save();cloudPush();
+  document.getElementById('uText').value='';
+  renderAdminUpdates();renderUpdates();
+  toast('اطلاعیه برای همه پخش شد 📢');
+}
+function delUpdate(id){
+  if(!confirm('حذف این اطلاعیه؟'))return;
+  DB.updates=(DB.updates||[]).filter(u=>u.id!==id);
+  save();cloudPush();renderAdminUpdates();renderUpdates();toast('حذف شد','🗑️');
+}
+function renderAdminUpdates(){
+  const el=document.getElementById('adminUpdateList'); if(!el)return;
+  el.innerHTML=(DB.updates||[]).map(u=>`
+    <div class="bg-white/85 rounded-xl p-3 flex items-center gap-2">
+      <span class="text-lg">📢</span>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm leading-6">${esc(u.text)}</p><p class="text-[10px] opacity-60">${fmtTs(u.ts)}</p></div>
+      <button onclick="delUpdate('${u.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    </div>`).join('')||'<p class="text-center text-sm opacity-50 py-3">اطلاعیه‌ای ثبت نشده</p>';
+}
+function tickClock(){
+  try{
+    const now=new Date();
+    const d=new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',weekday:'long',day:'numeric',month:'long'}).format(now);
+    const t=new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(now);
+    const el=document.getElementById('clockIR'); if(el)el.textContent=t+' · '+d;
+  }catch(e){}
+}
+setInterval(tickClock,1000); tickClock();
 
 /* ============================================================
    UTIL
