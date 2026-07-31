@@ -115,12 +115,12 @@
     </div>
     <h1 class="text-2xl sm:text-3xl font-black text-white drop-shadow">روان‌شناسی عمومی</h1>
     <p class="text-white/90 font-bold mt-1">دانشگاه آزاد اسلامی واحد قم</p>
-    <p class="text-sm text-white/80 mt-4 leading-7">سلام دانشجو جان! 👋 اسمت و ترمت رو وارد کن تا از اخرین اطلاع رسانی ها مطلع بشی. 🎨</p>
+    <p class="text-sm text-white/80 mt-4 leading-7">سلام دانشجو جان! 👋 اسمت و ترمت رو وارد کن تا وارد دنیای رنگی روان‌شناسی بشی 🎨</p>
 
     <div class="space-y-3 mt-6 text-right">
       <div>
         <label class="block text-white font-bold mb-1.5 text-sm">👤 نام و نام خانوادگی</label>
-        <input id="inName" class="field" placeholder="مثلاً: سید علی لاجوردی">
+        <input id="inName" class="field" placeholder="مثلاً: مریم احمدی">
       </div>
       <div>
         <label class="block text-white font-bold mb-1.5 text-sm">🎓 ترم تحصیلی</label>
@@ -162,28 +162,15 @@
     <div id="clockIR" class="chip shrink-0 bg-white/15 text-[11px]">--:--:--</div>
     <div class="overflow-hidden flex-1 text-[11px] font-bold text-white/95" dir="ltr">
       <div class="marquee-track">
-        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>برای آپدیت و به‌روز نگه داشتن برنامه، فيلترشکن خود را روشن کنید تا آنلاین باشید</span>
-        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>برای آپدیت و به‌روز نگه داشتن برنامه، فیلتر شکن خود را روشن کنید تا آنلاین باشید</span>
+        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg><span class="tickTxt">برای آپدیت و به‌روز نگه داشتن برنامه، VPN خود را روشن کنید تا آنلاین باشید</span></span>
+        <span class="mx-10 inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg><span class="tickTxt">برای آپدیت و به‌روز نگه داشتن برنامه، VPN خود را روشن کنید تا آنلاین باشید</span></span>
       </div>
     </div>
   </div>
   </header>
 
   <!-- Tabs -->
-  <nav class="px-3 sm:px-5 pt-4 grid grid-cols-4 gap-2 sm:gap-3 max-w-3xl mx-auto">
-    <button data-tab="1" onclick="switchTab(1)" class="tab-btn active glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
-      <span class="text-2xl">📚</span><span class="text-[11px] sm:text-xs font-bold">درس‌ها</span>
-    </button>
-    <button data-tab="2" onclick="switchTab(2)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
-      <span class="text-2xl">👨‍🏫</span><span class="text-[11px] sm:text-xs font-bold">اساتید</span>
-    </button>
-    <button data-tab="3" onclick="switchTab(3)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
-      <span class="text-2xl">📰</span><span class="text-[11px] sm:text-xs font-bold">مطالب و تبلیغات</span>
-    </button>
-    <button data-tab="4" onclick="switchTab(4)" class="tab-btn glass rounded-2xl py-3 px-1 flex flex-col items-center gap-1">
-      <span class="text-2xl">🔮</span><span class="text-[11px] sm:text-xs font-bold">ترم آینده</span>
-    </button>
-  </nav>
+  <nav id="mainNav" class="px-3 sm:px-5 pt-4 flex flex-wrap gap-2 max-w-3xl mx-auto"></nav>
 
   <!-- ===== Broadcast updates (for everyone) ===== -->
   <div id="updatesBar" class="px-4 sm:px-5 mt-3 max-w-3xl mx-auto space-y-2 hidden"></div>
@@ -199,6 +186,12 @@
 
   <!-- ===== TAB 4 : NEXT TERM ===== -->
   <div id="tab4" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
+
+  <!-- ===== TAB 5 : PROFESSOR POLL ===== -->
+  <div id="tab5" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
+
+  <!-- ===== DYNAMIC CUSTOM SECTIONS ===== -->
+  <div id="tabCustom" class="tab-panel px-4 sm:px-5 mt-5 max-w-3xl mx-auto hidden"></div>
 </section>
 
 <!-- ================= DRAWER ================= -->
@@ -216,6 +209,7 @@
   <div class="glass rounded-2xl p-3 mb-4 text-center">
     <p class="text-xs opacity-60">امتیاز شما</p>
     <p class="text-3xl font-black" style="color:#6d5efc"><span id="drawerPoints">0</span> ⭐</p>
+    <p id="drawerPrem" class="text-xs font-black mt-1" style="color:#b45309">عضویت: عادی</p>
   </div>
 
   <div class="glass rounded-2xl p-3 mb-4">
@@ -230,6 +224,8 @@
     <button onclick="switchTab(2);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">👨‍🏫 اساتید خوب/متوسط/ضعیف</button>
     <button onclick="switchTab(3);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">📰 مطالب و رسانه‌ها</button>
     <button onclick="switchTab(4);closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">🔮 اساتید ترم آینده</button>
+    <button onclick="switchTab('5');closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">⭐ نظرسنجی اساتید</button>
+    <div id="drawerCustom" class="space-y-2"></div>
     <button onclick="openAdminLogin()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 text-white"
       style="background:linear-gradient(135deg,#1c1432,#6d5efc)">🛡️ پنل مدیریت</button>
   </nav>
@@ -265,13 +261,14 @@
     </div>
 
     <!-- admin sub tabs -->
-    <div class="grid grid-cols-6 gap-1 p-3">
+    <div class="grid grid-cols-4 gap-1 p-3">
       <button data-atab="1" onclick="switchAdmin(1)" class="atab-btn btn-3d b-grad1 !p-1.5 !px-0.5 text-[10px] sm:text-xs">📚 درس‌ها</button>
       <button data-atab="2" onclick="switchAdmin(2)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#9333ea">👨‍🏫 اساتید</button>
       <button data-atab="3" onclick="switchAdmin(3)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#db2777">📰 مطالب</button>
       <button data-atab="4" onclick="switchAdmin(4)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#0891b2">🔮 ترم بعد</button>
       <button data-atab="5" onclick="switchAdmin(5)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#0f766e">🌐 آنلاین</button>
       <button data-atab="6" onclick="switchAdmin(6)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#b45309">📢 اطلاعیه</button>
+      <button data-atab="7" onclick="switchAdmin(7)" class="atab-btn btn-3d !p-1.5 !px-0.5 text-[10px] sm:text-xs" style="background:#4f46e5">🧩 بخش‌ها</button>
     </div>
 
     <div class="overflow-y-auto px-4 pb-4">
@@ -359,15 +356,47 @@
       <!-- admin section 5: ONLINE / STUDENTS -->
       <div id="admin5" class="atab-panel hidden"><div id="admin5Body"></div></div>
 
-      <!-- admin section 6: BROADCAST UPDATES -->
+      <!-- admin section 6: BROADCAST UPDATES + TICKER -->
       <div id="admin6" class="atab-panel hidden">
-        <h4 class="font-black text-lg mb-2">📢 پخش اطلاعیه / آپدیت برای همهٔ دانشجویان</h4>
+        <h4 class="font-black text-lg mb-2">🎞️ متن زیرنویس متحرک (بالای صفحه)</h4>
+        <p class="text-xs opacity-60 mb-2">این متن به‌صورت متحرک بالای صفحهٔ همهٔ دانشجویان نمایش داده می‌شود.</p>
+        <div class="glass rounded-2xl p-3 space-y-2">
+          <input id="tickText" class="field" placeholder="متن زیرنویس…">
+        </div>
+        <button onclick="saveTicker()" class="btn-3d b-grad1 w-full mt-2">💾 ذخیره زیرنویس (برای همه)</button>
+        <h4 class="font-black text-lg mt-5 mb-2">📢 پخش اطلاعیه / آپدیت برای همهٔ دانشجویان</h4>
         <p class="text-xs opacity-60 mb-2">اطلاعیه‌ها بلافاصله و بدون نیاز به آپدیت برنامه، بالای صفحهٔ همهٔ کاربران نمایش داده می‌شود.</p>
         <div class="glass rounded-2xl p-3">
           <textarea id="uText" class="field" rows="2" placeholder="متن اطلاعیه یا خبر آپدیت جدید…"></textarea>
         </div>
         <button onclick="addUpdate()" class="btn-3d w-full mt-2" style="background:linear-gradient(135deg,#b45309,#f59e0b)">➕ انتشار اطلاعیه (پخش برای همه)</button>
         <div id="adminUpdateList" class="space-y-2 mt-3"></div>
+      </div>
+
+      <!-- admin section 7: CUSTOM SECTIONS + ACCESS -->
+      <div id="admin7" class="atab-panel hidden">
+        <h4 class="font-black text-lg mb-2">🧩 افزودن بخش جدید به برنامه</h4>
+        <p class="text-xs opacity-60 mb-2">بخش جدید هم در برنامه (تب‌ها) و هم در منوی همبرگری همهٔ دانشجویان نمایش داده می‌شود.</p>
+        <div class="glass rounded-2xl p-3 space-y-2">
+          <div class="grid grid-cols-[1fr,110px] gap-2">
+            <input id="sTitle" class="field" placeholder="عنوان بخش (مثلاً: ارتباط با گروه)">
+            <select id="sIcon" class="field">
+              <option>🧩</option><option>🧠</option><option>📅</option><option>📞</option><option>🏛️</option><option>💬</option><option>📌</option><option>🎯</option><option>📝</option><option>🎓</option><option>❤️</option>
+            </select>
+          </div>
+          <textarea id="sBody" class="field" rows="3" placeholder="متن محتوای این بخش…"></textarea>
+          <select id="sAccess" class="field">
+            <option value="free">👥 عادی (برای همه)</option>
+            <option value="premium">💎 ویژه اعضای پرمیوم</option>
+          </select>
+        </div>
+        <button onclick="addSection()" class="btn-3d b-grad1 w-full mt-2">➕ افزودن بخش (برنامه + منو)</button>
+
+        <h4 class="font-black text-base mt-4 mb-2">🔐 سطح دسترسی بخش‌ها</h4>
+        <div id="secAccessList" class="space-y-2"></div>
+
+        <h4 class="font-black text-base mt-4 mb-2">🗂️ بخش‌های سفارشی</h4>
+        <div id="customList" class="space-y-2"></div>
       </div>
     </div>
   </div>
@@ -422,10 +451,12 @@ const FB_CONFIG = {
 let NET={ready:false,box:null}, PRES={}, USERS={}, adminOpen=false, currentAdminTab=1, firstCloudSync=true, lastShared=0;
 let savedCfg=null; try{savedCfg=JSON.parse(localStorage.getItem('psy_fb_cfg')||'null')}catch(e){}
 const CFG=(FB_CONFIG.apiKey&&FB_CONFIG.databaseURL)?FB_CONFIG:(savedCfg&&savedCfg.apiKey?savedCfg:null);
+const DEFAULT_TICKER='برای آپدیت و به‌روز نگه داشتن برنامه، VPN خود را روشن کنید تا آنلاین باشید';
+let RATINGS={}, PREM={}, BLOCKED={}, isAdminUnlocked=false, isBlockedFlag=false;
 
 function sid(){let id=localStorage.getItem('psy_sid');if(!id){id='s'+uid();localStorage.setItem('psy_sid',id)}return id}
-function sharedCount(){let t=0;for(const k in DB.terms)t+=(DB.terms[k]||[]).length;for(const k in DB.professors)t+=(DB.professors[k]||[]).length;t+=(DB.content||[]).length+(DB.nextTerm||[]).length+(DB.updates||[]).length;return t}
-function shareSnapshot(){return{terms:DB.terms,professors:DB.professors,content:DB.content,nextTerm:DB.nextTerm,updates:DB.updates||[]}}
+function sharedCount(){let t=0;for(const k in DB.terms)t+=(DB.terms[k]||[]).length;for(const k in DB.professors)t+=(DB.professors[k]||[]).length;t+=(DB.content||[]).length+(DB.nextTerm||[]).length+(DB.updates||[]).length+(DB.custom||[]).length;return t}
+function shareSnapshot(){return{terms:DB.terms,professors:DB.professors,content:DB.content,nextTerm:DB.nextTerm,updates:DB.updates||[],ticker:DB.ticker,custom:DB.custom||[],secAccess:DB.secAccess||{}}}
 function cloudPush(){if(NET.ready&&NET.box){NET.box.child('db').set(shareSnapshot())}}
 function netInit(){
   if(!CFG||typeof firebase==='undefined'){netBadge();return}
@@ -440,6 +471,9 @@ function netInit(){
     });
     root.child('presence').on('value',s=>{PRES=s.val()||{};updatePresenceUI()});
     root.child('users').on('value',s=>{USERS=s.val()||{};updatePresenceUI()});
+    root.child('ratings').on('value',s=>{RATINGS=s.val()||{};if(String(activeTab)=='5')renderPoll()});
+    root.child('premium').on('value',s=>{PREM=s.val()||{};renderDrawerCustom();if(adminOpen&&currentAdminTab==5)renderAdminOnline()});
+    root.child('blocked').on('value',s=>{BLOCKED=s.val()||{};if(BLOCKED[sid()]&&!isBlockedFlag){isBlockedFlag=true;toast('دسترسی شما توسط مدیر محدود شد 🚫','⚠️')}if(!BLOCKED[sid()])isBlockedFlag=false;if(adminOpen&&currentAdminTab==5)renderAdminOnline()});
     setInterval(updatePresenceUI,20000);
   }catch(e){console.warn('net',e);NET.ready=false}
   netBadge();
@@ -451,6 +485,9 @@ function applyRemote(v){
   DB.content=v.content||[];
   DB.nextTerm=v.nextTerm||[];
   DB.updates=v.updates||[];
+  DB.ticker=v.ticker||DEFAULT_TICKER;
+  DB.custom=v.custom||[];
+  DB.secAccess=v.secAccess||{};
   save(); lastShared=sharedCount();
   rerender(); netBadge();
   if(!firstCloudSync&&lastShared>prev){toast('📢 محتوای جدید اضافه شد! ببین 📚','🔔');}
@@ -460,21 +497,27 @@ function rerender(){
   const app=document.getElementById('app');
   if(!app||app.classList.contains('hidden'))return;
   const y=window.scrollY;
-  if(activeTab==1)renderCourses();
-  else if(activeTab==2)renderProfessors();
-  else if(activeTab==3)renderContent();
-  else if(activeTab==4)renderNext();
+  renderNav(); renderTicker(); renderDrawerCustom();
+  renderActiveTab();
   renderUpdates();
   refreshUser();
   if(adminOpen)switchAdmin(currentAdminTab);
   window.scrollTo(0,y);
+}
+function renderActiveTab(){
+  if(String(activeTab)=='1')renderCourses();
+  else if(String(activeTab)=='2')renderProfessors();
+  else if(String(activeTab)=='3')renderContent();
+  else if(String(activeTab)=='4')renderNext();
+  else if(String(activeTab)=='5')renderPoll();
+  else renderCustom(activeTab);
 }
 function startPresence(){
   if(!NET.ready||!DB.student)return;
   const id=sid(), root=NET.box;
   const pr=root.child('presence/'+id);
   const beat=()=>{
-    if(!DB.student)return;
+    if(!DB.student||BLOCKED[sid()])return;
     pr.set({name:DB.student.name,term:String(DB.student.term),pts:DB.points||0,ts:Date.now()});
     root.child('users/'+id).update({name:DB.student.name,term:String(DB.student.term),lastSeen:Date.now()});
   };
@@ -540,12 +583,22 @@ function renderAdminOnline(){
   const users=Object.entries(USERS||{});
   const ulist=users.map(([id,v])=>{
     const on=onlineIds.has(id);
+    const prem=!!PREM[id];
     return `<div class="bg-white/85 rounded-xl p-2.5 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${on?'#22c55e':'#cbd5e1'}"></span>
-      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(v.name)}</p><p class="text-[10px] opacity-60">${v.term?termName(v.term):'ترم نامشخص'}</p></div>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(v.name)}${prem?' 💎':''}</p><p class="text-[10px] opacity-60">${v.term?termName(v.term):'ترم نامشخص'}</p></div>
+      <button onclick="togglePrem('${id}')" class="chip text-white shrink-0" style="background:${prem?'linear-gradient(135deg,#b45309,#f59e0b)':'#94a3b8'}">${prem?'💎 پرمیوم':'عادی'}</button>
       <span class="text-[10px] font-black shrink-0" style="color:${on?'#16a34a':'#94a3b8'}">${on?'آنلاین':'آفلاین'}</span>
+      <button onclick="delUser('${id}')" title="حذف کاربر" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0 text-sm">🗑️</button>
     </div>`;
   }).join('');
+  const blockedIds=Object.keys(BLOCKED||{});
+  const blockedList=blockedIds.map(id=>`
+    <div class="bg-white/70 rounded-xl p-2.5 flex items-center gap-2">
+      <span class="text-red-400">🚫</span>
+      <p class="flex-1 text-sm font-bold truncate opacity-60">${esc((USERS[id]&&USERS[id].name)||'کاربر حذف‌شده')}</p>
+      <button onclick="unblockUser('${id}')" class="chip text-white shrink-0" style="background:#16a34a">بازگردانی</button>
+    </div>`).join('');
   el.innerHTML=`
     <div class="glass rounded-2xl p-4">
       <p class="font-black">🌐 وضعیت اتصال: <span style="color:#16a34a">متصل ✅</span></p>
@@ -557,10 +610,12 @@ function renderAdminOnline(){
         <div class="flex gap-1.5">
           <span class="chip text-white" style="background:#16a34a">آنلاین: ${online.length.toLocaleString('fa-ir')}</span>
           <span class="chip text-white" style="background:#6d5efc">ثبت‌شده: ${users.length.toLocaleString('fa-ir')}</span>
+          <span class="chip text-white" style="background:#b45309">💎 پرمیوم: ${Object.keys(PREM||{}).length.toLocaleString('fa-ir')}</span>
         </div>
       </div>
       <div class="space-y-1.5 max-h-64 overflow-y-auto">${ulist||'<p class="text-sm opacity-50 text-center py-3">هنوز دانشجویی ثبت نشده</p>'}</div>
-    </div>`;
+    </div>
+    ${blockedList?`<div class="glass rounded-2xl p-4 mt-3"><p class="font-black mb-2">🚫 کاربران حذف‌شده (${blockedIds.length.toLocaleString('fa-ir')})</p><div class="space-y-1.5">${blockedList}</div></div>`:''}`;
 }
 
 function seed(){
@@ -601,6 +656,10 @@ function seed(){
     updates:[
       {id:uid(),text:'به اپلیکیشن روانشناسی عمومی دانشگاه آزاد قم خوش آمدید 🎉',ts:Date.now()},
     ],
+    ticker:DEFAULT_TICKER,
+    custom:[],
+    secAccess:{},
+    localRatings:{},
     professors:{
       good:[
         {id:uid(),name:'دکتر محمدی',info:'توضیح‌رسانی عالی، اخلاق خوب'},
@@ -687,17 +746,61 @@ function termName(n){return ['','ترم اول','ترم دوم','ترم سوم',
 /* ============================================================
    TABS
 ============================================================ */
-let activeTab=1;
-function switchTab(n){
-  activeTab=n;
-  renderUpdates();
-  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.toggle('active',b.dataset.tab==n)});
-  for(let i=1;i<=4;i++)document.getElementById('tab'+i).classList.toggle('hidden',i!=n);
-  if(n==1)renderCourses();
-  if(n==2)renderProfessors();
-  if(n==3)renderContent();
-  if(n==4)renderNext();
+let activeTab='1';
+const NAVS=[{k:'1',i:'📚',t:'درس‌ها'},{k:'2',i:'👨‍🏫',t:'اساتید'},{k:'3',i:'📰',t:'مطالب'},{k:'4',i:'🔮',t:'ترم آینده'},{k:'5',i:'⭐',t:'نظرسنجی'}];
+function secLevel(key){return (DB.secAccess||{})[key]||'free'}
+function myPremium(){return !!(isAdminUnlocked||PREM[sid()])}
+function canAccess(key){return secLevel(key)!=='premium'||myPremium()}
+function lockHTML(title){
+  return `<div class="glass rounded-3xl p-8 text-center fade-in">
+    <div class="mx-auto w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-3 shadow-lg" style="background:linear-gradient(135deg,#b45309,#f59e0b)">💎</div>
+    <h3 class="text-xl font-black">بخش ویژه اعضای پرمیوم</h3>
+    <p class="text-sm opacity-70 mt-2 leading-8">«${esc(title)}» فقط برای دانشجویان پرمیوم فعال است.<br>برای ارتقای عضویت، به مدیر برنامه <b>سید علی لاجوردی</b> پیام بده 🙏</p>
+  </div>`;
+}
+function renderNav(){
+  const nav=document.getElementById('mainNav'); if(!nav)return;
+  const items=NAVS.map(n=>({...n,prem:secLevel('t'+n.k)==='premium'}))
+    .concat((DB.custom||[]).map(s=>({k:s.id,i:s.icon||'🧩',t:s.title,prem:s.access==='premium'})));
+  nav.innerHTML=items.map(n=>{
+    const on=String(activeTab)===String(n.k);
+    return `<button data-tab="${n.k}" onclick="switchTab('${n.k}')" class="tab-btn ${on?'active':''} glass rounded-2xl px-3 py-2.5 flex flex-col items-center gap-1 flex-1 min-w-[82px]">
+      <span class="text-2xl">${n.i}</span>
+      <span class="text-[10px] sm:text-xs font-bold leading-tight text-center">${esc(n.t)}${n.prem?' 💎':''}</span>
+    </button>`;
+  }).join('');
+}
+function switchTab(key){
+  activeTab=String(key);
+  ['tab1','tab2','tab3','tab4','tab5','tabCustom'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden')});
+  renderNav(); renderUpdates(); renderTicker(); renderDrawerCustom();
+  let pid = (activeTab>='1'&&activeTab<='5') ? 'tab'+activeTab : 'tabCustom';
+  const panel=document.getElementById(pid); if(panel)panel.classList.remove('hidden');
+  renderActiveTab();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderCustom(id){
+  const panel=document.getElementById('tabCustom'); if(!panel)return;
+  const s=(DB.custom||[]).find(x=>x.id===id);
+  if(!s){panel.innerHTML='<p class="glass rounded-2xl p-5 text-center opacity-70">بخش یافت نشد</p>';return}
+  if(s.access==='premium'&&!myPremium()){panel.innerHTML=lockHTML(s.title);return}
+  panel.innerHTML=`<div class="card-iso glass rounded-3xl p-6 fade-in">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-13 h-13 p-2.5 rounded-2xl text-3xl" style="background:linear-gradient(135deg,#6d5efc,#a64bff)">${s.icon||'🧩'}</div>
+      <h2 class="text-xl font-black">${esc(s.title)}</h2>
+    </div>
+    <p class="leading-8 whitespace-pre-line text-[15px]">${esc(s.body||'')}</p>
+  </div>`;
+}
+function renderTicker(){
+  const t=DB.ticker||DEFAULT_TICKER;
+  document.querySelectorAll('.tickTxt').forEach(el=>el.textContent=t);
+}
+function renderDrawerCustom(){
+  const el=document.getElementById('drawerCustom');
+  if(el){el.innerHTML=(DB.custom||[]).map(s=>`<button onclick="switchTab('${s.id}');closeDrawer()" class="w-full text-right rounded-2xl px-4 py-3 font-bold flex items-center gap-3 hover:bg-white">${s.icon||'🧩'} ${esc(s.title)} ${s.access==='premium'?'💎':''}</button>`).join('')}
+  const ps=document.getElementById('drawerPrem');
+  if(ps){ps.textContent=myPremium()?'💎 عضویت: پرمیوم':'عضویت: عادی'; ps.style.color=myPremium()?'#b45309':'#6b7280';}
 }
 
 /* ============================================================
@@ -707,6 +810,7 @@ let selTerm='1';
 function profsOf(c){return Array.isArray(c.profs)?c.profs:(c.prof?[c.prof]:[])}
 function renderCourses(){
   const wrap=document.getElementById('tab1');
+  if(!canAccess('t1')){wrap.innerHTML=lockHTML('درس‌های هر ترم');return}
   const termBtns=[1,2,3,4].map(t=>{
     const on=String(t)===String(selTerm);
     return `<button onclick="selTerm='${t}';renderCourses()" class="btn-3d ${on?'b-grad1':'!p-2.5'} ${on?'':'opacity-90'}" style="${on?'':'background:#fff;color:#6d5efc;box-shadow:0 5px 0 rgba(0,0,0,.12)'}">ترم ${t.toLocaleString('fa-ir')}</button>`;
@@ -739,6 +843,8 @@ function renderCourses(){
    TAB 2 — PROFESSORS
 ============================================================ */
 function renderProfessors(){
+  const wrap0=document.getElementById('tab2');
+  if(!canAccess('t2')){wrap0.innerHTML=lockHTML('اساتید');return}
   const cats=[
     {k:'good',t:'اساتید خوب 🟢',emoji:'⭐',grad:'linear-gradient(135deg,#22d3a6,#13b6c4)'},
     {k:'medium',t:'اساتید متوسط 🟡',emoji:'⚖️',grad:'linear-gradient(135deg,#ffd23f,#ff9d4d)'},
@@ -768,6 +874,8 @@ function renderProfessors(){
    TAB 3 — CONTENT & ADS
 ============================================================ */
 function renderContent(){
+  const wrap0=document.getElementById('tab3');
+  if(!canAccess('t3')){wrap0.innerHTML=lockHTML('مطالب و رسانه‌ها');return}
   const items=DB.content.map(m=>{
     let media='';
     if(m.type==='image') media=m.link?`<img src="${esc(m.link)}" class="w-full h-40 object-cover rounded-2xl mt-2" onerror="this.style.display='none'">`:'';
@@ -856,6 +964,8 @@ function cancelAd(){
    TAB 4 — NEXT TERM
 ============================================================ */
 function renderNext(){
+  const wrap0=document.getElementById('tab4');
+  if(!canAccess('t4')){wrap0.innerHTML=lockHTML('ترم آینده');return}
   const list=DB.nextTerm.map(n=>`
     <div class="card-iso glass rounded-2xl p-4 flex items-center gap-3 fade-in">
       <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0" style="background:linear-gradient(135deg,#0891b2,#22d3a6)">🔮</div>
@@ -868,6 +978,138 @@ function renderNext(){
     <h2 class="text-xl font-black mb-1 text-white drop-shadow">🔮 ترم آینده</h2>
     <p class="text-white/85 text-sm mb-3">اساتید احتمالی هر درس برای ترم بعد 🚀</p>
     <div class="space-y-2.5">${list||'<p class="glass rounded-2xl p-5 text-center opacity-70">هنوز برنامه‌ای اعلام نشده</p>'}</div>`;
+}
+
+/* ============================================================
+   TAB 5 — PROFESSOR POLL (5 STARS)
+============================================================ */
+const STAR_LABEL=['','خیلی ضعیف','ضعیف','متوسط','خوب','عالی'];
+const STAR_COLOR=['','#ef4444','#f97316','#eab308','#2563eb','#10b981'];
+function renderPoll(){
+  const wrap=document.getElementById('tab5'); if(!wrap)return;
+  if(!canAccess('t5')){wrap.innerHTML=lockHTML('نظرسنجی اساتید');return}
+  const profs=[...(DB.professors.good||[]).map(p=>({...p,cat:'good'})),...(DB.professors.medium||[]).map(p=>({...p,cat:'medium'})),...(DB.professors.weak||[]).map(p=>({...p,cat:'weak'}))];
+  const rows=profs.map(p=>{
+    let mine=0, vals=[];
+    if(NET.ready){ const m=RATINGS[p.id]||{}; mine=m[sid()]||0; vals=Object.values(m); }
+    else{ mine=(DB.localRatings||{})[p.id]||0; vals=mine?[mine]:[]; }
+    const cnt=vals.length, avg=cnt?vals.reduce((a,b)=>a+ +b,0)/cnt:0;
+    const stars=[1,2,3,4,5].map(i=>`<button onclick="rate('${p.id}',${i})" class="text-2xl leading-none transition hover:scale-125" style="color:${i<=mine?'#facc15':'#d5d5e0'}" title="${STAR_LABEL[i]}">★</button>`).join('');
+    return `<div class="card-iso glass rounded-2xl p-4 fade-in">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black shrink-0" style="background:linear-gradient(135deg,#9333ea,#6d5efc)">${esc((p.name||'؟').replace(/^دکتر\s*/,'').trim().charAt(0)||'؟')}</div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-bold leading-tight truncate">${esc(p.name)}</h3>
+          <p class="text-[11px] opacity-60">${cnt?('میانگین '+(avg).toLocaleString('fa-IR',{maximumFractionDigits:1})+' از ۵ · '+cnt.toLocaleString('fa-IR')+' رأی'):'هنوز رأیی ثبت نشده — اولین نفر باش!'}</p>
+        </div>
+        ${mine?`<span class="chip text-white shrink-0" style="background:${STAR_COLOR[mine]};font-size:11px">${STAR_LABEL[mine]}</span>`:''}
+      </div>
+      <div class="flex items-center justify-between mt-3">
+        <div class="flex gap-0.5" dir="ltr">${stars}</div>
+        <div class="w-24 h-2 rounded-full bg-black/10 overflow-hidden"><div class="h-full rounded-full" style="width:${(avg/5*100).toFixed(0)}%;background:linear-gradient(90deg,#facc15,#f97316)"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+  wrap.innerHTML=`
+    <h2 class="text-xl font-black mb-1 text-white drop-shadow">⭐ نظرسنجی اساتید</h2>
+    <p class="text-white/85 text-sm mb-3">به هر استاد ۱ تا ۵ ستاره بده: خیلی ضعیف تا عالی (${NET.ready?'نتیجهٔ همه دانشجویان':'فقط رأی شما — آفلاین'})</p>
+    <div class="space-y-2.5">${rows||'<p class="glass rounded-2xl p-5 text-center opacity-70">استادی ثبت نشده</p>'}</div>`;
+}
+function rate(pid,st){
+  if(!DB.student){toast('ابتدا ثبت‌نام کن','⚠️');return}
+  DB.localRatings=DB.localRatings||{}; DB.localRatings[pid]=st; save();
+  if(NET.ready&&NET.box){ NET.box.child('ratings/'+pid+'/'+sid()).set(st); }
+  renderPoll(); toast('رأی ثبت شد: '+STAR_LABEL[st]+' ⭐','🗳️');
+}
+
+/* ============================================================
+   CUSTOM SECTIONS + TICKER + ACCESS (ADMIN)
+============================================================ */
+const SEC_DEFS=[['t1','📚 درس‌های هر ترم'],['t2','👨‍🏫 اساتید (خوب/متوسط/ضعیف)'],['t3','📰 مطالب و رسانه‌ها'],['t4','🔮 ترم آینده'],['t5','⭐ نظرسنجی اساتید']];
+function saveTicker(){
+  const v=(document.getElementById('tickText').value||'').trim()||DEFAULT_TICKER;
+  DB.ticker=v; save(); cloudPush(); renderTicker();
+  toast('زیرنویس برای همه ذخیره شد 🎞️');
+}
+function addSection(){
+  const title=(document.getElementById('sTitle').value||'').trim();
+  const body=(document.getElementById('sBody').value||'').trim();
+  const icon=document.getElementById('sIcon').value;
+  const access=document.getElementById('sAccess').value;
+  if(!title){toast('عنوان بخش را بنویس','⚠️');return}
+  if(!body){toast('متن بخش را بنویس','⚠️');return}
+  DB.custom=DB.custom||[];
+  DB.custom.push({id:uid(),title,body,icon,access});
+  document.getElementById('sTitle').value='';document.getElementById('sBody').value='';
+  save(); cloudPush(); renderAdminSections(); renderNav(); renderDrawerCustom();
+  toast('بخش جدید برای همه اضافه شد 🧩');
+}
+function delSection(id){
+  if(!confirm('حذف این بخش؟'))return;
+  DB.custom=(DB.custom||[]).filter(s=>s.id!==id);
+  save(); cloudPush(); renderAdminSections(); renderNav(); renderDrawerCustom();
+  toast('حذف شد','🗑️');
+}
+function toggleSecAccess(k){
+  DB.secAccess=DB.secAccess||{};
+  DB.secAccess[k]=secLevel(k)==='premium'?'free':'premium';
+  save(); cloudPush(); renderAdminSections(); renderNav();
+  toast('سطح دسترسی تغییر کرد 🔐');
+}
+function toggleCustomAccess(id){
+  const s=(DB.custom||[]).find(x=>x.id===id); if(!s)return;
+  s.access=s.access==='premium'?'free':'premium';
+  save(); cloudPush(); renderAdminSections();
+}
+function renderAdminSections(){
+  const accList=document.getElementById('secAccessList'); if(!accList)return;
+  const built=SEC_DEFS.map(([k,t])=>{
+    const prem=secLevel(k)==='premium';
+    return `<div class="bg-white/85 rounded-xl p-3 flex items-center gap-2">
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${t}</p></div>
+      <button onclick="toggleSecAccess('${k}')" class="chip text-white shrink-0" style="background:${prem?'linear-gradient(135deg,#b45309,#f59e0b)':'#16a34a'}">${prem?'💎 پرمیوم':'👥 عادی'}</button>
+    </div>`;
+  }).join('');
+  const cust=(DB.custom||[]).map(s=>{
+    const prem=s.access==='premium';
+    return `<div class="bg-white/85 rounded-xl p-3 flex items-center gap-2">
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${s.icon||'🧩'} ${esc(s.title)}</p></div>
+      <button onclick="toggleCustomAccess('${s.id}')" class="chip text-white shrink-0" style="background:${prem?'linear-gradient(135deg,#b45309,#f59e0b)':'#16a34a'}">${prem?'💎 پرمیوم':'👥 عادی'}</button>
+    </div>`;
+  }).join('');
+  accList.innerHTML=built+cust;
+  const cl=document.getElementById('customList');
+  if(cl)cl.innerHTML=(DB.custom||[]).map(s=>`
+    <div class="bg-white/85 rounded-xl p-3 flex items-center gap-2">
+      <span class="text-lg">${s.icon||'🧩'}</span>
+      <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${esc(s.title)}</p><p class="text-[10px] opacity-60 truncate">${esc((s.body||'').slice(0,70))}</p></div>
+      <button onclick="delSection('${s.id}')" class="bg-red-500 text-white rounded-lg w-8 h-8 shrink-0">✕</button>
+    </div>`).join('')||'<p class="text-center text-sm opacity-50 py-2">بخش سفارشی ندارد</p>';
+}
+function togglePrem(id){
+  if(!NET.ready||!NET.box){toast('فقط در حالت آنلاین می‌توان عضویت را تغییر داد','⚠️');return}
+  const node=NET.box.child('premium/'+id);
+  if(PREM[id])node.remove();else node.set(true);
+  toast(PREM[id]?'عضویت عادی شد':'عضویت پرمیوم شد 💎');
+}
+function delUser(id){
+  if(!NET.ready||!NET.box){toast('فقط در حالت آنلاین امکان حذف است','⚠️');return}
+  if(id===sid()){toast('امکان حذف خودتان وجود ندارد! 😅','⚠️');return}
+  const nm=(USERS[id]&&USERS[id].name)||'این کاربر';
+  if(!confirm('«'+nm+'» حذف شود؟\nاز لیست دانشجویان پاک می‌شود و برنامه‌اش دیگر نمی‌تواند در لیست آنلاین ثبت شود.'))return;
+  const b=NET.box;
+  b.child('users/'+id).remove();
+  b.child('presence/'+id).remove();
+  b.child('premium/'+id).remove();
+  b.child('blocked/'+id).set(true);
+  const r=RATINGS||{};
+  Object.keys(r).forEach(pid=>{ if(r[pid]&&r[pid][id]!=null)b.child('ratings/'+pid+'/'+id).remove(); });
+  toast('کاربر حذف شد 🗑️');
+}
+function unblockUser(id){
+  if(!NET.ready||!NET.box){toast('فقط در حالت آنلاین','⚠️');return}
+  NET.box.child('blocked/'+id).remove();
+  toast('کاربر از حالت حذف خارج شد ✅');
 }
 
 /* ============================================================
@@ -894,8 +1136,10 @@ function closeAdminLogin(){
 function adminLogin(){
   const v=document.getElementById('adminPass').value.trim();
   if(v===ADMIN_PASS){
+    isAdminUnlocked=true;
     closeAdminLogin();
     openAdmin();
+    rerender();
     toast('خوش آمدید سید علی لاجوردی 👑','🛡️');
   }else{
     document.getElementById('adminErr').classList.remove('hidden');
@@ -921,13 +1165,14 @@ function closeAdmin(){
 function switchAdmin(n){
   currentAdminTab=n;
   document.querySelectorAll('.atab-btn').forEach(b=>b.classList.toggle('active',b.dataset.atab==n));
-  for(let i=1;i<=6;i++)document.getElementById('admin'+i).classList.toggle('hidden',i!=n);
+  for(let i=1;i<=7;i++)document.getElementById('admin'+i).classList.toggle('hidden',i!=n);
   if(n==1)renderAdminCourses();
   if(n==2)renderAdminProf();
   if(n==3)renderAdminContent();
   if(n==4)renderAdminNext();
   if(n==5)renderAdminOnline();
   if(n==6)renderAdminUpdates();
+  if(n==7)renderAdminSections();
 }
 
 /* ---- Admin: courses ---- */
@@ -1138,6 +1383,7 @@ function delUpdate(id){
   save();cloudPush();renderAdminUpdates();renderUpdates();toast('حذف شد','🗑️');
 }
 function renderAdminUpdates(){
+  const ti=document.getElementById('tickText'); if(ti)ti.value=DB.ticker||DEFAULT_TICKER;
   const el=document.getElementById('adminUpdateList'); if(!el)return;
   el.innerHTML=(DB.updates||[]).map(u=>`
     <div class="bg-white/85 rounded-xl p-3 flex items-center gap-2">
@@ -1166,6 +1412,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;',
 ============================================================ */
 load();
 lastShared=sharedCount();
+renderNav(); renderTicker(); renderDrawerCustom();
 netInit();
 if(DB.student){
   document.getElementById('welcome').classList.add('hidden');
